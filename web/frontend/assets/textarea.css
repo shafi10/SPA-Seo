@@ -1,0 +1,8 @@
+.text__area_input_field {
+  display: flex;
+  flex-direction: column;
+}
+
+.text__area_label {
+  margin-bottom: 4px;
+}

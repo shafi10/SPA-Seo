@@ -1,0 +1,50 @@
+.app__container {
+  display: flex;
+  gap: 24px;
+  /* background-color: #ebebeb; */
+  height: 100vh;
+}
+
+.app__sidebar_container {
+  width: 220px;
+  background-color: #ebebeb;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.app__dashboard_container {
+  background-color: #ebebeb;
+  width: 100%;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.sidebar__menu_item {
+  font-size: 16px;
+  cursor: pointer;
+  padding: 16px;
+  transition: all 0.5s ease;
+}
+
+.sidebar__menu_item:first-child {
+  margin-top: 16px;
+}
+
+.sidebar__menu_item:hover {
+  background-color: #ffffff;
+}
+
+.sidebar__selected_item {
+  background-color: #f1f2f4;
+}
+
+.app__feature_product_image {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.app__product_seo_creation {
+  padding: 10px;
+}
