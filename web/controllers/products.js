@@ -21,7 +21,7 @@ const fetchAllProducts = async (session) => {
                         title
                         description
                       }
-            images(first: 15) {
+            images(first: 100) {
                                   edges {
                                     node {
                                       id
@@ -178,7 +178,7 @@ export const updateProductSEO = async (req, res, next) => {
 
     const variables = {
       input: {
-        id: `gid://shopify/Product/${id}`,
+        id: id,
         seo: {
           description: seoDescription,
           title: seoTitle,

@@ -6,3 +6,16 @@
 .text__area_label {
   margin-bottom: 4px;
 }
+
+textarea {
+  font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Segoe UI",
+    Roboto, "Helvetica Neue", sans-serif;
+  padding: 5px 12px;
+  color: rgba(31, 33, 36, 1);
+  border-radius: 4px;
+}
+
+.text__danger_textfield {
+  color: red;
+  padding-top: 2px;
+}

@@ -16,7 +16,7 @@ export const useProductsQuery = ({
     };
   }, [url, JSON.stringify(fetchInit)]);
 
-  return useQuery(url, fetch, {
+  return useQuery("productList", fetch, {
     ...reactQueryOptions,
     onSuccess: (data) => {},
     refetchOnWindowFocus: false,
@@ -57,18 +57,18 @@ export const useCreateProductSeo = () => {
   return useMutation((status) => createStatus(status), {
     onSuccess: async (data, obj) => {
       setCloseModal();
-      queryClient.invalidateQueries("highlight");
-      if (obj.isEdit) {
-        setToggleToast({
-          active: true,
-          message: `Submit Successfully`,
-        });
-      } else {
-        setToggleToast({
-          active: true,
-          message: `Successfully Created`,
-        });
-      }
+      queryClient.invalidateQueries("productList");
+
+      setToggleToast({
+        active: true,
+        message: `Submit Successfully`,
+      });
+    },
+    onError: async () => {
+      setToggleToast({
+        active: true,
+        message: `Something went wrong`,
+      });
     },
     refetchOnWindowFocus: false,
   });

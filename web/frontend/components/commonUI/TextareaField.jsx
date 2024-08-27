@@ -7,6 +7,8 @@ export default function TextareaField({
   label,
   onChange,
   placeholder,
+  error,
+  index,
 }) {
   return (
     <div className="text__area_input_field">
@@ -17,9 +19,14 @@ export default function TextareaField({
         id="myTextarea"
         name={name}
         value={value}
-        onChange={(e) => onChange(e.target.value, name)}
-        // placeholder={placeholder}
+        onChange={(e) => onChange(e.target.value, name, index)}
+        placeholder={placeholder}
       />
+      {error && (
+        <label htmlFor="myError" className="text__danger_textfield">
+          {error}
+        </label>
+      )}
     </div>
   );
 }

@@ -1,7 +1,8 @@
 import React from "react";
-import { LegacyCard, Tabs } from "@shopify/polaris";
+import { Tabs } from "@shopify/polaris";
 import { useState, useCallback } from "react";
 import { CreateProductSeo } from "./CreateProductSeo";
+import { AltimageCreate } from "./AltimageCreate";
 
 export default function ProductSeo() {
   const [selected, setSelected] = useState(0);
@@ -23,16 +24,16 @@ export default function ProductSeo() {
       panelID: "accepts-Product-alt-content-1",
     },
   ];
+
   return (
     <div>
       <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}>
         {selected === 0 && (
           <div className="app__product_seo_creation">
-            <div>
-              <CreateProductSeo />
-            </div>
+            <CreateProductSeo />
           </div>
         )}
+        {selected === 1 && <AltimageCreate />}
       </Tabs>
     </div>
   );

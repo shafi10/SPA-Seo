@@ -48,3 +48,47 @@
 .app__product_seo_creation {
   padding: 10px;
 }
+
+.app__product_image_container {
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.app__product_alt_image {
+  width: 80px;
+  height: 80px;
+  flex: 1;
+}
+
+.app__product_alt_image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.app__product_alt_item {
+  display: flex;
+  gap: 16px;
+}
+
+.app__product_alt_textarea {
+  flex: 10;
+}
+
+.app__seo_alt_form {
+  display: flex;
+  width: 100%;
+  gap: 12px;
+}
+
+.app__seo_alt_textarea {
+  flex: 1;
+}
+
+.app_seo_alt_button {
+  display: flex;
+  justify-content: end;
+  align-items: end;
+}

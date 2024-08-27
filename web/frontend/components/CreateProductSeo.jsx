@@ -3,22 +3,23 @@ import { FormLayout, Button, Form, InlineError } from "@shopify/polaris";
 import { InputField } from "./commonUI/InputField";
 import {
   useCreateProductSeo,
-  useProductsQueryByID,
+  // useProductsQueryByID,
 } from "../hooks/useProductsQuery";
 import { useUI } from "../contexts/ui.context";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import TextareaField from "./commonUI/TextareaField";
 
 export function CreateProductSeo() {
-  const { modal, setCloseModal } = useUI();
+  const { modal } = useUI();
   const { mutate: createOrUpdateSeo, isError } = useCreateProductSeo();
-  const { isLoading, data } = useProductsQueryByID({
-    url: `/api/product/${modal?.data?.info?.id}`,
-    id: modal?.data?.info?.id,
-  });
-  console.log("🚀 ~ CreateProductSeo ~ data:", data);
-  console.log("🚀 ~ CreateProductSeo ~ data:", modal?.data?.info);
-  const navigate = useNavigate();
+  // const { isLoading, data } = useProductsQueryByID({
+  //   url: `/api/product/${modal?.data?.info?.id}`,
+  //   id: modal?.data?.info?.id,
+  // });
+  // console.log("🚀 ~ CreateProductSeo ~ data:", data);
+  // console.log("🚀 ~ CreateProductSeo ~ data:", modal?.data?.info);
+  // const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     seo_title: "",
     seo_description: "",
@@ -62,16 +63,19 @@ export function CreateProductSeo() {
   };
 
   const handleChange = (value, name) => {
-    console.log("🚀 ~ handleChange ~ value:", value);
     setFormData({ ...formData, [name]: value });
     setErrors({ ...errors, [name]: "" });
   };
 
   useEffect(() => {
-    if (modal?.data?.isEdit) {
-      setFormData(modal?.data?.info);
+    if (modal?.data?.info?.seo?.title && modal?.data?.info?.seo?.description) {
+      setFormData({
+        ...formData,
+        seo_title: modal?.data?.info?.seo?.title,
+        seo_description: modal?.data?.info?.seo?.description,
+      });
     }
-  }, [modal?.data?.isEdit]);
+  }, [modal?.data?.info?.seo?.title, modal?.data?.info?.seo?.description]);
 
   return (
     <>
