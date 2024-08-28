@@ -199,6 +199,9 @@ export const updateProductSEO = async (req, res, next) => {
 
     if (response.body.data.productUpdate.userErrors.length > 0) {
       console.error("Errors:", response.body.data.productUpdate.userErrors);
+      return res
+        .status(400)
+        .json({ error: response.body.data.productUpdate.userErrors });
     } else {
       console.log(
         "Updated product SEO:",
@@ -216,29 +219,55 @@ export const updateProductSEO = async (req, res, next) => {
   }
 };
 
-export const getProductHighlightController = async (req, res, next) => {
+export const updateImageSeoAltController = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { id, imageId, altText } = req.body;
 
-    const response = await shopify.api.rest.Metafield.all({
+    const mutation = `mutation productImageUpdate($productId: ID!, $image: ImageInput!) {
+      productImageUpdate(productId: $productId, image: $image) {
+        image {
+          id
+          altText
+        }
+        userErrors {
+          field
+          message
+        }
+      }
+    }`;
+
+    const variables = {
+      productId: id,
+      image: {
+        id: imageId,
+        altText: altText,
+      },
+    };
+
+    const client = new shopify.api.clients.Graphql({
       session: res.locals.shopify.session,
-      metafield: { owner_id: id, owner_resource: "product" },
     });
 
-    const highlight = response?.data?.find(
-      (data) =>
-        data?.namespace === "highlight" && data?.key === "product_highlight"
-    );
-    const highlightList = highlight?.value ? JSON.parse(highlight?.value) : "";
+    const response = await client.query({
+      data: {
+        query: mutation,
+        variables: variables,
+      },
+    });
 
-    const hideOrShowHighlight =
-      response?.data?.find(
-        (data) =>
-          data?.namespace === "check_highlight" &&
-          data?.key === "check_product_highlight"
-      )?.value || "no";
-
-    return res.status(200).json({ highlightList, hideOrShowHighlight });
+    if (response.body.data?.productImageUpdate?.userErrors?.length > 0) {
+      console.error(
+        "Errors:",
+        response.body.data.productImageUpdate.userErrors
+      );
+      return res
+        .status(400)
+        .json({ error: response.body.data?.productImageUpdate?.userErrors });
+    } else {
+      return res
+        .status(200)
+        .json({ product: response.body.data.productImageUpdate.image });
+    }
   } catch (err) {
     console.log(
       "🚀 ~ file: description.js:73 ~ descriptionController ~ err:",

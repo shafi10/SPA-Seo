@@ -56,6 +56,52 @@ export const useCreateProductSeo = () => {
 
   return useMutation((status) => createStatus(status), {
     onSuccess: async (data, obj) => {
+      if (data?.status === 400) {
+        return setToggleToast({
+          active: true,
+          message: `Something went wrong`,
+        });
+      }
+      setCloseModal();
+      queryClient.invalidateQueries("productList");
+
+      setToggleToast({
+        active: true,
+        message: `Submit Successfully`,
+      });
+    },
+    onError: async () => {
+      setToggleToast({
+        active: true,
+        message: `Something went wrong`,
+      });
+    },
+    refetchOnWindowFocus: false,
+  });
+};
+
+export const useUpdateProductSeoImgAlt = () => {
+  const fetch = useAuthenticatedFetch();
+  const { setCloseModal, setToggleToast } = useUI();
+  const queryClient = useQueryClient();
+  async function createStatus(status) {
+    return await fetch(`/api/product/update-image-alt`, {
+      method: "POST",
+      body: JSON.stringify(status),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
+
+  return useMutation((status) => createStatus(status), {
+    onSuccess: async (data, obj) => {
+      if (data?.status === 400) {
+        return setToggleToast({
+          active: true,
+          message: `Something went wrong`,
+        });
+      }
       setCloseModal();
       queryClient.invalidateQueries("productList");
 

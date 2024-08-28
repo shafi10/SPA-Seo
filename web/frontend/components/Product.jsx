@@ -16,8 +16,7 @@ export default function Product() {
   const { isError, isLoading, data } = useProductsQuery({
     url: "/api/product/list",
   });
-
-  console.log("🚀 ~ Product ~ data:", data);
+  const apikey = "AIzaSyAEu1z7QmLwZBGCvyoU6n3Nin8iTfqan-A";
   const rowMarkup =
     (data &&
       data?.map((info, index) => (
@@ -53,6 +52,23 @@ export default function Product() {
                 }}
               >
                 Update SEO
+              </Button>
+              <Button
+                className="cursor_pointer"
+                primary
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenModal({
+                    view: "CREATE_PRODUCT_SEO",
+                    isOpen: true,
+                    data: {
+                      title: "Product SEO",
+                      info: info,
+                    },
+                  });
+                }}
+              >
+                SEO Score
               </Button>
             </HorizontalStack>
           </IndexTable.Cell>

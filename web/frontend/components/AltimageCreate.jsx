@@ -1,43 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, FormLayout } from "@shopify/polaris";
-// import { useState, useCallback } from "react";
-// import { CreateProductSeo } from "./CreateProductSeo";
+import { Button, Form } from "@shopify/polaris";
 import { useUI } from "../contexts/ui.context";
 import TextareaField from "./commonUI/TextareaField";
+import { useUpdateProductSeoImgAlt } from "../hooks/useProductsQuery";
 
 export function AltimageCreate() {
-  const { modal } = useUI();
+  const { modal, setToggleToast } = useUI();
   const images = modal?.data?.info?.images?.edges?.map((data) => data?.node);
-  console.log("🚀 ~ AltimageCreate ~ images:", images);
 
+  const { mutate: updateSeoAltText, isError } = useUpdateProductSeoImgAlt();
   const [formData, setFormData] = useState([]);
 
-  const [errors, setErrors] = useState({
-    image_alt: "",
-  });
-
-  const handleSubmit = (obj, image) => {
-    if (!obj?.image_alt) {
-      return setErrors({
-        ...errors,
-        image_alt: `Please enter image alt`,
+  const handleSubmit = (obj) => {
+    if (!obj?.altText) {
+      return setToggleToast({
+        active: true,
+        message: `Alt text cannot be empty`,
       });
     }
 
     const info = {
       id: modal?.data?.info?.id,
-      image_alt: obj.image_alt,
+      imageId: obj?.id,
+      altText: obj?.altText,
     };
-    // createOrUpdateSeo(info);
+    updateSeoAltText(info);
   };
 
   const handleChange = (value, name, index) => {
-    console.log("🚀 ~ handleChange ~ value:", value, index);
     const images = [...formData];
     const data = { ...images[index], altText: value };
     images[index] = data;
     setFormData(images);
-    // setErrors({ ...errors, [name]: "" });
   };
 
   useEffect(() => {
@@ -56,7 +50,7 @@ export function AltimageCreate() {
           <div className="app__product_alt_textarea">
             <Form
               className="app__product_alt_textarea"
-              onSubmit={() => handleSubmit(formData, image)}
+              onSubmit={() => handleSubmit(image)}
             >
               <div className="app__seo_alt_form">
                 <div className="app__seo_alt_textarea">
@@ -67,7 +61,7 @@ export function AltimageCreate() {
                     type="text"
                     name="seo_description"
                     placeholder="Enter image alt text"
-                    error={errors?.seo_description}
+                    error={""}
                     index={index}
                   />
                 </div>
