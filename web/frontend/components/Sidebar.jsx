@@ -5,6 +5,7 @@ export default function Sidebar({ selectedSidebar, setSelectedSidebar }) {
     { id: 1, title: "Home page" },
     { id: 2, title: "Product page" },
     { id: 3, title: "Bulk Product page" },
+    { id: 3, title: "Collection page" },
   ];
 
   return (

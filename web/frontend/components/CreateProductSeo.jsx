@@ -94,10 +94,10 @@ export function CreateProductSeo() {
           <TextareaField
             value={formData?.seo_description}
             onChange={handleChange}
-            label={"Enter Meta description"}
+            label={"Enter Meta Description"}
             type="text"
             name="seo_description"
-            placeholder="Enter Meta description"
+            placeholder="Enter Meta Description"
             error={errors?.seo_description}
           />
           <Button primary submit>
