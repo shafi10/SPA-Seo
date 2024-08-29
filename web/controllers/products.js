@@ -17,6 +17,7 @@ const fetchAllProducts = async (session) => {
             title
             handle
             status
+            handle
             seo{
                         title
                         description

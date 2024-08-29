@@ -47,6 +47,7 @@ app.get("/api/shop", async (_req, res) => {
     name: response.data[0]?.name,
     email: response.data[0]?.email,
     currencyCode: response.data[0]?.currency,
+    domain: response.data[0]?.domain,
   };
 
   res.status(200).send(shop);

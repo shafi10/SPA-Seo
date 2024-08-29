@@ -3,6 +3,7 @@ import { Tabs } from "@shopify/polaris";
 import { useState, useCallback } from "react";
 import { CreateProductSeo } from "./CreateProductSeo";
 import { AltimageCreate } from "./AltimageCreate";
+import { SeoScore } from "./SeoScore";
 
 export default function ProductSeo() {
   const [selected, setSelected] = useState(0);
@@ -13,6 +14,11 @@ export default function ProductSeo() {
   );
 
   const tabs = [
+    {
+      id: "all-Score-1",
+      content: "SEO Score",
+      panelID: "all-Product-score-content-1",
+    },
     {
       id: "all-Product-1",
       content: "Product SEO",
@@ -28,12 +34,13 @@ export default function ProductSeo() {
   return (
     <div>
       <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}>
-        {selected === 0 && (
+        {selected === 0 && <SeoScore />}
+        {selected === 1 && (
           <div className="app__product_seo_creation">
             <CreateProductSeo />
           </div>
         )}
-        {selected === 1 && <AltimageCreate />}
+        {selected === 2 && <AltimageCreate />}
       </Tabs>
     </div>
   );

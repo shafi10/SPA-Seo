@@ -7,9 +7,9 @@ import Product from "./Product";
 import HomeSeo from "./HomeSeo";
 
 export function Dashboard() {
-  // const { isLoading, isError } = useShopQuery({
-  //   url: "/api/shop",
-  // });
+  useShopQuery({
+    url: "/api/shop",
+  });
 
   const [selectedSidebar, setSelectedSidebar] = useState(2);
 

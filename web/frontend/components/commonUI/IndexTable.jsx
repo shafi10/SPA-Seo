@@ -5,7 +5,7 @@ export function IndexTableData({
   rowMarkup,
   headings,
   resourceName,
-  itemsPerPage = 10,
+  itemsPerPage = 30,
 }) {
   // Pagination state variables
   const [currentPage, setCurrentPage] = useState(1);
