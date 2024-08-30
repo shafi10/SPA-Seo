@@ -1,7 +1,11 @@
+.bold_title {
+  font-weight: bold;
+  font-size: 13px;
+}
+
 .app__container {
   display: flex;
   gap: 24px;
-  /* background-color: #ebebeb; */
   height: 100vh;
 }
 
@@ -121,4 +125,29 @@
 .seo_score_result {
   font-size: 36px;
   color: #ffffff;
+}
+
+.app_product_bulk_update {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid rgba(221, 224, 228, 1);
+  padding: 10px;
+  background-color: #ffffff;
+}
+
+.app_product_bulk_image {
+  flex: 3;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.app_product_bulk_input {
+  flex: 3;
+}
+
+.product_bulk_update_description {
+  flex: 6;
 }

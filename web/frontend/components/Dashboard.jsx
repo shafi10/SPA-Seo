@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { Spinners } from "./index";
 import { useShopQuery } from "../hooks";
-import { Banner } from "@shopify/polaris";
 import Sidebar from "./Sidebar";
 import Product from "./Product";
 import HomeSeo from "./HomeSeo";
+import ProductBulkUpdate from "./ProductBulkUpdate";
 
 export function Dashboard() {
   useShopQuery({
@@ -15,18 +14,6 @@ export function Dashboard() {
 
   return (
     <>
-      {/* {isLoading && !isError ? (
-        <Spinners />
-      ) : ( */}
-      {/* <>
-        {isError ? (
-          <Banner title="Error">
-            <p>
-              An error occurred while processing this Page. Please try again
-              later.
-            </p>
-          </Banner>
-        ) : ( */}
       <div className="app__container">
         <Sidebar
           selectedSidebar={selectedSidebar}
@@ -35,11 +22,9 @@ export function Dashboard() {
         <div className="app__dashboard_container">
           {selectedSidebar === 1 && <HomeSeo />}
           {selectedSidebar === 2 && <Product />}
+          {selectedSidebar === 3 && <ProductBulkUpdate />}
         </div>
       </div>
-      {/* )}
-      </> */}
-      {/* )} */}
     </>
   );
 }
