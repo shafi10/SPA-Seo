@@ -3,6 +3,10 @@
   font-size: 13px;
 }
 
+.content__margin_top {
+  margin-top: 12px;
+}
+
 .app__container {
   display: flex;
   gap: 24px;
@@ -150,4 +154,10 @@
 
 .product_bulk_update_description {
   flex: 6;
+}
+
+.app_product_bulk_update_button {
+  display: flex;
+  justify-content: end;
+  margin-bottom: 12px;
 }

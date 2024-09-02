@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   IndexTable,
   Text,
@@ -12,6 +12,7 @@ import { Spinners } from "./Spinner";
 import { useUI } from "../contexts/ui.context";
 import { InputField } from "./commonUI/InputField";
 import TextareaField from "./commonUI/TextareaField";
+import Pagination from "./commonUI/Pagination";
 
 export default function ProductBulkUpdate() {
   const { setOpenModal } = useUI();
@@ -23,33 +24,62 @@ export default function ProductBulkUpdate() {
 
   const handleSubmit = (obj) => {};
 
-  const handleChange = (value, name) => {};
+  const handleChange = (value, name) => {
+    const products = [...formData];
+    const product = products[index];
+    const data = {
+      ...product,
+      seo: {
+        ...product?.seo,
+        title: name === "seo_title" ? value : product?.seo?.title,
+        description:
+          name === "seo_description" ? value : product?.seo?.description,
+      },
+    };
+    products[index] = data;
+    setFormData(products);
+  };
 
-  const headings = [
-    { title: "Image" },
-    { title: "Name" },
-    { title: "Meta title" },
-    { title: "Meta Description" },
-  ];
+  // Pagination state variables
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  // Calculate the index range for the current page
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  // Get the data for the current page
+  const currentPageData = formData.slice(startIndex, endIndex);
+
+  useEffect(() => {
+    setFormData(data);
+  }, [data]);
 
   return (
     <>
       {isLoading && !isError ? (
         <Spinners />
       ) : (
-        <Form onSubmit={() => handleSubmit(formData)}>
-          <div className="app_product_bulk_update">
-            <div className="app_product_bulk_image">
-              <div className="bold_title">Image</div>
-              <div className="app_product_bulk_title bold_title">Name</div>
-            </div>
-            <div className="app_product_bulk_input bold_title">Meta title</div>
-            <div className="product_bulk_update_description bold_title">
-              Meta Description
-            </div>
+        <div className="app_product_bulk_update_container">
+          <div className="app_product_bulk_update_button">
+            <Button primary submit>
+              Submit
+            </Button>
           </div>
-          {data &&
-            data?.map((info, index) => (
+          <Form onSubmit={() => handleSubmit(formData)}>
+            <div className="app_product_bulk_update">
+              <div className="app_product_bulk_image">
+                <div className="bold_title">Image</div>
+                <div className="app_product_bulk_title bold_title">Name</div>
+              </div>
+              <div className="app_product_bulk_input bold_title">
+                Meta title
+              </div>
+              <div className="product_bulk_update_description bold_title">
+                Meta Description
+              </div>
+            </div>
+            {currentPageData?.map((info, index) => (
               <div position={index} className="app_product_bulk_update">
                 <div className="app_product_bulk_image">
                   <img
@@ -80,7 +110,18 @@ export default function ProductBulkUpdate() {
                 </div>
               </div>
             ))}
-        </Form>
+          </Form>
+          {data?.length > 10 && (
+            <div className="center__align content__margin_top">
+              <Pagination
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                itemsPerPage={itemsPerPage}
+                itemList={data}
+              />
+            </div>
+          )}
+        </div>
       )}
     </>
   );
