@@ -13,6 +13,7 @@ export const InputField = ({
   type,
   placeholder,
   name,
+  index,
 }) => {
   return (
     <TextField
@@ -23,7 +24,7 @@ export const InputField = ({
       name={name}
       id={id}
       value={value}
-      onChange={(value) => onChange(value, name)}
+      onChange={(value) => onChange(value, name, index)}
       autoComplete={autoComplete}
       helpText={helpText}
       placeholder={placeholder}

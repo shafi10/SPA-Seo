@@ -120,46 +120,42 @@ export const useUpdateProductSeoImgAlt = () => {
   });
 };
 
-// export const useProductHighlightQuery = ({ url, id }) => {
-//   const authenticatedFetch = useAuthenticatedFetch();
-//   const fetch = useMemo(() => {
-//     return async () => {
-//       const response = await authenticatedFetch(url, {});
-//       return response.json();
-//     };
-//   }, [url]);
+export const useProductUpdateBulkSeo = () => {
+  const fetch = useAuthenticatedFetch();
+  const { setCloseModal, setToggleToast } = useUI();
+  const queryClient = useQueryClient();
+  async function createStatus(status) {
+    return await fetch("/api/product/update-product-bulk-seo", {
+      method: "POST",
+      body: JSON.stringify(status),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
 
-//   return useQuery("highlight", fetch, {
-//     onSuccess: (data) => {},
-//     refetchOnWindowFocus: false,
-//     enabled: id !== null,
-//   });
-// };
+  return useMutation((status) => createStatus(status), {
+    onSuccess: async (data, obj) => {
+      if (data?.status === 400) {
+        return setToggleToast({
+          active: true,
+          message: `Something went wrong`,
+        });
+      }
+      setCloseModal();
+      queryClient.invalidateQueries("productList");
 
-// export const useHideOrShowProductHighlight = () => {
-//   const fetch = useAuthenticatedFetch();
-//   const { setToggleToast } = useUI();
-//   async function createStatus(status) {
-//     return await fetch("/api/product/hide-or-show-highlight", {
-//       method: "POST",
-//       body: JSON.stringify(status),
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//     });
-//   }
-
-//   return useMutation((status) => createStatus(status), {
-//     onSuccess: async (data, obj) => {
-//       const res = await data.json();
-//       setToggleToast({
-//         active: true,
-//         message:
-//           res === "yes"
-//             ? `Feature Highlight Show Successfully`
-//             : "Feature Highlight Hide Successfully",
-//       });
-//     },
-//     refetchOnWindowFocus: false,
-//   });
-// };
+      setToggleToast({
+        active: true,
+        message: `Submit Successfully`,
+      });
+    },
+    onError: async () => {
+      setToggleToast({
+        active: true,
+        message: `Something went wrong`,
+      });
+    },
+    refetchOnWindowFocus: false,
+  });
+};

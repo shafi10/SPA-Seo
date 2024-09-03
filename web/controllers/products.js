@@ -220,6 +220,57 @@ export const updateProductSEO = async (req, res, next) => {
   }
 };
 
+export const updateProductBulkSeo = async (req, res) => {
+  const { products } = req.body;
+
+  let query = ``;
+  for (let i = 0; i < products.length; i++) {
+    query += `productUpdate_${i}: productUpdate(input: {
+      id: "${products[i]?.id}",
+      seo: {
+        description: "${products[i]?.seo_description}",
+        title: "${products[i]?.seo_title}",
+      },
+    }) {
+      product {
+        id
+        title
+        seo{
+          description
+          title
+        }
+      }
+      userErrors {
+        field
+        message
+      }
+    }`;
+  }
+
+  const mutation = `mutation {
+    ${query}
+  }`;
+  console.log("🚀 ~ updateProductBulkSeo ~ mutation:", mutation);
+
+  const client = new shopify.api.clients.Graphql({
+    session: res.locals.shopify.session,
+  });
+
+  const response = await client.query({
+    data: mutation,
+  });
+
+  console.log(
+    "🚀 ~ updateProductBulkSeo ~ response:",
+    response.body.data?.productUpdate_0?.userErrors
+  );
+  if (response.body?.data?.productUpdate_0?.userErrors?.length > 0) {
+    return res.status(400).json({ error: response.body.data });
+  } else {
+    return res.status(200).json({ product: response.body.data });
+  }
+};
+
 export const updateImageSeoAltController = async (req, res, next) => {
   try {
     const { id, imageId, altText } = req.body;

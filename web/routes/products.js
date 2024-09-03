@@ -4,7 +4,7 @@ import {
   getProductControllerByID,
   updateImageSeoAltController,
   productsController,
-  showOrHideProductHighlightController,
+  updateProductBulkSeo,
 } from "../controllers/products.js";
 
 const router = express.Router();
@@ -13,6 +13,6 @@ router.get("/list", productsController);
 router.get("/:id", getProductControllerByID);
 router.post("/update-product-seo", updateProductSEO);
 router.post("/update-image-alt", updateImageSeoAltController);
-router.post("/hide-or-show-highlight", showOrHideProductHighlightController);
+router.post("/update-product-bulk-seo", updateProductBulkSeo);
 
 export default router;

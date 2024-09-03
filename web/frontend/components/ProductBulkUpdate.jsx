@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { Button, Form } from "@shopify/polaris";
 import {
-  IndexTable,
-  Text,
-  HorizontalStack,
-  VerticalStack,
-  Button,
-  Form,
-} from "@shopify/polaris";
-import { useProductsQuery } from "../hooks/useProductsQuery";
+  useProductsQuery,
+  useProductUpdateBulkSeo,
+} from "../hooks/useProductsQuery";
 import { Spinners } from "./Spinner";
 import { useUI } from "../contexts/ui.context";
 import { InputField } from "./commonUI/InputField";
@@ -15,19 +11,35 @@ import TextareaField from "./commonUI/TextareaField";
 import Pagination from "./commonUI/Pagination";
 
 export default function ProductBulkUpdate() {
-  const { setOpenModal } = useUI();
+  const { setToggleToast } = useUI();
   const { isError, isLoading, data } = useProductsQuery({
     url: "/api/product/list",
   });
+  const { mutate: updateBulkSeo, isError: isErrorForBulk } =
+    useProductUpdateBulkSeo();
 
   const [formData, setFormData] = useState([]);
+  const [formUpdatedData, setFormUpdatedData] = useState([]);
 
-  const handleSubmit = (obj) => {};
+  const handleSubmit = (obj) => {
+    if (obj?.length === 0)
+      return setToggleToast({
+        active: true,
+        message: `Please enter meta title or description`,
+      });
+    const newObj = {
+      products: obj,
+    };
+    updateBulkSeo(newObj);
+    setFormUpdatedData([]);
+  };
 
-  const handleChange = (value, name) => {
+  const handleChange = (value, name, id) => {
     const products = [...formData];
-    const product = products[index];
-    const data = {
+    const productIndex = products.findIndex((product) => product.id === id);
+    if (productIndex === -1) return;
+    const product = products[productIndex];
+    const newInfo = {
       ...product,
       seo: {
         ...product?.seo,
@@ -36,8 +48,33 @@ export default function ProductBulkUpdate() {
           name === "seo_description" ? value : product?.seo?.description,
       },
     };
-    products[index] = data;
+    products[productIndex] = newInfo;
     setFormData(products);
+
+    const updatedData = formUpdatedData?.find(
+      (data) => data?.id === product?.id
+    );
+    if (updatedData) {
+      const newData = formUpdatedData.map((data) =>
+        data?.id === product?.id
+          ? {
+              ...data,
+              seo_title: newInfo?.seo?.title,
+              seo_description: newInfo?.seo?.description,
+            }
+          : data
+      );
+      setFormUpdatedData(newData);
+    } else {
+      setFormUpdatedData([
+        ...formUpdatedData,
+        {
+          id: product?.id,
+          seo_title: newInfo?.seo?.title,
+          seo_description: newInfo?.seo?.description,
+        },
+      ]);
+    }
   };
 
   // Pagination state variables
@@ -61,12 +98,12 @@ export default function ProductBulkUpdate() {
         <Spinners />
       ) : (
         <div className="app_product_bulk_update_container">
-          <div className="app_product_bulk_update_button">
-            <Button primary submit>
-              Submit
-            </Button>
-          </div>
-          <Form onSubmit={() => handleSubmit(formData)}>
+          <Form onSubmit={() => handleSubmit(formUpdatedData)}>
+            <div className="app_product_bulk_update_button">
+              <Button primary submit>
+                Submit
+              </Button>
+            </div>
             <div className="app_product_bulk_update">
               <div className="app_product_bulk_image">
                 <div className="bold_title">Image</div>
@@ -91,21 +128,23 @@ export default function ProductBulkUpdate() {
                 </div>
                 <div className="app_product_bulk_input">
                   <InputField
-                    value={info?.seo?.title}
+                    value={info?.seo?.title ? info.seo.title : ""}
                     onChange={handleChange}
                     type="text"
                     name="seo_title"
                     placeholder={"Enter Meta Title"}
+                    index={info?.id}
                     error={""}
                   />
                 </div>
                 <div className="product_bulk_update_description">
                   <TextareaField
-                    value={info?.seo?.description}
+                    value={info?.seo?.description ? info?.seo?.description : ""}
                     onChange={handleChange}
                     name="seo_description"
                     placeholder="Enter Meta Description"
                     error={""}
+                    index={info?.id}
                   />
                 </div>
               </div>
