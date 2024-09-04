@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { FormLayout, Button, Form, InlineError } from "@shopify/polaris";
 import { InputField } from "./commonUI/InputField";
-import { useCreateProductSeo } from "../hooks/useProductsQuery";
 import { useUI } from "../contexts/ui.context";
 import TextareaField from "./commonUI/TextareaField";
+import { useCreateCollectionSeo } from "../hooks/useCollectionsQuery";
 
-export function CreateProductSeo() {
+export function CreateCollectionSeo() {
   const { modal } = useUI();
-  const { mutate: createOrUpdateSeo, isError } = useCreateProductSeo();
+  const { mutate: createOrUpdateSeo, isError } = useCreateCollectionSeo();
 
   const [formData, setFormData] = useState({
     seo_title: "",
