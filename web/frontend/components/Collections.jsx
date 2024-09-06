@@ -17,17 +17,20 @@ export default function CollectionsPage() {
     url: "/api/collection/list",
   });
 
-  console.log("🚀 ~ CollectionsPage ~ data:", data);
   const rowMarkup =
     (data &&
       data?.map((info, index) => (
         <IndexTable.Row id={info?.id} key={info?.id} position={index}>
           <IndexTable.Cell>
-            <img
-              src={info?.image?.url}
-              alt={info?.image?.altText}
-              className="app__feature_product_image"
-            />
+            {info?.image?.url ? (
+              <img
+                src={info?.image?.url}
+                alt={info?.image?.altText}
+                className="app__feature_product_image"
+              />
+            ) : (
+              <div className="red_color">Image not available</div>
+            )}
           </IndexTable.Cell>
           <IndexTable.Cell>
             <Text as="span">{info?.title}</Text>

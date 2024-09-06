@@ -3,6 +3,10 @@
   font-size: 13px;
 }
 
+.red_color {
+  color: red;
+}
+
 .content__margin_top {
   margin-top: 12px;
 }

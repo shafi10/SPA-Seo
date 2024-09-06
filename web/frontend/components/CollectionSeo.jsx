@@ -1,8 +1,8 @@
 import React from "react";
 import { Tabs } from "@shopify/polaris";
 import { useState, useCallback } from "react";
-import { AltimageCreate } from "./AltimageCreate";
 import { CreateCollectionSeo } from "./CreateCollectionSeo";
+import { CollectionAltTextImage } from "./CollectionAltText";
 
 export default function CollectionSeo() {
   const [selected, setSelected] = useState(0);
@@ -33,7 +33,7 @@ export default function CollectionSeo() {
             <CreateCollectionSeo />
           </div>
         )}
-        {selected === 2 && <AltimageCreate />}
+        {selected === 1 && <CollectionAltTextImage />}
       </Tabs>
     </div>
   );

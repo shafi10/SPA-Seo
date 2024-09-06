@@ -159,6 +159,71 @@ export const updateCollectionSEO = async (req, res, next) => {
   }
 };
 
+export const updateCollectionAltTextSEO = async (req, res, next) => {
+  try {
+    const { id, imageId, atlText } = req.body;
+
+    const mutation = `
+    mutation updateCollection($input: CollectionInput!) {
+      collectionUpdate(input: $input) {
+        collection {
+          id
+          image {
+            id
+            altText
+          }
+        }
+        userErrors {
+          field
+          message
+        }
+      }
+    }
+  `;
+
+    const variables = {
+      input: {
+        id: id,
+        image: {
+          id: imageId,
+          altText: atlText,
+        },
+      },
+    };
+
+    const client = new shopify.api.clients.Graphql({
+      session: res.locals.shopify.session,
+    });
+
+    const response = await client.query({
+      data: {
+        query: mutation,
+        variables: variables,
+      },
+    });
+
+    if (response.body.data.collectionUpdate.userErrors.length > 0) {
+      console.error("Errors:", response.body.data.collectionUpdate.userErrors);
+      return res
+        .status(400)
+        .json({ error: response.body.data.collectionUpdate.userErrors });
+    } else {
+      console.log(
+        "Updated product SEO:",
+        response.body.data.collectionUpdate.collection
+      );
+      return res
+        .status(200)
+        .json({ product: response.body.data.collectionUpdate.collection });
+    }
+  } catch (error) {
+    console.error(
+      "Failed to update product SEO:",
+      error.response?.errors || error.message
+    );
+  }
+};
+
 export const updateProductBulkSeo = async (req, res) => {
   const { products } = req.body;
 
