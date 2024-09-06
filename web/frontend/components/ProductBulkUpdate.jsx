@@ -86,7 +86,7 @@ export default function ProductBulkUpdate() {
   const endIndex = startIndex + itemsPerPage;
 
   // Get the data for the current page
-  const currentPageData = formData.slice(startIndex, endIndex);
+  const currentPageData = formData?.slice(startIndex, endIndex);
 
   useEffect(() => {
     setFormData(data);
