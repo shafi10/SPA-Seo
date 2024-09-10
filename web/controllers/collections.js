@@ -224,19 +224,19 @@ export const updateCollectionAltTextSEO = async (req, res, next) => {
   }
 };
 
-export const updateProductBulkSeo = async (req, res) => {
-  const { products } = req.body;
+export const updateCollectionBulkSeo = async (req, res) => {
+  const { collections } = req.body;
 
   let query = ``;
-  for (let i = 0; i < products.length; i++) {
-    query += `productUpdate_${i}: productUpdate(input: {
-      id: "${products[i]?.id}",
+  for (let i = 0; i < collections?.length; i++) {
+    query += `collectionUpdate_${i}: collectionUpdate(input: {
+      id: "${collections[i]?.id}",
       seo: {
-        description: "${products[i]?.seo_description}",
-        title: "${products[i]?.seo_title}",
+        description: "${collections[i]?.seo_description}",
+        title: "${collections[i]?.seo_title}",
       },
     }) {
-      product {
+      collection {
         id
         title
         seo{
@@ -254,7 +254,6 @@ export const updateProductBulkSeo = async (req, res) => {
   const mutation = `mutation {
     ${query}
   }`;
-  console.log("🚀 ~ updateProductBulkSeo ~ mutation:", mutation);
 
   const client = new shopify.api.clients.Graphql({
     session: res.locals.shopify.session,
@@ -266,9 +265,9 @@ export const updateProductBulkSeo = async (req, res) => {
 
   console.log(
     "🚀 ~ updateProductBulkSeo ~ response:",
-    response.body.data?.productUpdate_0?.userErrors
+    response.body.data?.collectionUpdate_0?.userErrors
   );
-  if (response.body?.data?.productUpdate_0?.userErrors?.length > 0) {
+  if (response.body?.data?.collectionUpdate_0?.userErrors?.length > 0) {
     return res.status(400).json({ error: response.body.data });
   } else {
     return res.status(200).json({ product: response.body.data });
@@ -324,32 +323,6 @@ export const updateImageSeoAltController = async (req, res, next) => {
         .status(200)
         .json({ product: response.body.data.productImageUpdate.image });
     }
-  } catch (err) {
-    console.log(
-      "🚀 ~ file: description.js:73 ~ descriptionController ~ err:",
-      err
-    );
-    res.status(400).json({ err });
-  }
-};
-
-export const showOrHideProductHighlightController = async (req, res, next) => {
-  try {
-    const { id, checked } = req.body;
-
-    const metafield = new shopify.api.rest.Metafield({
-      session: res.locals.shopify.session,
-    });
-    metafield.product_id = id;
-    metafield.namespace = "check_highlight";
-    metafield.key = "check_product_highlight";
-    metafield.value = checked ? "yes" : "no";
-    metafield.type = "single_line_text_field";
-    await metafield.save({
-      update: true,
-    });
-
-    return res.status(200).json(metafield?.value);
   } catch (err) {
     console.log(
       "🚀 ~ file: description.js:73 ~ descriptionController ~ err:",

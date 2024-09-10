@@ -5,6 +5,7 @@ import Product from "./Product";
 import HomeSeo from "./HomeSeo";
 import ProductBulkUpdate from "./ProductBulkUpdate";
 import CollectionsPage from "./Collections";
+import CollectionBulkUpdate from "./CollectionBulkUpdate";
 
 export function Dashboard() {
   useShopQuery({
@@ -25,6 +26,7 @@ export function Dashboard() {
           {selectedSidebar === 2 && <Product />}
           {selectedSidebar === 3 && <ProductBulkUpdate />}
           {selectedSidebar === 4 && <CollectionsPage />}
+          {selectedSidebar === 5 && <CollectionBulkUpdate />}
         </div>
       </div>
     </>

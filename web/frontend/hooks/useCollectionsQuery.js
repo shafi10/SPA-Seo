@@ -120,12 +120,12 @@ export const useUpdateCollectionSeoImgAlt = () => {
   });
 };
 
-export const useUpdateProductSeoImgAlt = () => {
+export const useCollectionUpdateBulkSeo = () => {
   const fetch = useAuthenticatedFetch();
   const { setCloseModal, setToggleToast } = useUI();
   const queryClient = useQueryClient();
   async function createStatus(status) {
-    return await fetch(`/api/product/update-image-alt`, {
+    return await fetch("/api/collection/update-bulk-collection-seo", {
       method: "POST",
       body: JSON.stringify(status),
       headers: {
@@ -143,47 +143,7 @@ export const useUpdateProductSeoImgAlt = () => {
         });
       }
       setCloseModal();
-      queryClient.invalidateQueries("productList");
-
-      setToggleToast({
-        active: true,
-        message: `Submit Successfully`,
-      });
-    },
-    onError: async () => {
-      setToggleToast({
-        active: true,
-        message: `Something went wrong`,
-      });
-    },
-    refetchOnWindowFocus: false,
-  });
-};
-
-export const useProductUpdateBulkSeo = () => {
-  const fetch = useAuthenticatedFetch();
-  const { setCloseModal, setToggleToast } = useUI();
-  const queryClient = useQueryClient();
-  async function createStatus(status) {
-    return await fetch("/api/product/update-product-bulk-seo", {
-      method: "POST",
-      body: JSON.stringify(status),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  }
-
-  return useMutation((status) => createStatus(status), {
-    onSuccess: async (data, obj) => {
-      if (data?.status === 400) {
-        return setToggleToast({
-          active: true,
-          message: `Something went wrong`,
-        });
-      }
-      setCloseModal();
-      queryClient.invalidateQueries("productList");
+      queryClient.invalidateQueries("collectionList");
 
       setToggleToast({
         active: true,
