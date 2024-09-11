@@ -13,13 +13,8 @@ import Switch from "../commonUI/Switch/Switch";
 
 export default function ContactInformation() {
   const [checked, setChecked] = useState(false);
-  const [otherIndustry, setOtherIndustry] = useState(null);
-  const handleTextFieldChange = useCallback(
-    (value) => setOtherIndustry(value),
-    []
-  );
-  const handleCheckboxChange = useCallback(
-    (newChecked) => setChecked(newChecked),
+  const handleCheckedChange = useCallback(
+    () => setChecked((prev) => !prev),
     []
   );
 
@@ -46,7 +41,7 @@ export default function ContactInformation() {
                 </Text>
                 <VerticalStack gap={"2"}>
                   <Text variant="headingMd">Status</Text>
-                  <Switch />
+                  <Switch checked={checked} handleClick={handleCheckedChange} />
                 </VerticalStack>
               </VerticalStack>
             </AlphaCard>
