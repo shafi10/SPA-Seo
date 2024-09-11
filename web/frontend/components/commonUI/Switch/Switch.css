@@ -1,0 +1,68 @@
+/* The switch container */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 28px;
+}
+
+/* Hide the default checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider (background) */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #b3b1b1;
+  transition: 0.4s;
+  border-radius: 28px;
+}
+
+/* The text "OFF" inside the slider by default */
+.slider:before {
+  position: absolute;
+  content: "OFF";
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  left: 32px;
+  top: 4px;
+  transition: 0.4s;
+}
+
+/* The slider circle */
+.slider::after {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 4px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+/* Checked state for the switch */
+input:checked + .slider {
+  background-color: #007a5c;
+}
+
+/* When checked, change the text to "ON" and move it left */
+input:checked + .slider:before {
+  content: "ON";
+  left: 10px;
+}
+
+/* When checked, move the circle to the right */
+input:checked + .slider::after {
+  transform: translateX(32px);
+}

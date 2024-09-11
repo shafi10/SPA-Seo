@@ -14,6 +14,8 @@ import {
   VerticalStack,
 } from "@shopify/polaris";
 import IndustryInformation from "./HomepageSeoComponents/IndustryInformation";
+import BrandInformation from "./HomepageSeoComponents/BrandInformation";
+import ContactInformation from "./HomepageSeoComponents/ContactInformation";
 
 export default function HomeSeo() {
   const { data, error, status, isError, isLoading } = useShopQuery({
@@ -28,7 +30,7 @@ export default function HomeSeo() {
           compactTitle
           divider
           subtitle={data.domain}
-          title={<Text variant="headingLg">{data.name}</Text>}
+          title={data.name}
           primaryAction={{
             content: "Save",
             onAction: () => console.log("Save"),
@@ -36,6 +38,10 @@ export default function HomeSeo() {
         >
           <Box paddingInlineStart={"32"} paddingInlineEnd={"32"}>
             <IndustryInformation />
+            <Divider />
+            <BrandInformation />
+            <Divider />
+            <ContactInformation />
             <Divider />
           </Box>
         </Page>

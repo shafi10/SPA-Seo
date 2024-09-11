@@ -51,7 +51,7 @@ export default function IndustryInformation() {
     },
   ];
   return (
-    <Box paddingBlockStart={"4"} paddingBlockEnd={"4"}>
+    <Box paddingBlockEnd={"5"}>
       <Layout>
         <Layout.Section oneThird>
           <Box paddingBlockEnd={"4"}>
@@ -63,7 +63,7 @@ export default function IndustryInformation() {
             </Text>
           </Box>
         </Layout.Section>
-        <Layout.Section>
+        <Layout.Section oneHalf>
           <Box>
             <AlphaCard>
               <VerticalStack gap={"6"}>
