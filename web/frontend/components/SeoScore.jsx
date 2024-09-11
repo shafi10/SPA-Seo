@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useUI } from "../contexts/ui.context";
 import { Spinners } from "./Spinner";
 
-export function SeoScore() {
+export function PageSpeedInsights() {
   const { modal, shop } = useUI();
-  const url = `https://${shop?.domain}/products/${modal?.data?.info?.handle}`;
+  const url = `https://${shop?.domain}`;
   const [seoScore, setSeoScore] = useState(null);
   console.log("🚀 ~ SeoScore ~ url:", url);
   const [isLoading, setLoading] = useState(false);
@@ -46,12 +46,54 @@ export function SeoScore() {
       {isLoading ? (
         <Spinners />
       ) : (
-        <div className="seo_score_container">
-          <div className="seo_score_title">Lighthouse SEO performance</div>
-          <div className="seo_score_result_container">
-            <div className="seo_score_result">{seoScore}</div>
+        <>
+          <div className="seo_score_page_title_container">
+            <div className="seo_score_page_title">Page Speed Insights</div>
+            <p className="seo_score_page_description">
+              PageSpeed Insights is a powerful tool designed to optimize website
+              performance, providing a detailed assessment of your site based on
+              Google's key evaluation criteria
+            </p>
           </div>
-        </div>
+          <div className="seo_score_container_grid">
+            <div className="seo_score_container">
+              <div className="seo_score_title">Lighthouse SEO performance</div>
+              <div
+                style={{
+                  backgroundColor:
+                    seoScore >= 90 ? "#0c6" : seoScore >= 50 ? "#fa3" : "#f33",
+                }}
+                className="seo_score_result_container"
+              >
+                <div className="seo_score_result">{seoScore}</div>
+              </div>
+            </div>
+            <div className="seo_score_container">
+              <div className="seo_score_title">Lighthouse SEO performance</div>
+              <div
+                style={{
+                  backgroundColor:
+                    seoScore >= 90 ? "#0c6" : seoScore >= 50 ? "#fa3" : "#f33",
+                }}
+                className="seo_score_result_container"
+              >
+                <div className="seo_score_result">{seoScore}</div>
+              </div>
+            </div>
+            <div className="seo_score_container">
+              <div className="seo_score_title">Lighthouse SEO performance</div>
+              <div
+                style={{
+                  backgroundColor:
+                    seoScore >= 90 ? "#0c6" : seoScore >= 50 ? "#fa3" : "#f33",
+                }}
+                className="seo_score_result_container"
+              >
+                <div className="seo_score_result">{seoScore}</div>
+              </div>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
