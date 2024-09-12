@@ -1,18 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { useAuthenticatedFetch, useShopQuery } from "../hooks";
-import {
-  AlphaCard,
-  Box,
-  Card,
-  Divider,
-  HorizontalStack,
-  Layout,
-  Page,
-  Select,
-  Text,
-  TextField,
-  VerticalStack,
-} from "@shopify/polaris";
+import { Box, Divider, Page } from "@shopify/polaris";
 import IndustryInformation from "./HomepageSeoComponents/IndustryInformation";
 import BrandInformation from "./HomepageSeoComponents/BrandInformation";
 import ContactInformation from "./HomepageSeoComponents/ContactInformation";
@@ -25,7 +13,8 @@ export default function HomeSeo() {
   const { data, error, status, isError, isLoading } = useShopQuery({
     url: "/api/shop",
   });
-  console.log(data);
+  const fetcher = useAuthenticatedFetch();
+
   return (
     <>
       {!isLoading ? (
@@ -39,6 +28,12 @@ export default function HomeSeo() {
             content: "Save",
             onAction: () => console.log("Save"),
           }}
+          secondaryActions={[
+            {
+              content: "Test hit",
+              onAction: () => fetcher("/api/metafields/test"),
+            },
+          ]}
         >
           <Box paddingInlineStart={"32"} paddingInlineEnd={"32"}>
             <IndustryInformation />
