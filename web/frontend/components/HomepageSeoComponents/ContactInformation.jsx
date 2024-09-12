@@ -40,7 +40,7 @@ export default function ContactInformation() {
                   in Google JSONLD data.
                 </Text>
                 <VerticalStack gap={"2"}>
-                  <Text variant="headingMd">Status</Text>
+                  <Text variant="headingSm">Status</Text>
                   <Switch checked={checked} handleClick={handleCheckedChange} />
                 </VerticalStack>
               </VerticalStack>

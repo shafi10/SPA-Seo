@@ -1,8 +1,8 @@
 import express from "express";
-import { MetafieldTest } from "../controllers/metafields.js";
+import { MetafieldCreate } from "../controllers/metafields.js";
 
 const router = express.Router();
 
-router.get("/test", MetafieldTest);
+router.post("/create", MetafieldCreate);
 
 export default router;

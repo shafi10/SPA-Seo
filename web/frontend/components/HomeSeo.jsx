@@ -31,7 +31,15 @@ export default function HomeSeo() {
           secondaryActions={[
             {
               content: "Test hit",
-              onAction: () => fetcher("/api/metafields/test"),
+              onAction: () =>
+                fetcher("/api/metafields/create", {
+                  method: "POST",
+                  body: JSON.stringify({
+                    page: "/product",
+                    data: { p: 200, gg: "gg" },
+                  }),
+                  headers: { "Content-Type": "application/json" },
+                }),
             },
           ]}
         >
