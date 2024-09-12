@@ -28,7 +28,7 @@ export function Dashboard() {
           {selectedSidebar === 3 && <Product />}
           {selectedSidebar === 4 && <ProductBulkUpdate />}
           {selectedSidebar === 5 && <CollectionsPage />}
-          {selectedSidebar === 5 && <CollectionBulkUpdate />}
+          {selectedSidebar === 6 && <CollectionBulkUpdate />}
         </div>
       </div>
     </>

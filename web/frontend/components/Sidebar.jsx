@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Sidebar({ selectedSidebar, setSelectedSidebar }) {
   const menuItems = [
-    { id: 1, title: "PageSpeed Insights" },
+    { id: 1, title: "SEO Insights" },
     { id: 2, title: "Home page" },
     { id: 3, title: "Product page" },
     { id: 4, title: "Bulk Product page" },

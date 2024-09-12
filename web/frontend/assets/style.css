@@ -127,6 +127,9 @@
 .seo_score_container {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
   background-color: #ffffff;
   padding: 24px;
   border-radius: 12px;
@@ -134,7 +137,8 @@
 
 .seo_score_container_grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
 }
 
 .seo_score_result_container {
@@ -154,6 +158,16 @@
 .seo_score_result {
   font-size: 36px;
   color: #ffffff;
+}
+
+.seo_score_insights_url {
+  color: #f27321;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.seo_score_insights_url:hover {
+  color: rgba(69, 143, 255, 1);
 }
 
 .app_product_bulk_update {
