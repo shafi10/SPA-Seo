@@ -30,6 +30,7 @@
 .app__dashboard_container {
   background-color: #ebebeb;
   width: 100%;
+  height: max-content;
   padding: 16px;
   border-radius: 8px;
 }

@@ -3,7 +3,7 @@
 client_id = "4a8105f24e04b6b1e217541b65cb7b16"
 name = "app-testing-bs23"
 handle = "app-testing-bs23"
-application_url = "https://mentioned-requiring-easter-situation.trycloudflare.com"
+application_url = "https://noticed-cameroon-tomorrow-european.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_products,read_themes,write_products,write_themes"
 
 [auth]
 redirect_urls = [
-  "https://mentioned-requiring-easter-situation.trycloudflare.com/auth/callback",
-  "https://mentioned-requiring-easter-situation.trycloudflare.com/auth/shopify/callback",
-  "https://mentioned-requiring-easter-situation.trycloudflare.com/api/auth/callback"
+  "https://noticed-cameroon-tomorrow-european.trycloudflare.com/auth/callback",
+  "https://noticed-cameroon-tomorrow-european.trycloudflare.com/auth/shopify/callback",
+  "https://noticed-cameroon-tomorrow-european.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

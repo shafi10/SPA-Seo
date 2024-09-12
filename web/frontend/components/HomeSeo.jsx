@@ -16,6 +16,8 @@ import {
 import IndustryInformation from "./HomepageSeoComponents/IndustryInformation";
 import BrandInformation from "./HomepageSeoComponents/BrandInformation";
 import ContactInformation from "./HomepageSeoComponents/ContactInformation";
+import PriceRangeInformation from "./HomepageSeoComponents/PriceRangeInformation";
+import SocialMediaInformation from "./HomepageSeoComponents/SocialMediaInformation";
 
 export default function HomeSeo() {
   const { data, error, status, isError, isLoading } = useShopQuery({
@@ -42,6 +44,10 @@ export default function HomeSeo() {
             <BrandInformation />
             <Divider />
             <ContactInformation />
+            <Divider />
+            <PriceRangeInformation />
+            <Divider />
+            <SocialMediaInformation />
             <Divider />
           </Box>
         </Page>

@@ -8,7 +8,6 @@ import {
   TextField,
   Checkbox,
 } from "@shopify/polaris";
-import { EditMajor } from "@shopify/polaris-icons";
 
 export default function BrandInformation() {
   const [checked, setChecked] = useState(false);
