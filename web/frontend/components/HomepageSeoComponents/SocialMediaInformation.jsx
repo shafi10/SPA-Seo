@@ -45,7 +45,7 @@ export default function SocialMediaInformation() {
         <Layout.Section oneHalf>
           <Box>
             <AlphaCard>
-              <VerticalStack gap={"2"}>
+              <VerticalStack gap={"4"}>
                 <TextField
                   label="Facebook page URL"
                   value={facebook}

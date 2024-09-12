@@ -18,6 +18,8 @@ import BrandInformation from "./HomepageSeoComponents/BrandInformation";
 import ContactInformation from "./HomepageSeoComponents/ContactInformation";
 import PriceRangeInformation from "./HomepageSeoComponents/PriceRangeInformation";
 import SocialMediaInformation from "./HomepageSeoComponents/SocialMediaInformation";
+import CompanyLogoInformation from "./HomepageSeoComponents/CompanyLogoInformation";
+import ProductReviewInformation from "./HomepageSeoComponents/ProductReviewAppInformation";
 
 export default function HomeSeo() {
   const { data, error, status, isError, isLoading } = useShopQuery({
@@ -43,11 +45,15 @@ export default function HomeSeo() {
             <Divider />
             <BrandInformation />
             <Divider />
+            <CompanyLogoInformation />
+            <Divider />
             <ContactInformation />
             <Divider />
             <PriceRangeInformation />
             <Divider />
             <SocialMediaInformation />
+            <Divider />
+            <ProductReviewInformation />
             <Divider />
           </Box>
         </Page>
