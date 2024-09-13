@@ -1,22 +1,14 @@
+{% assign data = shop.metafields['bs-23-seo-app']['json-ld'].value %}
 <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Corporation",
-    "name": "GG",
-    "alternateName": "Gee gisle",
-    "url": "https://www.gg.com",
-    "logo": "https://cdn.js/logo-url",
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "telephone": "01736571444",
-      "contactType": "technical support",
-      "contactOption": "TollFree",
-      "areaServed": "US",
-      "availableLanguage": "en"
-    },
-    "sameAs": "https://pm23.atlassian.net/jira/software/c/projects/SIHD/boards/375/backlog?assignee=712020%3Ad9ed3c65-2f94-468f-80fe-d84547577f3e&selectedIssue=SIHD-81"
-  }
+  {{ request.path | json}}
 </script>
+
+{% assign temp = data[request.path] | json %}
+{% if temp != 'null' %}
+  <script type="application/ld+json">
+    {{ data[request.path] | json }}
+  </script>
+{% endif %}
 
 {% schema %}
 {

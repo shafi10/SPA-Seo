@@ -9,6 +9,7 @@ import {
   RangeSlider,
   LegacyStack,
 } from "@shopify/polaris";
+import { useHomeSeo } from "../../contexts/home.context";
 
 export default function PriceRangeInformation() {
   const initialValue = [500, 1500];
@@ -17,14 +18,19 @@ export default function PriceRangeInformation() {
   const max = 2000;
   const step = 100;
 
+  const { organization, setOrganization } = useHomeSeo();
+  let priceRange = organization?.priceRange;
   const [intermediateTextFieldValue, setIntermediateTextFieldValue] =
     useState(initialValue);
-  const [rangeValue, setRangeValue] = useState(initialValue);
+  const [rangeValue, setRangeValue] = useState(
+    priceRange ? priceRange : initialValue
+  );
 
-  const handleRangeSliderChange = useCallback((value) => {
+  const handleRangeSliderChange = (value) => {
     setRangeValue(value);
+    setOrganization({ ...organization, priceRange: value });
     setIntermediateTextFieldValue(value);
-  }, []);
+  };
 
   const handleLowerTextFieldChange = useCallback(
     (value) => {
@@ -42,31 +48,31 @@ export default function PriceRangeInformation() {
     [rangeValue]
   );
 
-  const handleLowerTextFieldBlur = useCallback(() => {
+  const handleLowerTextFieldBlur = () => {
     const upperValue = rangeValue[1];
     const value = intermediateTextFieldValue[0];
 
     setRangeValue([value, upperValue]);
-  }, [intermediateTextFieldValue, rangeValue]);
+    setOrganization({ ...organization, priceRange: [value, upperValue] });
+  };
 
-  const handleUpperTextFieldBlur = useCallback(() => {
+  const handleUpperTextFieldBlur = () => {
     const lowerValue = rangeValue[0];
     const value = intermediateTextFieldValue[1];
 
     setRangeValue([lowerValue, value]);
-  }, [intermediateTextFieldValue, rangeValue]);
+    setOrganization({ ...organization, priceRange: [lowerValue, value] });
+  };
 
-  const handleEnterKeyPress = useCallback(
-    (event) => {
-      const newValue = intermediateTextFieldValue;
-      const oldValue = rangeValue;
+  const handleEnterKeyPress = (event) => {
+    const newValue = intermediateTextFieldValue;
+    const oldValue = rangeValue;
 
-      if (event.key === "Enter" && newValue !== oldValue) {
-        setRangeValue(newValue);
-      }
-    },
-    [intermediateTextFieldValue, rangeValue]
-  );
+    if (event.key === "Enter" && newValue !== oldValue) {
+      setRangeValue(newValue);
+      setOrganization({ ...organization, priceRange: newValue });
+    }
+  };
 
   const lowerTextFieldValue =
     intermediateTextFieldValue[0] === rangeValue[0]

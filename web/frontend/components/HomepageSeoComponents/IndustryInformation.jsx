@@ -9,16 +9,23 @@ import {
   VerticalStack,
   TextField,
 } from "@shopify/polaris";
-import { EditMajor } from "@shopify/polaris-icons";
+import { useHomeSeo } from "../../contexts/home.context";
 
 export default function IndustryInformation() {
-  const [selected, setSelected] = useState("store");
+  const { organization, setOrganization } = useHomeSeo();
+  let industry = organization?.industry;
+  const [selected, setSelected] = useState(industry ? industry : "store");
   const [otherIndustry, setOtherIndustry] = useState(null);
-  const handleSelectChange = useCallback((value) => setSelected(value), []);
-  const handleTextFieldChange = useCallback(
-    (value) => setOtherIndustry(value),
-    []
-  );
+  const handleSelectChange = (value) => {
+    setSelected(value);
+    if (value !== "other") {
+      setOrganization({ ...organization, industry: value });
+    }
+  };
+  const handleTextFieldChange = (value) => {
+    setOtherIndustry(value);
+    setOrganization({ ...organization, industry: value });
+  };
 
   const options = [
     {

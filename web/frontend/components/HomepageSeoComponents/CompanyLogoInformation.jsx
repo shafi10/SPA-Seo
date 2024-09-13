@@ -7,11 +7,17 @@ import {
   VerticalStack,
   TextField,
 } from "@shopify/polaris";
+import { useHomeSeo } from "../../contexts/home.context";
 
 export default function CompanyLogoInformation() {
-  const [logourl, setLogoUrl] = useState(null);
+  const { organization, setOrganization } = useHomeSeo();
+  let companyLogo = organization?.companyLogo;
+  const [logourl, setLogoUrl] = useState(companyLogo ? companyLogo : null);
 
-  const handleLogoUrlChange = useCallback((value) => setLogoUrl(value), []);
+  const handleLogoUrlChange = (value) => {
+    setLogoUrl(value);
+    setOrganization({ ...organization, companyLogo: value });
+  };
 
   return (
     <Box paddingBlockStart={"6"} paddingBlockEnd={"5"}>

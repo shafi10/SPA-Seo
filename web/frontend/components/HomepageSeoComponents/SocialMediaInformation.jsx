@@ -8,25 +8,93 @@ import {
   TextField,
   Checkbox,
 } from "@shopify/polaris";
+import { useHomeSeo } from "../../contexts/home.context";
 
 export default function SocialMediaInformation() {
-  const [facebook, setFacebook] = useState(null);
-  const [twitter, setTwitter] = useState(null);
-  const [instagram, setInstagram] = useState(null);
-  const [youtube, setYoutube] = useState(null);
-  const [pinterest, setPinterest] = useState(null);
-  const [linkedin, setLinkedin] = useState(null);
-  const [snapchat, setSnapchat] = useState(null);
-  const [tiktok, setTiktok] = useState(null);
+  const { organization, setOrganization } = useHomeSeo();
+  let socialMediaLinks = organization?.socialMedia;
 
-  const handleFacebookChange = useCallback((value) => setFacebook(value), []);
-  const handleTwitterChange = useCallback((value) => setTwitter(value), []);
-  const handleInstagramChange = useCallback((value) => setInstagram(value), []);
-  const handleYoutubeChange = useCallback((value) => setYoutube(value), []);
-  const handlePinterestChange = useCallback((value) => setPinterest(value), []);
-  const handleLinkedinChange = useCallback((value) => setLinkedin(value), []);
-  const handleSnapchatChange = useCallback((value) => setSnapchat(value), []);
-  const handleTiktokChange = useCallback((value) => setTiktok(value), []);
+  const [facebook, setFacebook] = useState(
+    socialMediaLinks ? socialMediaLinks.facebook : null
+  );
+  const [twitter, setTwitter] = useState(
+    socialMediaLinks ? socialMediaLinks.twitter : null
+  );
+  const [instagram, setInstagram] = useState(
+    socialMediaLinks ? socialMediaLinks.instagram : null
+  );
+  const [youtube, setYoutube] = useState(
+    socialMediaLinks ? socialMediaLinks.youtube : null
+  );
+  const [pinterest, setPinterest] = useState(
+    socialMediaLinks ? socialMediaLinks.pinterest : null
+  );
+  const [linkedin, setLinkedin] = useState(
+    socialMediaLinks ? socialMediaLinks.linkedin : null
+  );
+  const [snapchat, setSnapchat] = useState(
+    socialMediaLinks ? socialMediaLinks.snapchat : null
+  );
+  const [tiktok, setTiktok] = useState(
+    socialMediaLinks ? socialMediaLinks.tiktok : null
+  );
+
+  const handleFacebookChange = (value) => {
+    setFacebook(value);
+    setOrganization({
+      ...organization,
+      socialMedia: { ...organization?.socialMedia, facebook: value },
+    });
+  };
+  const handleTwitterChange = (value) => {
+    setTwitter(value);
+    setOrganization({
+      ...organization,
+      socialMedia: { ...organization?.socialMedia, twitter: value },
+    });
+  };
+  const handleInstagramChange = (value) => {
+    setInstagram(value);
+    setOrganization({
+      ...organization,
+      socialMedia: { ...organization?.socialMedia, instagram: value },
+    });
+  };
+  const handleYoutubeChange = (value) => {
+    setYoutube(value);
+    setOrganization({
+      ...organization,
+      socialMedia: { ...organization?.socialMedia, youtube: value },
+    });
+  };
+  const handlePinterestChange = (value) => {
+    setPinterest(value);
+    setOrganization({
+      ...organization,
+      socialMedia: { ...organization?.socialMedia, pinterest: value },
+    });
+  };
+  const handleLinkedinChange = (value) => {
+    setLinkedin(value);
+    setOrganization({
+      ...organization,
+      socialMedia: { ...organization?.socialMedia, linkedin: value },
+    });
+  };
+  const handleSnapchatChange = (value) => {
+    setSnapchat(value);
+    setOrganization({
+      ...organization,
+      socialMedia: { ...organization?.socialMedia, snapchat: value },
+    });
+  };
+  const handleTiktokChange = (value) => {
+    setTiktok(value);
+    setOrganization({
+      ...organization,
+      socialMedia: { ...organization?.socialMedia, snapchat: value },
+    });
+  };
 
   return (
     <Box paddingBlockStart={"6"} paddingBlockEnd={"5"}>

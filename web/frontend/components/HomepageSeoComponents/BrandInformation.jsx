@@ -8,18 +8,26 @@ import {
   TextField,
   Checkbox,
 } from "@shopify/polaris";
+import { useHomeSeo } from "../../contexts/home.context";
 
 export default function BrandInformation() {
+  const { organization, setOrganization } = useHomeSeo();
+  let name = organization?.name;
   const [checked, setChecked] = useState(false);
-  const [otherIndustry, setOtherIndustry] = useState(null);
-  const handleTextFieldChange = useCallback(
-    (value) => setOtherIndustry(value),
-    []
-  );
-  const handleCheckboxChange = useCallback(
-    (newChecked) => setChecked(newChecked),
-    []
-  );
+  const [brandLogo, setBrandLogo] = useState(null);
+  const [otherIndustry, setOtherIndustry] = useState(name ? name : null);
+  const handleTextFieldChange = (value) => {
+    setOtherIndustry(value);
+    setOrganization({ ...organization, name: value });
+  };
+  const handleCheckboxChange = (newChecked) => {
+    setChecked(newChecked);
+    if (!newChecked) setOrganization({ ...organization, brandLogo: null });
+  };
+  const handleBrandLogoChange = (value) => {
+    setBrandLogo(value);
+    if (checked) setOrganization({ ...organization, brandLogo: value });
+  };
 
   return (
     <Box paddingBlockStart={"6"} paddingBlockEnd={"5"}>
@@ -53,9 +61,9 @@ export default function BrandInformation() {
                 {checked && (
                   <TextField
                     label="Brand Logo URL"
-                    value={otherIndustry}
+                    value={brandLogo}
                     placeholder="Paste your brand logo URL here"
-                    onChange={handleTextFieldChange}
+                    onChange={handleBrandLogoChange}
                   ></TextField>
                 )}
               </VerticalStack>

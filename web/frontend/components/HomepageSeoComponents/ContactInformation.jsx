@@ -10,13 +10,17 @@ import {
 } from "@shopify/polaris";
 import { EditMajor } from "@shopify/polaris-icons";
 import Switch from "../commonUI/Switch/Switch";
+import { useHomeSeo } from "../../contexts/home.context";
 
 export default function ContactInformation() {
-  const [checked, setChecked] = useState(false);
-  const handleCheckedChange = useCallback(
-    () => setChecked((prev) => !prev),
-    []
-  );
+  const { organization, setOrganization } = useHomeSeo();
+  let showContact = organization?.showContact;
+  const [checked, setChecked] = useState(showContact ? showContact : false);
+  const handleCheckedChange = () =>
+    setChecked((prev) => {
+      setOrganization({ ...organization, showContact: !prev });
+      return !prev;
+    });
 
   return (
     <Box paddingBlockStart={"6"} paddingBlockEnd={"5"}>

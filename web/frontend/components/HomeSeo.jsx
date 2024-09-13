@@ -1,19 +1,23 @@
 import React from "react";
 import { useAuthenticatedFetch, useShopQuery } from "../hooks";
-import { Box, Divider, Page } from "@shopify/polaris";
-import IndustryInformation from "./HomepageSeoComponents/IndustryInformation";
-import BrandInformation from "./HomepageSeoComponents/BrandInformation";
-import ContactInformation from "./HomepageSeoComponents/ContactInformation";
-import PriceRangeInformation from "./HomepageSeoComponents/PriceRangeInformation";
-import SocialMediaInformation from "./HomepageSeoComponents/SocialMediaInformation";
-import CompanyLogoInformation from "./HomepageSeoComponents/CompanyLogoInformation";
-import ProductReviewInformation from "./HomepageSeoComponents/ProductReviewAppInformation";
+import { Box, Divider, Page, Text } from "@shopify/polaris";
+import {
+  IndustryInformation,
+  BrandInformation,
+  CompanyLogoInformation,
+  ContactInformation,
+  PriceRangeInformation,
+  ProductReviewInformation,
+  SocialMediaInformation,
+} from "./HomepageSeoComponents";
+import { useHomeSeo } from "../contexts/home.context";
 
 export default function HomeSeo() {
   const { data, error, status, isError, isLoading } = useShopQuery({
     url: "/api/shop",
   });
   const fetcher = useAuthenticatedFetch();
+  const { organization } = useHomeSeo();
 
   return (
     <>

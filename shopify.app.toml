@@ -3,7 +3,7 @@
 client_id = "4a8105f24e04b6b1e217541b65cb7b16"
 name = "app-testing-bs23"
 handle = "app-testing-bs23"
-application_url = "https://played-roland-flash-buzz.trycloudflare.com"
+application_url = "https://7578-103-95-98-139.ngrok-free.app"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_products,read_themes,write_products,write_themes"
 
 [auth]
 redirect_urls = [
-  "https://played-roland-flash-buzz.trycloudflare.com/auth/callback",
-  "https://played-roland-flash-buzz.trycloudflare.com/auth/shopify/callback",
-  "https://played-roland-flash-buzz.trycloudflare.com/api/auth/callback"
+  "https://7578-103-95-98-139.ngrok-free.app/auth/callback",
+  "https://7578-103-95-98-139.ngrok-free.app/auth/shopify/callback",
+  "https://7578-103-95-98-139.ngrok-free.app/api/auth/callback"
 ]
 
 [webhooks]
