@@ -3,6 +3,7 @@ import { Tabs } from "@shopify/polaris";
 import { useState, useCallback } from "react";
 import { CreateProductSeo } from "./CreateProductSeo";
 import { AltimageCreate } from "./AltimageCreate";
+import { ProductScan } from "./ProductScan";
 
 export default function ProductSeo() {
   const [selected, setSelected] = useState(0);
@@ -23,6 +24,11 @@ export default function ProductSeo() {
       content: "Product Image alt",
       panelID: "accepts-Product-alt-content-1",
     },
+    {
+      id: "accepts-Product-scan-alt-1",
+      content: "Scan for SEO issues",
+      panelID: "accepts-Product-alt-content-1",
+    },
   ];
 
   return (
@@ -34,6 +40,7 @@ export default function ProductSeo() {
           </div>
         )}
         {selected === 1 && <AltimageCreate />}
+        {selected === 2 && <ProductScan />}
       </Tabs>
     </div>
   );
