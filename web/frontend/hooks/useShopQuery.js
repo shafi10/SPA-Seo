@@ -28,9 +28,30 @@ export const useShopQuery = ({ url, fetchInit = {}, reactQueryOptions }) => {
   return useQuery(url, fetch, {
     ...reactQueryOptions,
     onSuccess: (data) => {
-      setShop(data)
+      setShop(data);
     },
     refetchOnWindowFocus: false,
-    enabled: Object.keys(shop).length === 0
+    enabled: Object.keys(shop).length === 0,
+  });
+};
+
+export const useSeoInsightsQuery = ({
+  url,
+  fetchInit = {},
+  reactQueryOptions,
+}) => {
+  const authenticatedFetch = useAuthenticatedFetch();
+  const fetch = useMemo(() => {
+    return async () => {
+      const response = await authenticatedFetch(url, fetchInit);
+      return response.json();
+    };
+  }, [url, JSON.stringify(fetchInit)]);
+
+  return useQuery("seoInsights", fetch, {
+    ...reactQueryOptions,
+    onSuccess: (data) => {},
+    refetchOnWindowFocus: false,
+    // enabled: Object.keys(shop).length === 0,
   });
 };
