@@ -19,69 +19,62 @@ export default function PriceRangeInformation() {
   const step = 100;
 
   const { organization, setOrganization } = useHomeSeo();
-  let priceRange = organization?.priceRange;
-  const [intermediateTextFieldValue, setIntermediateTextFieldValue] =
-    useState(initialValue);
-  const [rangeValue, setRangeValue] = useState(
-    priceRange ? priceRange : initialValue
+  const [intermediateTextFieldValue, setIntermediateTextFieldValue] = useState(
+    organization.priceRange
   );
 
   const handleRangeSliderChange = (value) => {
-    setRangeValue(value);
     setOrganization({ ...organization, priceRange: value });
     setIntermediateTextFieldValue(value);
   };
 
   const handleLowerTextFieldChange = useCallback(
     (value) => {
-      const upperValue = rangeValue[1];
+      const upperValue = organization.priceRange[1];
       setIntermediateTextFieldValue([parseInt(value, 10), upperValue]);
     },
-    [rangeValue]
+    [organization.priceRange]
   );
 
   const handleUpperTextFieldChange = useCallback(
     (value) => {
-      const lowerValue = rangeValue[0];
+      const lowerValue = organization.priceRange[0];
       setIntermediateTextFieldValue([lowerValue, parseInt(value, 10)]);
     },
-    [rangeValue]
+    [organization.priceRange]
   );
 
   const handleLowerTextFieldBlur = () => {
-    const upperValue = rangeValue[1];
+    const upperValue = organization.priceRange[1];
     const value = intermediateTextFieldValue[0];
 
-    setRangeValue([value, upperValue]);
     setOrganization({ ...organization, priceRange: [value, upperValue] });
   };
 
   const handleUpperTextFieldBlur = () => {
-    const lowerValue = rangeValue[0];
+    const lowerValue = organization.priceRange[0];
     const value = intermediateTextFieldValue[1];
 
-    setRangeValue([lowerValue, value]);
     setOrganization({ ...organization, priceRange: [lowerValue, value] });
   };
 
   const handleEnterKeyPress = (event) => {
     const newValue = intermediateTextFieldValue;
-    const oldValue = rangeValue;
+    const oldValue = organization.priceRange;
 
     if (event.key === "Enter" && newValue !== oldValue) {
-      setRangeValue(newValue);
       setOrganization({ ...organization, priceRange: newValue });
     }
   };
 
   const lowerTextFieldValue =
-    intermediateTextFieldValue[0] === rangeValue[0]
-      ? rangeValue[0]
+    intermediateTextFieldValue[0] === organization.priceRange[0]
+      ? organization.priceRange[0]
       : intermediateTextFieldValue[0];
 
   const upperTextFieldValue =
-    intermediateTextFieldValue[1] === rangeValue[1]
-      ? rangeValue[1]
+    intermediateTextFieldValue[1] === organization.priceRange[1]
+      ? organization.priceRange[1]
       : intermediateTextFieldValue[1];
 
   return (
@@ -106,7 +99,7 @@ export default function PriceRangeInformation() {
                 <div onKeyDown={handleEnterKeyPress}>
                   <RangeSlider
                     output
-                    value={rangeValue}
+                    value={organization?.priceRange}
                     prefix={prefix}
                     min={min}
                     max={max}

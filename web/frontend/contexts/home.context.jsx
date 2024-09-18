@@ -6,6 +6,7 @@ const initialState = {
     brand: { name: "", logo: "" },
     logo: "",
     showContact: false,
+    priceRange: [100, 1000],
     socialLinks: {
       facebook: "",
       twitter: "",

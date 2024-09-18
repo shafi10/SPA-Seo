@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import {
   Layout,
   Box,
@@ -6,93 +6,58 @@ import {
   AlphaCard,
   VerticalStack,
   TextField,
-  Checkbox,
 } from "@shopify/polaris";
 import { useHomeSeo } from "../../contexts/home.context";
 
 export default function SocialMediaInformation() {
   const { organization, setOrganization } = useHomeSeo();
-  let socialMediaLinks = organization?.socialMedia;
-
-  const [facebook, setFacebook] = useState(
-    socialMediaLinks ? socialMediaLinks.facebook : null
-  );
-  const [twitter, setTwitter] = useState(
-    socialMediaLinks ? socialMediaLinks.twitter : null
-  );
-  const [instagram, setInstagram] = useState(
-    socialMediaLinks ? socialMediaLinks.instagram : null
-  );
-  const [youtube, setYoutube] = useState(
-    socialMediaLinks ? socialMediaLinks.youtube : null
-  );
-  const [pinterest, setPinterest] = useState(
-    socialMediaLinks ? socialMediaLinks.pinterest : null
-  );
-  const [linkedin, setLinkedin] = useState(
-    socialMediaLinks ? socialMediaLinks.linkedin : null
-  );
-  const [snapchat, setSnapchat] = useState(
-    socialMediaLinks ? socialMediaLinks.snapchat : null
-  );
-  const [tiktok, setTiktok] = useState(
-    socialMediaLinks ? socialMediaLinks.tiktok : null
-  );
 
   const handleFacebookChange = (value) => {
-    setFacebook(value);
     setOrganization({
       ...organization,
-      socialMedia: { ...organization?.socialMedia, facebook: value },
+      socialLinks: { ...organization?.socialLinks, facebook: value },
     });
   };
   const handleTwitterChange = (value) => {
-    setTwitter(value);
     setOrganization({
       ...organization,
-      socialMedia: { ...organization?.socialMedia, twitter: value },
+      socialLinks: { ...organization?.socialLinks, twitter: value },
     });
   };
   const handleInstagramChange = (value) => {
-    setInstagram(value);
     setOrganization({
       ...organization,
-      socialMedia: { ...organization?.socialMedia, instagram: value },
+      socialLinks: { ...organization?.socialLinks, instagram: value },
     });
   };
   const handleYoutubeChange = (value) => {
-    setYoutube(value);
     setOrganization({
       ...organization,
-      socialMedia: { ...organization?.socialMedia, youtube: value },
+      socialLinks: { ...organization?.socialLinks, youtube: value },
     });
   };
   const handlePinterestChange = (value) => {
-    setPinterest(value);
     setOrganization({
       ...organization,
-      socialMedia: { ...organization?.socialMedia, pinterest: value },
+      socialLinks: { ...organization?.socialLinks, pinterest: value },
     });
   };
   const handleLinkedinChange = (value) => {
-    setLinkedin(value);
     setOrganization({
       ...organization,
-      socialMedia: { ...organization?.socialMedia, linkedin: value },
+      socialLinks: { ...organization?.socialLinks, linkedin: value },
     });
   };
   const handleSnapchatChange = (value) => {
-    setSnapchat(value);
     setOrganization({
       ...organization,
-      socialMedia: { ...organization?.socialMedia, snapchat: value },
+      socialLinks: { ...organization?.socialLinks, snapchat: value },
     });
   };
   const handleTiktokChange = (value) => {
-    setTiktok(value);
     setOrganization({
       ...organization,
-      socialMedia: { ...organization?.socialMedia, snapchat: value },
+      socialLinks: { ...organization?.socialLinks, snapchat: value },
     });
   };
 
@@ -116,49 +81,49 @@ export default function SocialMediaInformation() {
               <VerticalStack gap={"4"}>
                 <TextField
                   label="Facebook page URL"
-                  value={facebook}
+                  value={organization?.socialLinks?.facebook}
                   placeholder="https://facebook.com/"
                   onChange={handleFacebookChange}
                 ></TextField>
                 <TextField
                   label="Twitter URL"
-                  value={twitter}
+                  value={organization?.socialLinks?.twitter}
                   placeholder="https://twitter.com/"
                   onChange={handleTwitterChange}
                 ></TextField>
                 <TextField
                   label="Instagram URL"
-                  value={instagram}
+                  value={organization?.socialLinks?.instagram}
                   placeholder="https://instagram.com/"
                   onChange={handleInstagramChange}
                 ></TextField>
                 <TextField
                   label="Youtube URL"
-                  value={youtube}
+                  value={organization?.socialLinks?.youtube}
                   placeholder="https://youytube.com/channel/"
                   onChange={handleYoutubeChange}
                 ></TextField>
                 <TextField
                   label="Pinterest URL"
-                  value={pinterest}
+                  value={organization?.socialLinks?.pinterest}
                   placeholder="https://pinterest.com/"
                   onChange={handlePinterestChange}
                 ></TextField>
                 <TextField
                   label="LinkedIn URL"
-                  value={linkedin}
+                  value={organization?.socialLinks?.linkedin}
                   placeholder="https://linkedin.com/"
                   onChange={handleLinkedinChange}
                 ></TextField>
                 <TextField
                   label="Snapchat URL"
-                  value={snapchat}
+                  value={organization?.socialLinks?.snapchat}
                   placeholder="https://snapchat.com/"
                   onChange={handleSnapchatChange}
                 ></TextField>
                 <TextField
                   label="TikTok URL"
-                  value={tiktok}
+                  value={organization?.socialLinks?.tiktok}
                   placeholder="https://tiktok.com/"
                   onChange={handleTiktokChange}
                 ></TextField>

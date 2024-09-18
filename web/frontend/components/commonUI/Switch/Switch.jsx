@@ -5,10 +5,12 @@ export default function Switch({ checked = false, handleClick }) {
   return (
     <>
       <label
+        className="switch"
         onClick={(e) => {
+          console.log("clicked");
+          e.preventDefault();
           handleClick();
         }}
-        className="switch"
       >
         <span className={`slider ${checked ? "checked" : ""}`}></span>
       </label>
