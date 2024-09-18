@@ -2,20 +2,36 @@
   {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "{{ shop.name | escape }}",
+    {% if data.brand.name %}
+      "name": "{{ data.brand.name | escape }}",
+    {% else %}
+      "name": "{{ shop.name | escape }}",
+    {% endif %}
+    "description": "{{ shop.description | escape }}",
     "url": "{{ shop.url }}",
-    "logo": "{{ shop.logo | default: shop.url | append: '/logo.png' }}",
+    {% if data.brand.logo %}
+      "logo": "{{ data.brand.logo }}",
+    {% elsif data.logo %}
+      "logo": "{{ data.logo }}",
+    {% else %}
+      "logo": "{{ shop.logo | default: shop.url | append: '/logo.png' }}",
+    {% endif %}
     "sameAs": [
-      "{% if shop.facebook %}{{ shop.facebook | escape }}{% endif %}",
-      "{% if shop.twitter %}{{ shop.twitter | escape }}{% endif %}",
-      "{% if shop.instagram %}{{ shop.instagram | escape }}{% endif %}",
-      "{% if shop.youtube %}{{ shop.youtube | escape }}{% endif %}"
+      "{% if data.socialLinks.facebook %}{{ data.socialLinks.facebook | escape }}{% endif %}",
+      "{% if data.socialLinks.twitter %}{{ data.socialLinks.twitter | escape }}{% endif %}",
+      "{% if data.socialLinks.instagram %}{{ data.socialLinks.instagram | escape }}{% endif %}",
+      "{% if data.socialLinks.youtube %}{{ data.socialLinks.youtube | escape }}{% endif %}",
+      "{% if data.socialLinks.pinterest %}{{ data.socialLinks.pinterest | escape }}{% endif %}",
+      "{% if data.socialLinks.linkedin %}{{ data.socialLinks.linkedin | escape }}{% endif %}",
+      "{% if data.socialLinks.snapchat %}{{ data.socialLinks.snapchat | escape }}{% endif %}",
+      "{% if data.socialLinks.tiktok %}{{ data.socialLinks.tiktok | escape }}{% endif %}"
     ],
     "contactPoint": {
       "@type": "ContactPoint",
       "telephone": "{{ shop.phone | escape }}",
       "contactType": "Customer Service"
     },
+    {% if data.showContact %}
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "{{ shop.address.address1 | escape }}{% if shop.address.address2 %}, {{ shop.address.address2 | escape }}{% endif %}",
@@ -24,6 +40,7 @@
       "postalCode": "{{ shop.address.zip | escape }}",
       "addressCountry": "{{ shop.address.country | escape }}"
     },
+    {% endif %}
     "potentialAction": {
       "@type": "SearchAction",
       "target": "{{ shop.url }}/search?q={search_term_string}",

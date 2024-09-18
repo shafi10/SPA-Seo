@@ -32,21 +32,14 @@ export default function JsonLd() {
           title={data.name}
           primaryAction={{
             content: "Save",
-            onAction: () => console.log("Save"),
+            onAction: () =>
+              createMetafield({
+                type: "organization",
+                data: organization,
+              }),
           }}
-          secondaryActions={[
-            {
-              content: "Test hit",
-              onAction: () =>
-                createMetafield({
-                  type: "Organization",
-                  data: organization,
-                }),
-            },
-          ]}
         >
           <Box paddingInlineStart={"32"} paddingInlineEnd={"32"}>
-            <Text>{JSON.stringify(organization)}</Text>
             <IndustryInformation />
             <Divider />
             <BrandInformation />

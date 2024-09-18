@@ -7,11 +7,13 @@ import ProductBulkUpdate from "./ProductBulkUpdate";
 import CollectionsPage from "./Collections";
 import CollectionBulkUpdate from "./CollectionBulkUpdate";
 import JsonLd from "./JsonLdPage";
+import { useMetafieldsQuery } from "../hooks/useMetafieldQuery";
 
 export function Dashboard() {
   useShopQuery({
     url: "/api/shop",
   });
+  useMetafieldsQuery({ url: "/api/metafields" });
 
   const [selectedSidebar, setSelectedSidebar] = useState(2);
 

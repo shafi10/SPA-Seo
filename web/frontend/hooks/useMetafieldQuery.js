@@ -2,6 +2,7 @@ import { useAuthenticatedFetch } from "./useAuthenticatedFetch";
 import { useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useUI } from "../contexts/ui.context";
+import { useHomeSeo } from "../contexts/home.context";
 
 export const useMetafieldsQuery = ({
   url,
@@ -9,36 +10,28 @@ export const useMetafieldsQuery = ({
   reactQueryOptions,
 }) => {
   const authenticatedFetch = useAuthenticatedFetch();
+  const { organization, setOrganization } = useHomeSeo();
   const fetch = useMemo(() => {
     return async () => {
       const response = await authenticatedFetch(url, fetchInit);
       return response.json();
     };
-  }, [url, JSON.stringify(fetchInit)]);
+  }, [JSON.stringify(fetchInit)]);
 
   return useQuery("metafieldList", fetch, {
     ...reactQueryOptions,
-    onSuccess: (data) => {},
+    onSuccess: (data) => {
+      console.log(data);
+      if (
+        typeof data.data === "object" &&
+        Object.entries(data.data).length > 0
+      ) {
+        setOrganization({ ...organization, ...data.data.organization });
+      }
+    },
     refetchOnWindowFocus: false,
-    // enabled: Object.keys(shop).length === 0,
   });
 };
-
-// export const useProductsQueryByID = ({ url, id }) => {
-//   const authenticatedFetch = useAuthenticatedFetch();
-//   const fetch = useMemo(() => {
-//     return async () => {
-//       const response = await authenticatedFetch(url, {});
-//       return response.json();
-//     };
-//   }, [url]);
-
-//   return useQuery(url, fetch, {
-//     onSuccess: (data) => {},
-//     refetchOnWindowFocus: false,
-//     enabled: id !== null,
-//   });
-// };
 
 export const useCreateMetafield = () => {
   const fetch = useAuthenticatedFetch();
@@ -56,7 +49,7 @@ export const useCreateMetafield = () => {
 
   return useMutation((status) => createStatus(status), {
     onSuccess: async (data, obj) => {
-      if (data?.status === 400) {
+      if (data?.status !== 200) {
         return setToggleToast({
           active: true,
           message: `Something went wrong`,

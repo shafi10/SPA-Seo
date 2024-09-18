@@ -1,17 +1,22 @@
 import React, { useState } from "react";
-import { Layout, Box, Text, AlphaCard, VerticalStack } from "@shopify/polaris";
+import {
+  Layout,
+  Box,
+  Text,
+  AlphaCard,
+  VerticalStack,
+  Button,
+} from "@shopify/polaris";
 import Switch from "../commonUI/Switch/Switch";
 import { useHomeSeo } from "../../contexts/home.context";
 
 export default function ContactInformation() {
   const { organization, setOrganization } = useHomeSeo();
-  let showContact = organization?.showContact;
-  const [checked, setChecked] = useState(showContact ? showContact : false);
   const handleCheckedChange = () => {
-    setChecked((prev) => {
-      return !prev;
+    setOrganization({
+      ...organization,
+      showContact: !organization.showContact,
     });
-    setOrganization({ ...organization, showContact: !checked });
   };
   return (
     <Box paddingBlockStart={"6"} paddingBlockEnd={"5"}>
@@ -36,7 +41,10 @@ export default function ContactInformation() {
                 </Text>
                 <VerticalStack gap={"2"}>
                   <Text variant="headingSm">Status</Text>
-                  <Switch checked={checked} handleClick={handleCheckedChange} />
+                  <Switch
+                    checked={organization?.showContact}
+                    handleClick={handleCheckedChange}
+                  />
                 </VerticalStack>
               </VerticalStack>
             </AlphaCard>

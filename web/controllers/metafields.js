@@ -121,3 +121,34 @@ export const MetafieldCreate = async (req, res, next) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 };
+
+export const GetMetafields = async (req, res, next) => {
+  try {
+    const client = new shopify.api.clients.Graphql({
+      session: res.locals.shopify.session,
+    });
+
+    let metafieldData = await client.query({
+      data: {
+        query: GetShopMetafield,
+      },
+    });
+
+    if (metafieldData.body.data.shop.metafield) {
+      metafieldData = JSON.parse(metafieldData.body.data.shop.metafield.value);
+    } else {
+      metafieldData = null;
+    }
+
+    return res.status(200).json({
+      message: "Retrived metafield successfully",
+      data: metafieldData,
+    });
+  } catch (error) {
+    console.error(
+      "Failed to get shop metafield:",
+      error.response?.errors || error.message
+    );
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
