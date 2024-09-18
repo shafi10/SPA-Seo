@@ -1,7 +1,4 @@
 {% assign data = shop.metafields['bs-23-seo-app']['json-ld'].value %}
-<script type="application/ld+json">
-  {{ request.path | json}}
-</script>
 
 {% assign temp = data[request.path] | json %}
 {% if temp != 'null' %}
