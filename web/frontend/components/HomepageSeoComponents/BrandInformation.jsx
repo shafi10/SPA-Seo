@@ -12,9 +12,10 @@ import { useHomeSeo } from "../../contexts/home.context";
 
 export default function BrandInformation() {
   const { organization, setOrganization } = useHomeSeo();
-  let name = organization?.name;
-  const [checked, setChecked] = useState(false);
-  const [brandLogo, setBrandLogo] = useState(null);
+  let name = organization?.name,
+    bLogo = organization?.brandLogo;
+  const [checked, setChecked] = useState(bLogo ? true : false);
+  const [brandLogo, setBrandLogo] = useState(bLogo ? bLogo : null);
   const [otherIndustry, setOtherIndustry] = useState(name ? name : null);
   const handleTextFieldChange = (value) => {
     setOtherIndustry(value);

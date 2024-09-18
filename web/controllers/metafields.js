@@ -69,7 +69,7 @@ export const MetafieldCreate = async (req, res, next) => {
     });
     await initializeMetafield(client);
 
-    const { page, data } = req.body;
+    const { type, data } = req.body;
     let prevData = await client.query({
       data: {
         query: GetShopMetafield,
@@ -97,10 +97,7 @@ export const MetafieldCreate = async (req, res, next) => {
               key: "json-ld",
               namespace: "bs-23-seo-app",
               ownerId: shopId,
-              value: JSON.stringify({
-                ...prevData,
-                [page]: generateJsonldFromPayload(data),
-              }),
+              value: JSON.stringify({ ...prevData, [type]: data }),
             },
           ],
         },
@@ -118,7 +115,7 @@ export const MetafieldCreate = async (req, res, next) => {
     });
   } catch (error) {
     console.error(
-      "Failed to check shop metafield:",
+      "Failed to create shop metafield:",
       error.response?.errors || error.message
     );
     return res.status(500).json({ error: "Internal server error" });

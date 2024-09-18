@@ -1,23 +1,63 @@
 <script type="application/ld+json">
   {
-    "@context": "{{ data['@context'] }}",
-    "@type": "{{ data['@type'] }}",
-    "name": "{{ data['name'] }}",
-    "logo": "{{ data['companyLogo'] }}",
-    "url": "{{ data['brandLogo'] }}",
-    {% if data.showContact %}
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "{{ shop.address.address1 | escape }}",
-        "addressLocality": "{{ shop.address.city | escape }}",
-        "addressRegion": "{{ shop.address.province | escape }}",
-        "postalCode": "{{ shop.address.zip | escape }}",
-        "addressCountry": "{{ shop.address.country | escape }}",
-        "hi": 1
-      },
-    {% endif %}
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "{{ shop.name | escape }}",
+    "url": "{{ shop.url }}",
+    "logo": "{{ shop.logo | default: shop.url | append: '/logo.png' }}",
     "sameAs": [
-      {{ data['socialMedia'] }}
-    ]
+      "{% if shop.facebook %}{{ shop.facebook | escape }}{% endif %}",
+      "{% if shop.twitter %}{{ shop.twitter | escape }}{% endif %}",
+      "{% if shop.instagram %}{{ shop.instagram | escape }}{% endif %}",
+      "{% if shop.youtube %}{{ shop.youtube | escape }}{% endif %}"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "{{ shop.phone | escape }}",
+      "contactType": "Customer Service"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "{{ shop.address.address1 | escape }}{% if shop.address.address2 %}, {{ shop.address.address2 | escape }}{% endif %}",
+      "addressLocality": "{{ shop.address.city | escape }}",
+      "addressRegion": "{{ shop.address.province | escape }}",
+      "postalCode": "{{ shop.address.zip | escape }}",
+      "addressCountry": "{{ shop.address.country | escape }}"
+    },
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "{{ shop.url }}/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Featured Products",
+      "itemListElement": [
+        {% for product in collections['frontpage'].products %}
+        {
+          "@type": "Product",
+          "name": "{{ product.title | escape }}",
+          "image": [
+            {% for image in product.images %}
+              "{{ image.src | product_img_url: 'large' }}"{% if forloop.last == false %},{% endif %}
+            {% endfor %}
+          ],
+          "sku": "{{ product.variants.first.sku | escape }}",
+          "mpn": "{{ product.variants.first.barcode | escape }}",
+          "brand": {
+            "@type": "Brand",
+            "name": "{{ product.vendor | escape }}"
+          },
+          "offers": {
+            "@type": "Offer",
+            "priceCurrency": "{{ shop.currency | escape }}",
+            "price": "{{ product.price | money_without_currency | escape }}",
+            "availability": "{% if product.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
+            "url": "{{ shop.url }}/products/{{ product.handle }}"
+          }
+        }{% if forloop.last == false %},{% endif %}
+        {% endfor %}
+      ]
+    }
   }
 </script>

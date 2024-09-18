@@ -1,0 +1,46 @@
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "{{ collection.title | escape }}",
+    "description": "{{ collection.description | escape }}",
+    "url": "{{ shop.url }}/collections/{{ collection.handle }}",
+    "numberOfItems": {{ collection.products_count }},
+    "itemListElement": [
+      {% for product in collection.products %}
+      {
+        "@type": "ListItem",
+        "position": {{ forloop.index }},
+        "url": "{{ shop.url }}/products/{{ product.handle }}",
+        "item": {
+          "@type": "Product",
+          "name": "{{ product.title | escape }}",
+          "image": [
+            {% for image in product.images %}
+              "{{ image.src | product_img_url: 'large' }}"{% if forloop.last == false %},{% endif %}
+            {% endfor %}
+          ],
+          "sku": "{{ product.variants.first.sku | escape }}",
+          "mpn": "{{ product.variants.first.barcode | escape }}",
+          "brand": {
+            "@type": "Brand",
+            "name": "{{ product.vendor | escape }}"
+          },
+          "offers": {
+            "@type": "Offer",
+            "priceCurrency": "{{ shop.currency | escape }}",
+            "price": "{{ product.price | money_without_currency | escape }}",
+            "availability": "{% if product.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
+            "url": "{{ shop.url }}/products/{{ product.handle }}",
+            "seller": {
+              "@type": "Organization",
+              "name": "{{ shop.name | escape }}",
+              "url": "{{ shop.url | escape }}"
+            }
+          }
+        }
+      }{% if forloop.last == false %},{% endif %}
+      {% endfor %}
+    ]
+  }
+</script>

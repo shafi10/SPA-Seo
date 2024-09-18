@@ -39,14 +39,13 @@ export default function JsonLd() {
               content: "Test hit",
               onAction: () =>
                 createMetafield({
-                  page: "/",
+                  type: "Organization",
                   data: organization,
                 }),
             },
           ]}
         >
           <Box paddingInlineStart={"32"} paddingInlineEnd={"32"}>
-            <Text>{JSON.stringify(organization)}</Text>
             <IndustryInformation />
             <Divider />
             <BrandInformation />

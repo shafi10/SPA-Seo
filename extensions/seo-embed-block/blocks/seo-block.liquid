@@ -1,13 +1,12 @@
 {% assign data = shop.metafields['bs-23-seo-app']['json-ld'].value %}
 
-{% assign temp = data[request.path] | json %}
-{% if temp != 'null' %}
-  <script type="application/ld+json">
-    {{ data[request.path] }}
-  </script>
+{% if request.page_type == 'index' %}
+  {% render 'organization', data: data.Organization %}
+{% elsif request.page_type == 'product' %}
+  {% render 'product' %}
+{% elsif request.page_type == 'collection' %}
+  {% render 'collection' %}`
 {% endif %}
-
-{% render 'organization', data: data[request.path] %}
 
 {% schema %}
 {
