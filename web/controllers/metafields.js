@@ -49,6 +49,19 @@ async function initializeMetafield(client) {
   }
 }
 
+function generateJsonldFromPayload(payload) {
+  const socialMedia = Object.entries(payload.socialMedia)
+    .map(([key, val]) => `"${val}"`)
+    .join(",\n");
+  const jsonld = {
+    "@context": "http://schema.org/",
+    "@type": "Organization",
+    ...payload,
+    socialMedia,
+  };
+  return jsonld;
+}
+
 export const MetafieldCreate = async (req, res, next) => {
   try {
     const client = new shopify.api.clients.Graphql({
@@ -84,7 +97,10 @@ export const MetafieldCreate = async (req, res, next) => {
               key: "json-ld",
               namespace: "bs-23-seo-app",
               ownerId: shopId,
-              value: JSON.stringify({ ...prevData, [page]: data }),
+              value: JSON.stringify({
+                ...prevData,
+                [page]: generateJsonldFromPayload(data),
+              }),
             },
           ],
         },

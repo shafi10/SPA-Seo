@@ -1,0 +1,23 @@
+<script type="application/ld+json">
+  {
+    "@context": "{{ data['@context'] }}",
+    "@type": "{{ data['@type'] }}",
+    "name": "{{ data['name'] }}",
+    "logo": "{{ data['companyLogo'] }}",
+    "url": "{{ data['brandLogo'] }}",
+    {% if data.showContact %}
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "{{ shop.address.address1 | escape }}",
+        "addressLocality": "{{ shop.address.city | escape }}",
+        "addressRegion": "{{ shop.address.province | escape }}",
+        "postalCode": "{{ shop.address.zip | escape }}",
+        "addressCountry": "{{ shop.address.country | escape }}",
+        "hi": 1
+      },
+    {% endif %}
+    "sameAs": [
+      {{ data['socialMedia'] }}
+    ]
+  }
+</script>

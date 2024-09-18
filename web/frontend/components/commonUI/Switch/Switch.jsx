@@ -1,10 +1,10 @@
 import React from "react";
 import "./Switch.css";
 
-export default function Switch({ checked, handleClick }) {
+export default function Switch({ checked = false, handleClick }) {
   return (
     <>
-      <label class="switch">
+      <label className="switch">
         <input
           type="checkbox"
           id="toggleSwitch"

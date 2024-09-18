@@ -11,13 +11,15 @@ import {
   SocialMediaInformation,
 } from "./HomepageSeoComponents";
 import { useHomeSeo } from "../contexts/home.context";
+import { useCreateMetafield } from "../hooks/useMetafieldQuery";
 
 export default function HomeSeo() {
   const { data, error, status, isError, isLoading } = useShopQuery({
     url: "/api/shop",
   });
-  const fetcher = useAuthenticatedFetch();
   const { organization } = useHomeSeo();
+  const { mutate: createMetafield, isError: isErrorOnCreatingMetafield } =
+    useCreateMetafield();
 
   return (
     <>
@@ -36,18 +38,15 @@ export default function HomeSeo() {
             {
               content: "Test hit",
               onAction: () =>
-                fetcher("/api/metafields/create", {
-                  method: "POST",
-                  body: JSON.stringify({
-                    page: "/product",
-                    data: { p: 200, gg: "gg" },
-                  }),
-                  headers: { "Content-Type": "application/json" },
+                createMetafield({
+                  page: "/",
+                  data: organization,
                 }),
             },
           ]}
         >
           <Box paddingInlineStart={"32"} paddingInlineEnd={"32"}>
+            <Text>{JSON.stringify(organization)}</Text>
             <IndustryInformation />
             <Divider />
             <BrandInformation />

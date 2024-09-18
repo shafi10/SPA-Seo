@@ -1,14 +1,5 @@
-import React, { useCallback, useState } from "react";
-import {
-  Layout,
-  Box,
-  Text,
-  AlphaCard,
-  VerticalStack,
-  TextField,
-  Checkbox,
-} from "@shopify/polaris";
-import { EditMajor } from "@shopify/polaris-icons";
+import React, { useState } from "react";
+import { Layout, Box, Text, AlphaCard, VerticalStack } from "@shopify/polaris";
 import Switch from "../commonUI/Switch/Switch";
 import { useHomeSeo } from "../../contexts/home.context";
 
@@ -16,12 +7,12 @@ export default function ContactInformation() {
   const { organization, setOrganization } = useHomeSeo();
   let showContact = organization?.showContact;
   const [checked, setChecked] = useState(showContact ? showContact : false);
-  const handleCheckedChange = () =>
+  const handleCheckedChange = () => {
     setChecked((prev) => {
-      setOrganization({ ...organization, showContact: !prev });
       return !prev;
     });
-
+    setOrganization({ ...organization, showContact: !checked });
+  };
   return (
     <Box paddingBlockStart={"6"} paddingBlockEnd={"5"}>
       <Layout>

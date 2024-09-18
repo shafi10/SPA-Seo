@@ -6,9 +6,11 @@
 {% assign temp = data[request.path] | json %}
 {% if temp != 'null' %}
   <script type="application/ld+json">
-    {{ data[request.path] | json }}
+    {{ data[request.path] }}
   </script>
 {% endif %}
+
+{% render 'organization', data: data[request.path] %}
 
 {% schema %}
 {
