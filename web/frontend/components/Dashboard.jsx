@@ -6,6 +6,7 @@ import HomeSeo from "./HomeSeo";
 import ProductBulkUpdate from "./ProductBulkUpdate";
 import CollectionsPage from "./Collections";
 import CollectionBulkUpdate from "./CollectionBulkUpdate";
+import JsonLd from "./JsonLdPage";
 
 export function Dashboard() {
   useShopQuery({
@@ -27,6 +28,7 @@ export function Dashboard() {
           {selectedSidebar === 3 && <ProductBulkUpdate />}
           {selectedSidebar === 4 && <CollectionsPage />}
           {selectedSidebar === 5 && <CollectionBulkUpdate />}
+          {selectedSidebar === 6 && <JsonLd />}
         </div>
       </div>
     </>
