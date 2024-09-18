@@ -26,6 +26,7 @@ const fetchAllProducts = async (session) => {
                                   edges {
                                     node {
                                       id
+                                      url
                                       originalSrc
                                       altText
                                     }
