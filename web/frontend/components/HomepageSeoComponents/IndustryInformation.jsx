@@ -5,7 +5,6 @@ import {
   Text,
   AlphaCard,
   Select,
-  Icon,
   VerticalStack,
   TextField,
 } from "@shopify/polaris";
@@ -13,17 +12,10 @@ import { useHomeSeo } from "../../contexts/home.context";
 
 export default function IndustryInformation() {
   const { organization, setOrganization } = useHomeSeo();
-  let industry = organization?.industry;
-  const [selected, setSelected] = useState(industry ? industry : "store");
-  const [otherIndustry, setOtherIndustry] = useState(null);
   const handleSelectChange = (value) => {
-    setSelected(value);
-    if (value !== "other") {
-      setOrganization({ ...organization, industry: value });
-    }
+    setOrganization({ ...organization, industry: value });
   };
   const handleTextFieldChange = (value) => {
-    setOtherIndustry(value);
     setOrganization({ ...organization, industry: value });
   };
 
@@ -57,6 +49,17 @@ export default function IndustryInformation() {
       value: "other",
     },
   ];
+
+  function getIndustryLabel(value) {
+    const industry = options.find((option) => option.value === value);
+    return industry ? industry.label : "Other";
+  }
+
+  function getIndustryValue(value) {
+    const industry = options.find((option) => option.value === value);
+    return industry ? industry.value : "other";
+  }
+
   return (
     <Box paddingBlockEnd={"5"}>
       <Layout>
@@ -79,11 +82,11 @@ export default function IndustryInformation() {
                   label="Select industry"
                   options={options}
                   onChange={handleSelectChange}
-                  value={selected}
+                  value={getIndustryValue(organization?.industry)}
                 />
-                {selected == "other" && (
+                {getIndustryLabel(organization?.industry) == "Other" && (
                   <TextField
-                    value={otherIndustry}
+                    value={organization?.industry}
                     placeholder="Enter industry"
                     onChange={handleTextFieldChange}
                   ></TextField>

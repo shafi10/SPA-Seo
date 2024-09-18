@@ -1,7 +1,22 @@
 import React from "react";
 
 const initialState = {
-  organization: {},
+  organization: {
+    industry: "store",
+    brand: { name: "", logo: "" },
+    comapanyLogo: "",
+    showContact: false,
+    socialLinks: {
+      facebook: "",
+      twitter: "",
+      instagram: "",
+      youtube: "",
+      pinterest: "",
+      linkedin: "",
+      snapchat: "",
+      tiktok: "",
+    },
+  },
   rating: {},
   reviews: [],
 };

@@ -46,6 +46,7 @@ export default function JsonLd() {
           ]}
         >
           <Box paddingInlineStart={"32"} paddingInlineEnd={"32"}>
+            <Text>{JSON.stringify(organization)}</Text>
             <IndustryInformation />
             <Divider />
             <BrandInformation />
