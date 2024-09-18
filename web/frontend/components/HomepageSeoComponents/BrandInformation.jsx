@@ -12,22 +12,19 @@ import { useHomeSeo } from "../../contexts/home.context";
 
 export default function BrandInformation() {
   const { organization, setOrganization } = useHomeSeo();
-  let name = organization?.name,
-    bLogo = organization?.brandLogo;
+  let name = organization.brand.name,
+    bLogo = organization.brand.logo;
   const [checked, setChecked] = useState(bLogo ? true : false);
-  const [brandLogo, setBrandLogo] = useState(bLogo ? bLogo : null);
-  const [otherIndustry, setOtherIndustry] = useState(name ? name : null);
   const handleTextFieldChange = (value) => {
-    setOtherIndustry(value);
-    setOrganization({ ...organization, name: value });
+    setOrganization({ ...organization, brand: { name: value, logo: bLogo } });
   };
   const handleCheckboxChange = (newChecked) => {
     setChecked(newChecked);
-    if (!newChecked) setOrganization({ ...organization, brandLogo: null });
+    if (!newChecked) setOrganization({ ...organization, brand: { name } });
   };
   const handleBrandLogoChange = (value) => {
-    setBrandLogo(value);
-    if (checked) setOrganization({ ...organization, brandLogo: value });
+    if (checked)
+      setOrganization({ ...organization, brand: { name, logo: value } });
   };
 
   return (
@@ -50,7 +47,7 @@ export default function BrandInformation() {
               <VerticalStack gap={"6"}>
                 <TextField
                   label="Brand Name"
-                  value={otherIndustry}
+                  value={organization?.brand?.name}
                   placeholder="Some really cool brand name"
                   onChange={handleTextFieldChange}
                 ></TextField>
@@ -62,7 +59,7 @@ export default function BrandInformation() {
                 {checked && (
                   <TextField
                     label="Brand Logo URL"
-                    value={brandLogo}
+                    value={organization?.brand?.logo}
                     placeholder="Paste your brand logo URL here"
                     onChange={handleBrandLogoChange}
                   ></TextField>

@@ -4,7 +4,7 @@ const initialState = {
   organization: {
     industry: "store",
     brand: { name: "", logo: "" },
-    comapanyLogo: "",
+    logo: "",
     showContact: false,
     socialLinks: {
       facebook: "",
