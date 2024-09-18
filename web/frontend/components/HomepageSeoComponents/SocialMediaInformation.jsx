@@ -57,7 +57,7 @@ export default function SocialMediaInformation() {
   const handleTiktokChange = (value) => {
     setOrganization({
       ...organization,
-      socialLinks: { ...organization?.socialLinks, snapchat: value },
+      socialLinks: { ...organization?.socialLinks, tiktok: value },
     });
   };
 
