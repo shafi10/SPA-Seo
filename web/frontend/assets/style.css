@@ -7,6 +7,12 @@
   color: red;
 }
 
+.items_center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .content__margin_top {
   margin-top: 12px;
 }
@@ -73,7 +79,14 @@
   flex: 1;
 }
 
-.app__product_alt_image img {
+.app__product_alt_image-smaller {
+  width: 40px;
+  height: 40px;
+  flex: 1;
+}
+
+.app__product_alt_image img,
+.app__product_alt_image-smaller img {
   width: 100%;
   height: 100%;
   object-fit: contain;

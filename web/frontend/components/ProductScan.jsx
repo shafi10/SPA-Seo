@@ -2,10 +2,61 @@ import React from "react";
 import { useUI } from "../contexts/ui.context";
 
 export function ProductScan() {
-  const { modal } = useUI();
+  const { modal, shop } = useUI();
   const product = modal?.data?.info;
+  const productUrl = `https://${shop?.domain}/products/${product?.handle}`;
   const metaTitle = product?.seo?.title;
   const metaDescription = product?.seo?.description;
+
+  const isSEOFriendlyUrl = (url) => {
+    const urlLength = url.length;
+    const containsSpecialChars = /[!@#$%^&*()_+={}|:"<>?]/.test(url);
+    const containsUnderscore = /_/.test(url);
+    const containsUppercase = /[A-Z]/.test(url);
+    const endsWithSlash = url.endsWith("/");
+
+    let errors = [];
+
+    // Rule 1: Check URL length
+    if (urlLength > 60) {
+      errors.push(
+        "URL is too long. Keep it under 60 characters for better SEO."
+      );
+    }
+
+    // Rule 2: Check for special characters
+    if (containsSpecialChars) {
+      errors.push(
+        "URL contains special characters. Use only alphanumeric characters and hyphens."
+      );
+    }
+
+    // Rule 3: Check for underscores
+    if (containsUnderscore) {
+      errors.push(
+        "URL contains underscores. Use hyphens instead of underscores."
+      );
+    }
+
+    // Rule 4: Check for uppercase letters
+    if (containsUppercase) {
+      errors.push(
+        "URL contains uppercase letters. Use lowercase letters for better SEO."
+      );
+    }
+
+    // Rule 5: Check if URL ends with a slash
+    if (endsWithSlash) {
+      errors.push(
+        "URL ends with a trailing slash. Avoid trailing slashes in SEO-friendly URLs."
+      );
+    }
+
+    return errors;
+  };
+
+  const seoErrors = isSEOFriendlyUrl(productUrl);
+
   return (
     <div className="seo_scan_page">
       <div className="seo_scan_meta_info">
@@ -74,7 +125,61 @@ export function ProductScan() {
           </div>
         </div>
       </div>
-      <div className="seo_scan_meta_info">Images</div>
+      <div className="seo_scan_meta_info">
+        {product?.images?.edges?.map((data) => (
+          <div className="seo_scan_product_section" key={data?.node?.id}>
+            <div className="seo_scan_product_meta items_center">
+              <div className="app__product_alt_image-smaller">
+                <img src={data?.node?.url} alt={data?.node?.altText} />
+              </div>
+            </div>
+            <div className="seo_scan_product_meta_data">
+              <div className="seo_scan_product_title_suggestion">
+                {/* Alt text validation for better SEO */}
+                {!data?.node?.altText && (
+                  <p style={{ color: "red" }}>
+                    Image is missing alt text. Please add alt text for better
+                    SEO.
+                  </p>
+                )}
+
+                {data?.node?.altText && data?.node?.altText?.length < 10 && (
+                  <p style={{ color: "red" }}>
+                    Alt text is too short. Aim for descriptive alt text with at
+                    least 10 characters for better SEO.
+                  </p>
+                )}
+
+                {/* Image URL validation */}
+                {!data?.node?.url && (
+                  <p style={{ color: "red" }}>
+                    Image source URL is missing. Ensure your image is properly
+                    linked.
+                  </p>
+                )}
+              </div>
+              <div>{data?.node?.altText}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="seo_scan_meta_info">
+        <div className="seo_scan_product_title_suggestion">
+          Product URL: {productUrl}
+        </div>
+
+        {/* Display SEO errors if there are any */}
+        {seoErrors?.length > 0 && (
+          <div style={{ color: "red" }}>
+            <p>SEO Issues with the URL:</p>
+            <ul>
+              {seoErrors?.map((error, index) => (
+                <li key={index}>{error}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
