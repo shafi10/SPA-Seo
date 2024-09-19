@@ -9,7 +9,6 @@ import CollectionBulkUpdate from "./CollectionBulkUpdate";
 import CompanyProfile from "./CompanyProfile";
 import { useMetafieldsQuery } from "../hooks/useMetafieldQuery";
 import { PageSpeedInsights } from "./SeoScore";
-import CompanyProfile from "./CompanyProfile";
 
 export function Dashboard() {
   useShopQuery({
