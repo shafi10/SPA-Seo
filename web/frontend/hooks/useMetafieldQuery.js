@@ -60,7 +60,7 @@ export const useCreateMetafield = () => {
 
       setToggleToast({
         active: true,
-        message: `Successfully created metafield`,
+        message: `Submitted successfully`,
       });
     },
     onError: async () => {

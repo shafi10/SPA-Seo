@@ -6,9 +6,10 @@ import HomeSeo from "./HomeSeo";
 import ProductBulkUpdate from "./ProductBulkUpdate";
 import CollectionsPage from "./Collections";
 import CollectionBulkUpdate from "./CollectionBulkUpdate";
-import JsonLd from "./JsonLdPage";
+import CompanyProfile from "./CompanyProfile";
 import { useMetafieldsQuery } from "../hooks/useMetafieldQuery";
 import { PageSpeedInsights } from "./SeoScore";
+import CompanyProfile from "./CompanyProfile";
 
 export function Dashboard() {
   useShopQuery({
@@ -32,7 +33,7 @@ export function Dashboard() {
           {selectedSidebar === 4 && <ProductBulkUpdate />}
           {selectedSidebar === 5 && <CollectionsPage />}
           {selectedSidebar === 6 && <CollectionBulkUpdate />}
-          {selectedSidebar === 7 && <JsonLd />}
+          {selectedSidebar === 7 && <CompanyProfile />}
         </div>
       </div>
     </>

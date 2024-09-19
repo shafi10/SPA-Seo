@@ -50,7 +50,7 @@
       "@type": "OfferCatalog",
       "name": "Featured Products",
       "itemListElement": [
-        {% for product in collections['frontpage'].products %}
+        {% for product in collections.first.products %}
         {
           "@type": "Product",
           "name": "{{ product.title | escape }}",

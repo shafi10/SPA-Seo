@@ -13,7 +13,7 @@ import {
 import { useHomeSeo } from "../contexts/home.context";
 import { useCreateMetafield } from "../hooks/useMetafieldQuery";
 
-export default function JsonLd() {
+export default function CompanyProfile() {
   const { data, error, status, isError, isLoading } = useShopQuery({
     url: "/api/shop",
   });
