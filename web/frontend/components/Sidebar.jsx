@@ -2,12 +2,12 @@ import React from "react";
 
 export default function Sidebar({ selectedSidebar, setSelectedSidebar }) {
   const menuItems = [
-    { id: 1, title: "Home page" },
-    { id: 2, title: "Product page" },
-    { id: 3, title: "Bulk Product page" },
-    { id: 4, title: "Collection page" },
-    { id: 5, title: "Bulk Collection page" },
-    { id: 6, title: "Company Profile" },
+    { id: 2, title: "Home page" },
+    { id: 3, title: "Product page" },
+    { id: 4, title: "Bulk Product page" },
+    { id: 5, title: "Collection page" },
+    { id: 6, title: "Bulk Collection page" },
+    { id: 7, title: "Company Profile" },
   ];
 
   return (

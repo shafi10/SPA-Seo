@@ -8,6 +8,7 @@ import CollectionsPage from "./Collections";
 import CollectionBulkUpdate from "./CollectionBulkUpdate";
 import JsonLd from "./JsonLdPage";
 import { useMetafieldsQuery } from "../hooks/useMetafieldQuery";
+import { PageSpeedInsights } from "./SeoScore";
 
 export function Dashboard() {
   useShopQuery({
@@ -15,7 +16,7 @@ export function Dashboard() {
   });
   useMetafieldsQuery({ url: "/api/metafields" });
 
-  const [selectedSidebar, setSelectedSidebar] = useState(2);
+  const [selectedSidebar, setSelectedSidebar] = useState(1);
 
   return (
     <>
@@ -25,12 +26,13 @@ export function Dashboard() {
           setSelectedSidebar={setSelectedSidebar}
         />
         <div className="app__dashboard_container">
-          {selectedSidebar === 1 && <HomeSeo />}
-          {selectedSidebar === 2 && <Product />}
-          {selectedSidebar === 3 && <ProductBulkUpdate />}
-          {selectedSidebar === 4 && <CollectionsPage />}
-          {selectedSidebar === 5 && <CollectionBulkUpdate />}
-          {selectedSidebar === 6 && <JsonLd />}
+          {selectedSidebar === 1 && <PageSpeedInsights />}
+          {selectedSidebar === 2 && <HomeSeo />}
+          {selectedSidebar === 3 && <Product />}
+          {selectedSidebar === 4 && <ProductBulkUpdate />}
+          {selectedSidebar === 5 && <CollectionsPage />}
+          {selectedSidebar === 6 && <CollectionBulkUpdate />}
+          {selectedSidebar === 7 && <JsonLd />}
         </div>
       </div>
     </>
