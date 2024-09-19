@@ -52,8 +52,6 @@ export default function JsonLd() {
             <Divider />
             <SocialMediaInformation />
             <Divider />
-            <ProductReviewInformation />
-            <Divider />
           </Box>
         </Page>
       ) : (

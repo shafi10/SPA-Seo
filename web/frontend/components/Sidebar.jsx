@@ -7,7 +7,7 @@ export default function Sidebar({ selectedSidebar, setSelectedSidebar }) {
     { id: 3, title: "Bulk Product page" },
     { id: 4, title: "Collection page" },
     { id: 5, title: "Bulk Collection page" },
-    { id: 6, title: "JSON-LD" },
+    { id: 6, title: "Company Profile" },
   ];
 
   return (
