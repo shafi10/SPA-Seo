@@ -9,6 +9,7 @@ import {
   PolarisProvider,
 } from "./components";
 import { ManagedUIContext } from "./contexts/ui.context";
+import { ManagedHomeSeoContext } from "./contexts/home.context";
 import { ModalArea } from "./components/commonUI/Modal";
 import { ToastContainer } from "./components/commonUI/Toast";
 
@@ -19,11 +20,12 @@ export default function App() {
 
   return (
     <ManagedUIContext>
-      <PolarisProvider>
-        <BrowserRouter>
-          <AppBridgeProvider>
-            <QueryProvider>
-              {/* <NavigationMenu
+      <ManagedHomeSeoContext>
+        <PolarisProvider>
+          <BrowserRouter>
+            <AppBridgeProvider>
+              <QueryProvider>
+                {/* <NavigationMenu
                 navigationLinks={[
                   {
                     label: "Page name",
@@ -31,13 +33,14 @@ export default function App() {
                   },
                 ]}
               /> */}
-              <Routes pages={pages} />
-              <ModalArea />
-              <ToastContainer />
-            </QueryProvider>
-          </AppBridgeProvider>
-        </BrowserRouter>
-      </PolarisProvider>
+                <Routes pages={pages} />
+                <ModalArea />
+                <ToastContainer />
+              </QueryProvider>
+            </AppBridgeProvider>
+          </BrowserRouter>
+        </PolarisProvider>
+      </ManagedHomeSeoContext>
     </ManagedUIContext>
   );
 }

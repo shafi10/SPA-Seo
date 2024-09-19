@@ -1,0 +1,66 @@
+/* Switch container */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 28px;
+}
+
+/* Hide the default checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Slider (background) */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #a4a4a4;
+  transition: 0.4s;
+  border-radius: 28px;
+}
+
+/* Text inside the switch */
+.slider:before {
+  position: absolute;
+  content: "OFF";
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  left: 32px;
+  top: 4px;
+  transition: 0.4s;
+}
+
+/* Slider circle */
+.slider::after {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+/* The class for the checked state */
+.slider.checked {
+  background-color: #007a5c;
+}
+
+.slider.checked:before {
+  content: "ON";
+  left: 10px;
+}
+
+.slider.checked::after {
+  transform: translateX(32px);
+}

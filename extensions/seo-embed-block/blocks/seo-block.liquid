@@ -1,0 +1,16 @@
+{% assign data = shop.metafields['bs-23-seo-app']['json-ld'].value %}
+
+{% if request.page_type == 'index' %}
+  {% render 'organization', data: data.organization %}
+{% elsif request.page_type == 'product' %}
+  {% render 'product' %}
+{% elsif request.page_type == 'collection' %}
+  {% render 'collection' %}`
+{% endif %}
+
+{% schema %}
+{
+  "name": "SEO app",
+  "target": "head"
+}
+{% endschema %}

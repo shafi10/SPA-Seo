@@ -20,7 +20,7 @@
 .app__container {
   display: flex;
   gap: 24px;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .app__sidebar_container {
