@@ -99,10 +99,13 @@ export default function ProductBulkUpdate() {
       ) : (
         <div className="app_product_bulk_update_container">
           <Form onSubmit={() => handleSubmit(formUpdatedData)}>
-            <div className="app_product_bulk_update_button">
-              <Button primary submit>
-                Submit
-              </Button>
+            <div className="seo_score_page_title_container">
+              <div className="seo_score_page_title">Bulk Product SEO</div>
+              <div className="">
+                <Button primary submit>
+                  Submit
+                </Button>
+              </div>
             </div>
             <div className="app_product_bulk_update">
               <div className="app_product_bulk_image">
@@ -127,7 +130,7 @@ export default function ProductBulkUpdate() {
                   <div className="app_product_bulk_title">{info?.title}</div>
                 </div>
                 <div className="app_product_bulk_input">
-                  <InputField
+                  <TextareaField
                     value={info?.seo?.title ? info.seo.title : ""}
                     onChange={handleChange}
                     type="text"

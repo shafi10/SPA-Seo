@@ -9,6 +9,7 @@ export default function TextareaField({
   placeholder,
   error,
   index,
+  rows = 3,
 }) {
   return (
     <div className="text__area_input_field">
@@ -21,6 +22,7 @@ export default function TextareaField({
         value={value}
         onChange={(e) => onChange(e.target.value, name, index)}
         placeholder={placeholder}
+        rows={rows}
       />
       {error && (
         <label htmlFor="myError" className="text__danger_textfield">

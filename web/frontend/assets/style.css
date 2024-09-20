@@ -127,6 +127,8 @@
   padding: 24px;
   border-radius: 12px;
   margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .seo_score_page_title {
@@ -210,11 +212,11 @@
 }
 
 .app_product_bulk_input {
-  flex: 3;
+  flex: 4;
 }
 
 .product_bulk_update_description {
-  flex: 6;
+  flex: 5;
 }
 
 .app_product_bulk_update_button {

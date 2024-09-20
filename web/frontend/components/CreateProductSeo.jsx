@@ -77,6 +77,7 @@ export function CreateProductSeo() {
             name="seo_description"
             placeholder="Enter Meta Description"
             error={errors?.seo_description}
+            rows={"5"}
           />
           <Button primary submit>
             Submit
