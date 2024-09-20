@@ -1,18 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Layout,
   Box,
   Text,
   AlphaCard,
-  Select,
   VerticalStack,
   Form,
   Button,
 } from "@shopify/polaris";
-import { InputField } from "./commonUI/InputField";
 import TextareaField from "./commonUI/TextareaField";
+import { useCreateHomeSeo, useHomeSEOQuery } from "../hooks/useHomeSEOQuery";
 
 export default function HomeSeo() {
+  const { data } = useHomeSEOQuery({ url: "/api/home/get-home-seo" });
+  const { mutate: createOrUpdateSeo, isError } = useCreateHomeSeo();
+  console.log("🚀 ~ HomeSeo ~ data:", data);
   const [formData, setFormData] = useState({
     seo_title: "",
     seo_description: "",
@@ -21,9 +23,38 @@ export default function HomeSeo() {
     seo_title: "",
     seo_description: "",
   });
-  const handleChange = (value) => {};
+
+  const handleChange = (value, name) => {
+    setFormData({ ...formData, [name]: value });
+    setErrors({ ...errors, [name]: "" });
+  };
+
+  const handleSubmit = (value) => {
+    if (!value?.seo_title) {
+      return setErrors({
+        ...errors,
+        seo_title: `Please enter SEO title`,
+      });
+    } else if (!value?.seo_description) {
+      return setErrors({
+        ...errors,
+        seo_description: `Please enter SEO description`,
+      });
+    }
+    const obj = {
+      homeSeo: value,
+    };
+    createOrUpdateSeo(obj);
+  };
+
+  useEffect(() => {
+    if (data) {
+      setFormData(data);
+    }
+  }, [data]);
+
   return (
-    <Form onSubmit={() => handleSubmit(formUpdatedData)}>
+    <Form onSubmit={() => handleSubmit(formData)}>
       <div className="seo_score_page_title_container">
         <div className="seo_score_page_title">Homepage SEO</div>
         <div className="">
