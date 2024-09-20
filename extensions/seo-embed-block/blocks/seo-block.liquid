@@ -8,6 +8,30 @@
   {% render 'collection' %}`
 {% endif %}
 
+{% assign homeSeoData = shop.metafields['seo-app-bs23']['home-seo-value'].value %}
+
+
+{% if request.page_type == 'index' %}
+  <title>
+  {%- if homeSeoData.seo_title %}
+    {{ homeSeoData.seo_title }}
+  {%- else %}
+    {{ page_title -}}
+    {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+    {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+    {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+  {%- endif %}
+  </title>
+
+  {%- if homeSeoData.seo_description %}
+    <meta name="description" content="{{ homeSeoData.seo_description | escape }}" />
+  {%- else %}
+     {% if page_description %}
+     <meta name="description" content="{{ page_description | escape }}" />
+     {% endif %}
+  {%- endif %}
+{% endif %}
+
 {% schema %}
 {
   "name": "SEO app",

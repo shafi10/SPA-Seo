@@ -8,6 +8,7 @@ import productsRoute from "./routes/products.js";
 import collectionsRoute from "./routes/collections.js";
 import metafieldsRoute from "./routes/metafields.js";
 import seoInsightsRoute from "./routes/seoInsights.js";
+import homeRoute from "./routes/home.js";
 
 const PORT = parseInt(
   process.env.BACKEND_PORT || process.env.PORT || "3000",
@@ -60,6 +61,7 @@ app.use("/api/product", productsRoute);
 app.use("/api/collection", collectionsRoute);
 app.use("/api/metafields", metafieldsRoute);
 app.use("/api/seo", seoInsightsRoute);
+app.use("/api/home", homeRoute);
 
 app.use(shopify.cspHeaders());
 app.use(serveStatic(STATIC_PATH, { index: false }));

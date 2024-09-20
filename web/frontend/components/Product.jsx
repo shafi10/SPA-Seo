@@ -76,7 +76,10 @@ export default function Product() {
       {isLoading && !isError ? (
         <Spinners />
       ) : (
-        <VerticalStack gap="4">
+        <VerticalStack gap="2">
+          <div className="seo_score_page_title_container">
+            <div className="seo_score_page_title">Product SEO</div>
+          </div>
           <IndexTableData
             isLoading={isLoading}
             rowMarkup={rowMarkup}
