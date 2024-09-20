@@ -47,7 +47,7 @@ export default function ProductSeo() {
         )}
         {selected === 1 && <AltimageCreate />}
         {selected === 2 && <ProductScan />}
-        {selected === 3 && <GenerateJsonld />}
+        {selected === 3 && <GenerateJsonld obj_type={"Product"} />}
       </Tabs>
     </div>
   );

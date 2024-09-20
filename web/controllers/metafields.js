@@ -7,17 +7,18 @@ import {
   SetShopMetafield,
 } from "../graphql/metafields.js";
 
-async function initializeMetafield(client) {
+async function initializeMetafield(client, type) {
   try {
+    console.log("initializing metafield", type);
     const response = await client.query({
       data: {
-        query: CheckShopMetafieldDefinition,
+        query: CheckShopMetafieldDefinition(type),
       },
     });
 
     if (response.body.data.metafieldDefinitions.edges.length == 0) {
       const metafieldCreationResponse = await client.query({
-        data: { query: CreateShopMetafieldDefinition },
+        data: { query: CreateShopMetafieldDefinition(type) },
       });
 
       if (
@@ -67,9 +68,9 @@ export const MetafieldCreate = async (req, res, next) => {
     const client = new shopify.api.clients.Graphql({
       session: res.locals.shopify.session,
     });
-    await initializeMetafield(client);
+    const { type, data, owner } = req.body;
 
-    const { type, data } = req.body;
+    await initializeMetafield(client, owner);
     let prevData = await client.query({
       data: {
         query: GetShopMetafield,

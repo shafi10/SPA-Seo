@@ -15,6 +15,7 @@
         "@type": "Brand",
         "name": "{{ product.vendor | escape }}"
       },
+      "keywords": "{{ product.tags | join: ', ' }}",
       "hasVariant": [
         {% for variant in product.variants %}
           {
@@ -60,6 +61,7 @@
         "@type": "Brand",
         "name": "{{ product.vendor | escape }}"
       },
+      "keywords": "{{ product.tags | join: ', ' }}",
       "offers": [
         {% for variant in product.variants %}
           {

@@ -36,6 +36,7 @@ export default function CompanyProfile() {
               createMetafield({
                 type: "organization",
                 data: organization,
+                owner: "SHOP",
               }),
           }}
         >
