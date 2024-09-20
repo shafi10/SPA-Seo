@@ -1,31 +1,88 @@
 <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": "{{ product.title | escape }}",
-    "description": "{{ product.description | escape }}",
-    "image": [
-      {% for image in product.images %}
-        "{{ image.src | product_img_url: 'large' }}"{% if forloop.last == false %},{% endif %}
-      {% endfor %}
-    ],
-    "sku": "{{ product.variants.first.sku | escape }}",
-    "mpn": "{{ product.variants.first.barcode | escape }}",
-    "brand": {
-      "@type": "Brand",
-      "name": "{{ product.vendor | escape }}"
-    },
-    "offers": {
-      "@type": "Offer",
-      "priceCurrency": "{{ shop.currency | escape }}",
-      "price": "{{ product.price | money_without_currency | escape }}",
-      "availability": "{% if product.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
-      "url": "{{ shop.url }}/products/{{ product.handle }}",
-      "seller": {
-        "@type": "Organization",
-        "name": "{{ shop.name | escape }}",
-        "url": "{{ shop.url | escape }}"
-      }
+  {% if product.variants.size > 1 %}
+    {
+      "@context": "https://schema.org",
+      "@type": "ProductGroup",
+      "name": "{{ product.title | escape }}",
+      "description": "{{ product.description | escape }}",
+      "image": [
+        {% for image in product.images %}
+          "{{ image.src | product_img_url: 'large' }}"
+          {% if forloop.last == false %},{% endif %}
+        {% endfor %}
+      ],
+      "brand": {
+        "@type": "Brand",
+        "name": "{{ product.vendor | escape }}"
+      },
+      "hasVariant": [
+        {% for variant in product.variants %}
+          {
+            "@type": "Product",
+            "sku": "{{ variant.sku | escape }}",
+            "mpn": "{{ variant.barcode | escape }}",
+            "url": "{{ shop.url }}/products/{{ product.handle }}?variant={{ variant.id }}",
+            "offers": {
+              "@type": "Offer",
+              "priceCurrency": "{{ shop.currency | escape }}",
+              "price": "{{ variant.price | money_without_currency | escape }}",
+              "availability": "{% if variant.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
+              "seller": {
+                "@type": "Organization",
+                "name": "{{ shop.name | escape }}",
+                "url": "{{ shop.url | escape }}"
+              },
+              "size": "{{ variant.option1 | escape }}"
+              {% if product.options.size > 1 %}
+                , "color": "{{ variant.option2 | escape }}"
+              {% endif %}
+            }
+          }
+          {% if forloop.last == false %},{% endif %}
+        {% endfor %}
+      ]
     }
-  }
+  {% else %}
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "{{ product.title | escape }}",
+      "description": "{{ product.description | escape }}",
+      "image": [
+        {% for image in product.images %}
+          "{{ image.src | product_img_url: 'large' }}"
+          {% if forloop.last == false %},{% endif %}
+        {% endfor %}
+      ],
+      "sku": "{{ product.variants.first.sku | escape }}",
+      "mpn": "{{ product.variants.first.barcode | escape }}",
+      "brand": {
+        "@type": "Brand",
+        "name": "{{ product.vendor | escape }}"
+      },
+      "offers": [
+        {% for variant in product.variants %}
+          {
+            "@type": "Offer",
+            "priceCurrency": "{{ shop.currency | escape }}",
+            "price": "{{ variant.price | money_without_currency | escape }}",
+            "availability": "{% if variant.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
+            "sku": "{{ variant.sku | escape }}",
+            "mpn": "{{ variant.barcode | escape }}",
+            "url": "{{ shop.url }}/products/{{ product.handle }}?variant={{ variant.id }}",
+            "seller": {
+              "@type": "Organization",
+              "name": "{{ shop.name | escape }}",
+              "url": "{{ shop.url | escape }}"
+            },
+            "size": "{{ variant.option1 | escape }}"
+            {% if product.options.size > 1 %}
+              , "color": "{{ variant.option2 | escape }}"
+            {% endif %}
+          }
+          {% if forloop.last == false %},{% endif %}
+        {% endfor %}
+      ]
+    }
+  {% endif %}
 </script>

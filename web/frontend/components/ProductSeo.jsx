@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { CreateProductSeo } from "./CreateProductSeo";
 import { AltimageCreate } from "./AltimageCreate";
 import { ProductScan } from "./ProductScan";
+import { GenerateJsonld } from "./GenerateJsonld";
 
 export default function ProductSeo() {
   const [selected, setSelected] = useState(0);
@@ -29,6 +30,11 @@ export default function ProductSeo() {
       content: "Scan for SEO issues",
       panelID: "accepts-Product-alt-content-1",
     },
+    {
+      id: "product-json-ld",
+      content: "Generate JSON-LD for SEO",
+      panelID: "panel-product-json-ld",
+    },
   ];
 
   return (
@@ -41,6 +47,7 @@ export default function ProductSeo() {
         )}
         {selected === 1 && <AltimageCreate />}
         {selected === 2 && <ProductScan />}
+        {selected === 3 && <GenerateJsonld />}
       </Tabs>
     </div>
   );
