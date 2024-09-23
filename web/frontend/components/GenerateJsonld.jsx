@@ -12,6 +12,7 @@ import {
 } from "@shopify/polaris";
 import { useUI } from "../contexts/ui.context";
 import { useCreateMetafield } from "../hooks/useMetafieldQuery";
+import StarRating from "./commonUI/StarRating/StarRating";
 
 export function GenerateJsonld({ obj_type }) {
   const { modal, shop } = useUI();
@@ -25,6 +26,8 @@ export function GenerateJsonld({ obj_type }) {
   const [description, setDescription] = useState(metaDescription);
   const [imageUrl, setImageUrl] = useState(owner?.featuredImage?.url);
   const [showTags, setShowTags] = useState(false);
+  const [rating, setRating] = useState(null);
+  const [reviewCount, setReviewCount] = useState(null);
 
   const handleSubmit = useCallback(() => {
     createMetafield({
@@ -36,6 +39,8 @@ export function GenerateJsonld({ obj_type }) {
         description,
         imageUrl,
         showTags,
+        rating,
+        reviewCount,
       },
     });
   }, []);
@@ -43,10 +48,19 @@ export function GenerateJsonld({ obj_type }) {
   const handleTitleChange = useCallback((value) => setTitle(value), []);
   const handleImageUrlChange = useCallback((value) => setImageUrl(value), []);
   const handleShowTagsChange = useCallback((value) => setShowTags(value), []);
+  const handleRatingChange = useCallback((value) => setRating(value), []);
+  const handleReviewCountChange = useCallback(
+    (value) => setReviewCount(value),
+    []
+  );
   const handleDescriptionChange = useCallback(
     (value) => setDescription(value),
     []
   );
+
+  const handleStarClick = (value) => {
+    setRating(value);
+  };
 
   return (
     <Box paddingBlockStart={"2"}>
@@ -60,7 +74,6 @@ export function GenerateJsonld({ obj_type }) {
               label="Meta Title"
               type="text"
             />
-
             <TextField
               value={description}
               onChange={handleDescriptionChange}
@@ -68,7 +81,6 @@ export function GenerateJsonld({ obj_type }) {
               label={`${obj_type} meta description`}
               type="text"
             />
-
             <HorizontalStack gap={"3"}>
               {imageUrl && <Thumbnail source={imageUrl} />}
               <div style={{ flexGrow: 1 }}>
@@ -80,7 +92,29 @@ export function GenerateJsonld({ obj_type }) {
                 />
               </div>
             </HorizontalStack>
-
+            {obj_type.toLowerCase() == "product" && (
+              <HorizontalStack gap={"4"} blockAlign="center">
+                <TextField
+                  value={rating}
+                  onChange={handleRatingChange}
+                  label="Aggregated rating"
+                  type="number"
+                />
+                <StarRating
+                  size={30}
+                  rating={rating}
+                  onRate={handleStarClick}
+                />
+              </HorizontalStack>
+            )}
+            {obj_type.toLowerCase() == "product" && (
+              <TextField
+                value={reviewCount}
+                onChange={handleReviewCountChange}
+                label={`Review count`}
+                type="integer"
+              />
+            )}
             {obj_type.toLowerCase() == "product" && (
               <Checkbox
                 label="Show product tag information"
@@ -88,7 +122,6 @@ export function GenerateJsonld({ obj_type }) {
                 onChange={handleShowTagsChange}
               />
             )}
-
             <HorizontalStack align="end">
               <Button primary submit>
                 Save
