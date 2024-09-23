@@ -15,6 +15,7 @@ const fetchAllProducts = async (session) => {
           node {
             id
             title
+            description
             handle
             status
             handle
@@ -118,6 +119,7 @@ export const getProductControllerByID = async (req, res, next) => {
       product(id: "gid://shopify/Product/${id}") {
         id
         title
+        description
         images(first: 5) {
           edges {
             node {

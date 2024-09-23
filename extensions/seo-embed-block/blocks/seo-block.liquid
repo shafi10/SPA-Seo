@@ -2,7 +2,7 @@
 
 {% if request.page_type == 'product' %}
   {% assign data = product.metafields['bs-23-seo-app']['json-ld'].value %}
-  {% render 'product', org_data: shop_data.organization, data: data %}
+  {% render 'product', org_data: shop_data.organization, data: data.product %}
 {% elsif request.page_type == 'collection' %}
   {% assign data = collection.metafields['bs-23-seo-app']['json-ld'].value %}
   {% render 'collection', org_data: shop_data.organization, data: data %}

@@ -9,6 +9,7 @@ import {
   Button,
   HorizontalStack,
   Thumbnail,
+  InlineError,
 } from "@shopify/polaris";
 import { useUI } from "../contexts/ui.context";
 import { useCreateMetafield } from "../hooks/useMetafieldQuery";
@@ -26,10 +27,13 @@ export function GenerateJsonld({ obj_type }) {
   const [description, setDescription] = useState(metaDescription);
   const [imageUrl, setImageUrl] = useState(owner?.featuredImage?.url);
   const [showTags, setShowTags] = useState(false);
-  const [rating, setRating] = useState(null);
-  const [reviewCount, setReviewCount] = useState(null);
+  const [rating, setRating] = useState(0);
+  const [reviewCount, setReviewCount] = useState(0);
+
+  console.log("owner", owner);
 
   const handleSubmit = useCallback(() => {
+    console.log({ reviewCount, rating });
     createMetafield({
       type: obj_type.toLowerCase(),
       owner: obj_type.toUpperCase(),
@@ -39,11 +43,11 @@ export function GenerateJsonld({ obj_type }) {
         description,
         imageUrl,
         showTags,
-        rating,
-        reviewCount,
+        rating: rating,
+        reviewCount: reviewCount,
       },
     });
-  }, []);
+  }, [rating, reviewCount, title, description, imageUrl, showTags]);
 
   const handleTitleChange = useCallback((value) => setTitle(value), []);
   const handleImageUrlChange = useCallback((value) => setImageUrl(value), []);

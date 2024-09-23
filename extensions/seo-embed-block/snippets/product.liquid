@@ -3,16 +3,8 @@
     {
       "@context": "https://schema.org",
       "@type": "ProductGroup",
-      {% if data.title %}
-      "name": "{{ data.title | escape }}",
-      {% else %}
-      "name": "{{ page_title | escape }}",
-      {% endif %}
-      {% if data.description %}
-      "description": "{{ data.description | escape }}",
-      {% else %}
-      "description": "{{ page_description | strip_html | escape }}",
-      {% endif %}
+      "name": "{{ product.title | escape }}",
+      "description": "{{ product.description | strip_html | escape }}",
       "image": [
       {% for image in product.images %}
         "{{ image.src | product_img_url: 'large' }}"
@@ -21,10 +13,10 @@
       ],
       "brand": {
         "@type": "Brand",
-        {% if org_data.brand.name %}
-        "name": "{{ org_data.brand.name | escape }}"
-        {% else %}
+        {% if product.vendor %}
         "name": "{{ product.vendor | escape }}"
+        {% else %}
+        "name": "{{ org_data.brand.name | escape }}"
         {% endif %}
       },
       {% if data.showtags %}
@@ -39,8 +31,8 @@
           "url": "{{ shop.url }}/products/{{ product.handle }}?variant={{ variant.id }}",
           "aggregateRating": {
             "@type": "AggregateRating",
-            "ratingValue": 4.4,
-            "reviewCount": 89
+            "ratingValue": {{ data.rating }},
+            "reviewCount": {{ data.reviewCount }}
           },
           "offers": {
             "@type": "Offer",
@@ -66,16 +58,8 @@
     {
       "@context": "https://schema.org",
       "@type": "Product",
-      {% if data.title %}
-      "name": "{{ data.title | escape }}",
-      {% else %}
-      "name": "{{ page_title | escape }}",
-      {% endif %}
-      {% if data.description %}
-      "description": "{{ data.description | escape }}",
-      {% else %}
-      "description": "{{ page_description | strip_html | escape }}",
-      {% endif %}
+      "name": "{{ product.title | escape }}",
+      "description": "{{ product.description | strip_html | escape }}",
       "image": [
       {% for image in product.images %}
         "{{ image.src | product_img_url: 'large' }}"
@@ -86,10 +70,10 @@
       "mpn": "{{ product.variants.first.barcode | escape }}",
       "brand": {
         "@type": "Brand",
-        {% if org_data.brand.name %}
-        "name": "{{ org_data.brand.name | escape }}"
-        {% else %}
+        {% if product.vendor %}
         "name": "{{ product.vendor | escape }}"
+        {% else %}
+        "name": "{{ org_data.brand.name | escape }}"
         {% endif %}
       },
       {% if data.showtags %}
@@ -97,8 +81,8 @@
       {% endif %}
       "aggregateRating": {
         "@type": "AggregateRating",
-        "ratingValue": 4.4,
-        "reviewCount": 89
+        "ratingValue": {{ data.rating }},
+        "reviewCount": {{ data.reviewCount }}
       },
       "offers": [
       {% for variant in product.variants %}

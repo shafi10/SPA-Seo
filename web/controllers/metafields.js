@@ -96,10 +96,14 @@ export const MetafieldCreate = async (req, res, next) => {
     }
 
     if (prevData.body.data[`${owner.toLowerCase()}`].metafield) {
-      prevData = JSON.parse(prevData.body.data.shop.metafield.value);
+      prevData = JSON.parse(
+        prevData.body.data[`${owner.toLowerCase()}`].metafield.value
+      );
     } else {
       prevData = {};
     }
+
+    console.log("prevData", prevData, req.body);
 
     let shopId = await client.query({
       data: {
