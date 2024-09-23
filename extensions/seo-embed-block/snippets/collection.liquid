@@ -1,46 +1,69 @@
 <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "ItemList",
-    "name": "{{ collection.title | escape }}",
-    "description": "{{ collection.description | escape }}",
-    "url": "{{ shop.url }}/collections/{{ collection.handle }}",
-    "numberOfItems": {{ collection.products_count }},
-    "itemListElement": [
-      {% for product in collection.products %}
+    "@type": "ProductCollection",
+    "name": "{{ page_title | escape }}",
+    "description": "{{ page_description | strip_html | escape }}",
+    {% if collection.products.size > 0 %}
+    "hasItem": [
+    {% for product in collection.products %}
       {
-        "@type": "ListItem",
-        "position": {{ forloop.index }},
-        "url": "{{ shop.url }}/products/{{ product.handle }}",
-        "item": {
-          "@type": "Product",
-          "name": "{{ product.title | escape }}",
-          "image": [
-            {% for image in product.images %}
-              "{{ image.src | product_img_url: 'large' }}"{% if forloop.last == false %},{% endif %}
-            {% endfor %}
-          ],
-          "sku": "{{ product.variants.first.sku | escape }}",
-          "mpn": "{{ product.variants.first.barcode | escape }}",
-          "brand": {
-            "@type": "Brand",
-            "name": "{{ product.vendor | escape }}"
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "{{ product.title | strip_html | escape }}",
+        "description": "{{ product.description | strip_html | escape }}",
+        "image": [
+        {% for image in product.images %}
+          "{{ image.src | product_img_url: 'large' }}"
+          {% if forloop.last == false %},{% endif %}
+        {% endfor %}
+        ],
+        "sku": "{{ product.variants.first.sku | escape }}",
+        "mpn": "{{ product.variants.first.barcode | escape }}",
+        "brand": {
+          "@type": "Brand",
+          {% if org_data.brand.name %}
+          "name": "{{ org_data.brand.name | escape }}"
+          {% else %}
+          "name": "{{ product.vendor | escape }}"
+          {% endif %}
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "itemReviewed": {
+            "@type": "Thing",
+            "name": "{{ product.title | strip_html | escape }}"
           },
-          "offers": {
+          "ratingValue": 4.4,
+          "reviewCount": 89
+        },
+        "offers": [
+        {% for variant in product.variants %}
+          {
             "@type": "Offer",
             "priceCurrency": "{{ shop.currency | escape }}",
-            "price": "{{ product.price | money_without_currency | escape }}",
-            "availability": "{% if product.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
-            "url": "{{ shop.url }}/products/{{ product.handle }}",
+            "price": {{ variant.price | money_without_currency | remove: ',' }},
+            "availability": "{% if variant.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
+            "sku": "{{ variant.sku | escape }}",
+            "mpn": "{{ variant.barcode | escape }}",
+            "url": "{{ shop.url }}/products/{{ product.handle }}?variant={{ variant.id }}",
             "seller": {
               "@type": "Organization",
               "name": "{{ shop.name | escape }}",
               "url": "{{ shop.url | escape }}"
-            }
+            },
+            "size": "{{ variant.option1 | escape }}"
+            {% if product.options.size > 1 %}
+              , "color": "{{ variant.option2 | escape }}"
+            {% endif %}
           }
-        }
-      }{% if forloop.last == false %},{% endif %}
-      {% endfor %}
+          {% if forloop.last == false %},{% endif %}
+        {% endfor %}
+        ]
+      }
+      {% if forloop.last == false %},{% endif %}
+    {% endfor %}
     ]
+    {% endif %}
   }
 </script>

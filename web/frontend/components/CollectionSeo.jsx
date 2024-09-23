@@ -3,6 +3,7 @@ import { Tabs } from "@shopify/polaris";
 import { useState, useCallback } from "react";
 import { CreateCollectionSeo } from "./CreateCollectionSeo";
 import { CollectionAltTextImage } from "./CollectionAltText";
+import { GenerateJsonld } from "./GenerateJsonld";
 
 export default function CollectionSeo() {
   const [selected, setSelected] = useState(0);
@@ -23,6 +24,11 @@ export default function CollectionSeo() {
       content: "Collection Image alt",
       panelID: "accepts-Product-alt-content-1",
     },
+    {
+      id: "accepts-Jsonld-1",
+      content: "Json-LD",
+      panelID: "accepts-jsonld-1",
+    },
   ];
 
   return (
@@ -34,6 +40,7 @@ export default function CollectionSeo() {
           </div>
         )}
         {selected === 1 && <CollectionAltTextImage />}
+        {selected === 2 && <GenerateJsonld obj_type={"Collection"} />}
       </Tabs>
     </div>
   );

@@ -11,24 +11,33 @@ import {
   Thumbnail,
 } from "@shopify/polaris";
 import { useUI } from "../contexts/ui.context";
+import { useCreateMetafield } from "../hooks/useMetafieldQuery";
 
 export function GenerateJsonld({ obj_type }) {
   const { modal, shop } = useUI();
-  const product = modal?.data?.info;
-  const productUrl = `https://${shop?.domain}/products/${product?.handle}`;
-  const metaTitle = product?.seo?.title;
-  const metaDescription = product?.seo?.description;
+  const owner = modal?.data?.info;
+  const metaTitle = owner?.seo?.title;
+  const metaDescription = owner?.seo?.description;
 
-  console.log("GenerateJsonld -> product", product);
+  const { mutate: createMetafield, isError } = useCreateMetafield();
 
   const [title, setTitle] = useState(metaTitle);
   const [description, setDescription] = useState(metaDescription);
-  const [imageUrl, setImageUrl] = useState(product?.featuredImage?.url);
+  const [imageUrl, setImageUrl] = useState(owner?.featuredImage?.url);
   const [showTags, setShowTags] = useState(false);
 
   const handleSubmit = useCallback(() => {
-    setEmail("");
-    setNewsletter(false);
+    createMetafield({
+      type: obj_type.toLowerCase(),
+      owner: obj_type.toUpperCase(),
+      ownerId: owner?.id,
+      data: {
+        title,
+        description,
+        imageUrl,
+        showTags,
+      },
+    });
   }, []);
 
   const handleTitleChange = useCallback((value) => setTitle(value), []);
@@ -48,7 +57,7 @@ export function GenerateJsonld({ obj_type }) {
             <TextField
               value={title}
               onChange={handleTitleChange}
-              label="Title"
+              label="Meta Title"
               type="text"
             />
 
@@ -56,7 +65,7 @@ export function GenerateJsonld({ obj_type }) {
               value={description}
               onChange={handleDescriptionChange}
               multiline={4}
-              label={`${obj_type} description`}
+              label={`${obj_type} meta description`}
               type="text"
             />
 
