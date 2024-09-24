@@ -41,8 +41,8 @@
             "@type": "Thing",
             "name": "{{ product.title | strip_html | escape }}"
           },
-          "ratingValue": {{ product_meta_data.rating }},
-          "reviewCount": {{ product_meta_data.reviewCount }}
+          "ratingValue": {{ product_meta_data.product.rating }},
+          "reviewCount": {{ product_meta_data.product.reviewCount }}
         },
         {% endif %}
         "offers": [
