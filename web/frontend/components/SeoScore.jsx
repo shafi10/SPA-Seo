@@ -12,12 +12,14 @@ export function PageSpeedInsights() {
       ) : (
         <>
           <div className="seo_score_page_title_container">
-            <div className="seo_score_page_title">SEO Insights</div>
-            <p className="seo_score_page_description">
-              SEO Insights is a powerful tool designed to optimize website
-              performance, providing a detailed assessment of your site based on
-              Google's key evaluation criteria
-            </p>
+            <div>
+              <div className="seo_score_page_title">SEO Insights</div>
+              <p className="seo_score_page_description">
+                SEO Insights is a powerful tool designed to optimize website
+                performance, providing a detailed assessment of your site based
+                on Google's key evaluation criteria
+              </p>
+            </div>
           </div>
           <div className="seo_score_container_grid">
             {data?.map((seoInfo) => (
