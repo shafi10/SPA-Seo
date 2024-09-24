@@ -56,8 +56,8 @@ export const useCreateMetafield = (invalidationTarget) => {
           message: `Something went wrong`,
         });
       }
-      // setCloseModal(); // metafieldList productList collectionList
-      queryClient.invalidateQueries("productList");
+      setCloseModal(); // metafieldList productList collectionList
+      queryClient.invalidateQueries(invalidationTarget);
 
       setToggleToast({
         active: true,
