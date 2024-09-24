@@ -19,6 +19,11 @@
         "name": "{{ org_data.brand.name | escape }}"
         {% endif %}
       },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": {{ data.rating }},
+        "reviewCount": {{ data.reviewCount }}
+      },
       {% if data.showtags %}
       "keywords": "{{ product.tags | join: ', ' }}",
       {% endif %}
@@ -26,14 +31,11 @@
       {% for variant in product.variants %}
         {
           "@type": "Product",
+          "name": "{{ product.title | append: " (" | append: variant.title | append: ")" | escape }}",
+          "image": "{{ variant.image.src | product_img_url: 'large' }}",
           "sku": "{{ variant.sku | escape }}",
           "mpn": "{{ variant.barcode | escape }}",
           "url": "{{ shop.url }}/products/{{ product.handle }}?variant={{ variant.id }}",
-          "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": {{ data.rating }},
-            "reviewCount": {{ data.reviewCount }}
-          },
           "offers": {
             "@type": "Offer",
             "priceCurrency": "{{ shop.currency | escape }}",
