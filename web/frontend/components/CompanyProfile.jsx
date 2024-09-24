@@ -56,41 +56,54 @@ export default function CompanyProfile() {
               }),
           }}
         >
-          <Layout>
-            <Layout.Section>
-              <IndustryInformation />
-              <Divider />
-              <BrandInformation />
-              <Divider />
-              <CompanyLogoInformation />
-              <Divider />
-              <ContactInformation />
-              <Divider />
-              <PriceRangeInformation />
-              <Divider />
-              <SocialMediaInformation />
-              <Divider />
-            </Layout.Section>
-            <Layout.Section secondary>
-              <Box paddingInlineStart={"20"}>
-                <HorizontalStack align="space-between" blockAlign="center">
-                  <div style={{ width: "70%" }}>
-                    <VerticalStack gap={"2"}>
-                      <Text variant="headingMd">Json-LD snippet</Text>
-                      <Text variant="bodyMd">
-                        Inject your organization information for seach engines
-                        like googles to crawl
-                      </Text>
-                    </VerticalStack>
-                  </div>
-                  <Switch
-                    checked={organization?.status}
-                    handleClick={handleCheckedChange}
-                  />
-                </HorizontalStack>
-              </Box>
-            </Layout.Section>
-          </Layout>
+          <Box paddingInlineStart={"32"} paddingInlineEnd={"32"}>
+            <Box paddingBlockEnd={"5"}>
+              <Layout>
+                <Layout.Section oneThird>
+                  <Box paddingBlockEnd={"4"}>
+                    <Text variant="headingMd">Show snippet</Text>
+                  </Box>
+                  <Box>
+                    <Text variant="bodyMd">
+                      Inject your organization information for seach engines
+                      like googles to crawl
+                    </Text>
+                  </Box>
+                </Layout.Section>
+                <Layout.Section oneHalf>
+                  <Box>
+                    <AlphaCard>
+                      <VerticalStack gap={"6"}>
+                        <Text variant="bodyMd">
+                          Add organization snippet in storefront.
+                        </Text>
+                        <VerticalStack gap={"2"}>
+                          <Text variant="headingSm">Status</Text>
+                          <Switch
+                            checked={organization?.status}
+                            handleClick={handleCheckedChange}
+                          />
+                        </VerticalStack>
+                      </VerticalStack>
+                    </AlphaCard>
+                  </Box>
+                </Layout.Section>
+              </Layout>
+            </Box>
+            <Divider />
+            <IndustryInformation />
+            <Divider />
+            <BrandInformation />
+            <Divider />
+            <CompanyLogoInformation />
+            <Divider />
+            <ContactInformation />
+            <Divider />
+            <PriceRangeInformation />
+            <Divider />
+            <SocialMediaInformation />
+            <Divider />
+          </Box>
         </Page>
       ) : (
         <>Loading . . .</>

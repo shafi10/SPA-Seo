@@ -61,7 +61,7 @@ export default function IndustryInformation() {
   }
 
   return (
-    <Box paddingBlockEnd={"5"}>
+    <Box paddingBlockStart={"5"} paddingBlockEnd={"5"}>
       <Layout>
         <Layout.Section oneThird>
           <Box paddingBlockEnd={"4"}>

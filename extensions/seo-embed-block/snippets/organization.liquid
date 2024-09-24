@@ -14,8 +14,10 @@
     {% elsif data.logo %}
       "logo": "{{ data.logo }}",
     {% else %}
-      "logo": "{{ shop.logo | default: shop.url | append: '/logo.png' }}",
+      "logo": "{{ shop.logo | default: shop.url }}",
     {% endif %}
+    "industry": "{{ data.industry | escape }}",
+    "priceRange": [{{ data.priceRange[0] }}, {{ data.priceRange[1] }}],
     "sameAs": [
       "{% if data.socialLinks.facebook %}{{ data.socialLinks.facebook | escape }}{% endif %}",
       "{% if data.socialLinks.twitter %}{{ data.socialLinks.twitter | escape }}{% endif %}",
@@ -39,7 +41,7 @@
         "addressRegion": "{{ shop.address.province | escape }}",
         "postalCode": "{{ shop.address.zip | escape }}",
         "addressCountry": "{{ shop.address.country | escape }}"
-      },
+      }
     {% endif %}
   }
 </script>
