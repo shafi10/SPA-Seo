@@ -25,10 +25,20 @@ export function CreateCollectionSeo() {
         ...errors,
         seo_title: `Please enter SEO title`,
       });
+    } else if (obj.seo_title.length > 70) {
+      return setErrors({
+        ...errors,
+        seo_title: `SEO title must be 70 characters or fewer. Currently, it is ${obj.seo_title.length} characters.`,
+      });
     } else if (!obj?.seo_description) {
       return setErrors({
         ...errors,
         seo_description: `Please enter SEO description`,
+      });
+    } else if (obj.seo_description.length > 160) {
+      return setErrors({
+        ...errors,
+        seo_description: `SEO description must be 160 characters or fewer. Currently, it is ${obj.seo_description.length} characters.`,
       });
     }
 

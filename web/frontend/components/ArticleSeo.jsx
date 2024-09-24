@@ -1,8 +1,8 @@
 import React from "react";
 import { Tabs } from "@shopify/polaris";
 import { useState, useCallback } from "react";
-import { AltimageCreate } from "./AltimageCreate";
 import { CreateArticleSeo } from "./CreateArticleSeo";
+import { ArticleAltTextImage } from "./BlogAltCreate";
 
 export default function ArticleSeo() {
   const [selected, setSelected] = useState(0);
@@ -15,12 +15,12 @@ export default function ArticleSeo() {
   const tabs = [
     {
       id: "all-blog-1",
-      content: "Product SEO",
+      content: "Article SEO",
       panelID: "all-Product-content-1",
     },
     {
       id: "accepts-blog-alt-1",
-      content: "Product Image alt",
+      content: "Article Image alt",
       panelID: "accepts-Product-alt-content-1",
     },
   ];
@@ -33,7 +33,7 @@ export default function ArticleSeo() {
             <CreateArticleSeo />
           </div>
         )}
-        {selected === 1 && <AltimageCreate />}
+        {selected === 1 && <ArticleAltTextImage />}
       </Tabs>
     </div>
   );

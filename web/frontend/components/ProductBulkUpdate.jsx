@@ -6,7 +6,6 @@ import {
 } from "../hooks/useProductsQuery";
 import { Spinners } from "./Spinner";
 import { useUI } from "../contexts/ui.context";
-import { InputField } from "./commonUI/InputField";
 import TextareaField from "./commonUI/TextareaField";
 import Pagination from "./commonUI/Pagination";
 
@@ -21,14 +20,35 @@ export default function ProductBulkUpdate() {
   const [formData, setFormData] = useState([]);
   const [formUpdatedData, setFormUpdatedData] = useState([]);
 
-  const handleSubmit = (obj) => {
-    if (obj?.length === 0)
+  const handleSubmit = (seoContentList) => {
+    if (seoContentList?.length === 0)
       return setToggleToast({
         active: true,
-        message: `Please enter meta title or description`,
+        message: `Please enter or change meta title or description for products`,
       });
+
+    const findError = seoContentList.find(
+      (data) =>
+        data?.seo_title?.length > 70 || data?.seo_description?.length > 160
+    );
+
+    if (findError) {
+      return setToggleToast({
+        active: true,
+        message: `SEO ${
+          findError.seo_title?.length > 70 ? "title" : "description"
+        } for product ${findError.title} must be ${
+          findError.seo_title?.length > 70 ? "70" : "160"
+        } characters or fewer. Currently, it is ${
+          findError.seo_title?.length > 70
+            ? findError.seo_title?.length
+            : findError.seo_description?.length
+        } characters.`,
+      });
+    }
+
     const newObj = {
-      products: obj,
+      products: seoContentList,
     };
     updateBulkSeo(newObj);
     setFormUpdatedData([]);
@@ -70,6 +90,7 @@ export default function ProductBulkUpdate() {
         ...formUpdatedData,
         {
           id: product?.id,
+          title: product?.title,
           seo_title: newInfo?.seo?.title,
           seo_description: newInfo?.seo?.description,
         },
@@ -139,6 +160,12 @@ export default function ProductBulkUpdate() {
                     index={info?.id}
                     error={""}
                   />
+                  {info?.seo?.title.length > 70 && (
+                    <p className="seo_validation_error">
+                      SEO title must be 70 characters or fewer. Currently, it is{" "}
+                      {info?.seo?.title.length} characters.
+                    </p>
+                  )}
                 </div>
                 <div className="product_bulk_update_description">
                   <TextareaField
@@ -149,6 +176,13 @@ export default function ProductBulkUpdate() {
                     error={""}
                     index={info?.id}
                   />
+                  {info?.seo?.description?.length > 160 && (
+                    <p className="seo_validation_error">
+                      SEO description must be 160 characters or fewer.
+                      Currently, it is {info?.seo?.description.length}{" "}
+                      characters.
+                    </p>
+                  )}
                 </div>
               </div>
             ))}

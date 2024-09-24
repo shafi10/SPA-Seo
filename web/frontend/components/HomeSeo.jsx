@@ -14,7 +14,7 @@ import { useCreateHomeSeo, useHomeSEOQuery } from "../hooks/useHomeSEOQuery";
 export default function HomeSeo() {
   const { data } = useHomeSEOQuery({ url: "/api/home/get-home-seo" });
   const { mutate: createOrUpdateSeo, isError } = useCreateHomeSeo();
-  console.log("🚀 ~ HomeSeo ~ data:", data);
+
   const [formData, setFormData] = useState({
     seo_title: "",
     seo_description: "",
@@ -35,12 +35,23 @@ export default function HomeSeo() {
         ...errors,
         seo_title: `Please enter SEO title`,
       });
+    } else if (value.seo_title.length > 70) {
+      return setErrors({
+        ...errors,
+        seo_title: `SEO title must be 70 characters or fewer. Currently, it is ${value?.seo_title?.length} characters.`,
+      });
     } else if (!value?.seo_description) {
       return setErrors({
         ...errors,
         seo_description: `Please enter SEO description`,
       });
+    } else if (value?.seo_description.length > 160) {
+      return setErrors({
+        ...errors,
+        seo_description: `SEO description must be 160 characters or fewer. Currently, it is ${value?.seo_description?.length} characters.`,
+      });
     }
+
     const obj = {
       homeSeo: value,
     };
@@ -128,7 +139,7 @@ export default function HomeSeo() {
                       name="seo_description"
                       placeholder="Enter Meta Description"
                       error={errors?.seo_description}
-                      rows={"5"}
+                      rows={"3"}
                     />
                   </VerticalStack>
                 </AlphaCard>

@@ -150,53 +150,22 @@ export const updateArticleSeo = async (req, res) => {
 
 export const updateImageSeoAltController = async (req, res, next) => {
   try {
-    const { id, imageId, altText } = req.body;
+    const { id, blogId, image } = req.body;
 
-    const mutation = `mutation productImageUpdate($productId: ID!, $image: ImageInput!) {
-      productImageUpdate(productId: $productId, image: $image) {
-        image {
-          id
-          altText
-        }
-        userErrors {
-          field
-          message
-        }
-      }
-    }`;
-
-    const variables = {
-      productId: id,
-      image: {
-        id: imageId,
-        altText: altText,
-      },
-    };
-
-    const client = new shopify.api.clients.Graphql({
+    const article = new shopify.api.rest.Article({
       session: res.locals.shopify.session,
     });
+    article.blog_id = blogId;
+    article.id = id;
+    article.image = image;
 
-    const response = await client.query({
-      data: {
-        query: mutation,
-        variables: variables,
-      },
+    await article.save({
+      update: true,
     });
 
-    if (response.body.data?.productImageUpdate?.userErrors?.length > 0) {
-      console.error(
-        "Errors:",
-        response.body.data.productImageUpdate.userErrors
-      );
-      return res
-        .status(400)
-        .json({ error: response.body.data?.productImageUpdate?.userErrors });
-    } else {
-      return res
-        .status(200)
-        .json({ product: response.body.data.productImageUpdate.image });
-    }
+    return res
+      .status(200)
+      .json({ status: "Success", message: "Successfully updated" });
   } catch (err) {
     console.log(
       "🚀 ~ file: description.js:73 ~ descriptionController ~ err:",

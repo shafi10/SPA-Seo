@@ -9,7 +9,7 @@ export function CollectionAltTextImage() {
   const image = modal?.data?.info?.image;
 
   const { mutate: updateSeoAltText, isError } = useUpdateCollectionSeoImgAlt();
-  const [formData, setFormData] = useState([]);
+  const [formData, setFormData] = useState("");
 
   const handleSubmit = (obj) => {
     if (!obj) {
@@ -59,6 +59,7 @@ export function CollectionAltTextImage() {
                     name="altText"
                     placeholder="Enter image alt text"
                     error={""}
+                    rows={2}
                   />
                 </div>
                 <div className="app_seo_alt_button">

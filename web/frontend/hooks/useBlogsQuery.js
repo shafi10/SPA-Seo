@@ -45,6 +45,29 @@ export const useArticlesQuery = ({
   });
 };
 
+export const useSingleArticleQuery = ({
+  url,
+  fetchInit = {},
+  reactQueryOptions,
+}) => {
+  const authenticatedFetch = useAuthenticatedFetch();
+  const fetch = useMemo(() => {
+    return async () => {
+      const response = await authenticatedFetch(url, fetchInit);
+      return response.json();
+    };
+  }, [url, JSON.stringify(fetchInit)]);
+
+  return useQuery("singleArticle", fetch, {
+    ...reactQueryOptions,
+    onSuccess: (data) => {},
+    refetchOnWindowFocus: false,
+    cacheTime: 0,
+    staleTime: 0,
+    // enabled: Object.keys(shop).length === 0,
+  });
+};
+
 export const useArticlesSeoQuery = ({
   url,
   fetchInit = {},
@@ -62,6 +85,8 @@ export const useArticlesSeoQuery = ({
     ...reactQueryOptions,
     onSuccess: (data) => {},
     refetchOnWindowFocus: false,
+    cacheTime: 0,
+    staleTime: 0,
     // enabled: Object.keys(shop).length === 0,
   });
 };
@@ -106,12 +131,12 @@ export const useUpdateBlogSeo = () => {
   });
 };
 
-export const useUpdateProductSeoImgAlt = () => {
+export const useUpdateArticleSeoImgAlt = () => {
   const fetch = useAuthenticatedFetch();
-  const { setCloseModal, setToggleToast } = useUI();
+  const { setToggleToast } = useUI();
   const queryClient = useQueryClient();
   async function createStatus(status) {
-    return await fetch(`/api/product/update-image-alt`, {
+    return await fetch(`/api/blog/update-article-image-alt`, {
       method: "POST",
       body: JSON.stringify(status),
       headers: {
@@ -128,48 +153,7 @@ export const useUpdateProductSeoImgAlt = () => {
           message: `Something went wrong`,
         });
       }
-      setCloseModal();
-      queryClient.invalidateQueries("productList");
-
-      setToggleToast({
-        active: true,
-        message: `Submit Successfully`,
-      });
-    },
-    onError: async () => {
-      setToggleToast({
-        active: true,
-        message: `Something went wrong`,
-      });
-    },
-    refetchOnWindowFocus: false,
-  });
-};
-
-export const useProductUpdateBulkSeo = () => {
-  const fetch = useAuthenticatedFetch();
-  const { setCloseModal, setToggleToast } = useUI();
-  const queryClient = useQueryClient();
-  async function createStatus(status) {
-    return await fetch("/api/product/update-product-bulk-seo", {
-      method: "POST",
-      body: JSON.stringify(status),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  }
-
-  return useMutation((status) => createStatus(status), {
-    onSuccess: async (data, obj) => {
-      if (data?.status === 400) {
-        return setToggleToast({
-          active: true,
-          message: `Something went wrong`,
-        });
-      }
-      setCloseModal();
-      queryClient.invalidateQueries("productList");
+      queryClient.invalidateQueries("singleArticle");
 
       setToggleToast({
         active: true,
