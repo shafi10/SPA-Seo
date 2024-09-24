@@ -188,7 +188,6 @@
 .app_product_bulk_update {
   display: flex;
   justify-content: center;
-  align-items: center;
   gap: 12px;
   border-bottom: 1px solid rgba(221, 224, 228, 1);
   padding: 10px;
@@ -261,4 +260,8 @@
   border-bottom: 1px solid rgba(221, 224, 228, 1);
   margin-bottom: 4px;
   padding-bottom: 4px;
+}
+
+.seo_validation_error {
+  color: red;
 }
