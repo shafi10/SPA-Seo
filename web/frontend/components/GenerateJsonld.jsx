@@ -10,55 +10,62 @@ import {
   HorizontalStack,
   Thumbnail,
   InlineError,
+  VerticalStack,
 } from "@shopify/polaris";
 import { useUI } from "../contexts/ui.context";
 import { useCreateMetafield } from "../hooks/useMetafieldQuery";
 import StarRating from "./commonUI/StarRating/StarRating";
+import Switch from "./commonUI/Switch/Switch";
 
 export function GenerateJsonld({ obj_type }) {
   const { modal, shop } = useUI();
   const owner = modal?.data?.info;
-  const metaTitle = owner?.seo?.title;
-  const metaDescription = owner?.seo?.description;
+  const images =
+    obj_type?.toLowerCase() == "product"
+      ? owner?.images.edges.map((e) => e.node)
+      : obj_type?.toLowerCase() == "collection" && owner?.image
+      ? [owner?.image]
+      : null;
+  const metaData = owner?.metafield
+    ? JSON.parse(owner?.metafield?.value)
+    : null;
+  const ownerMetaData = metaData?.[`${obj_type?.toLowerCase()}`] || null;
 
-  const { mutate: createMetafield, isError } = useCreateMetafield();
+  const invalidationTarget =
+    obj_type?.toLowerCase() == "product"
+      ? "productList"
+      : obj_type?.toLowerCase() == "collection"
+      ? "collectionList"
+      : "metafieldList";
+  const { mutate: createMetafield } = useCreateMetafield(invalidationTarget);
 
-  const [title, setTitle] = useState(metaTitle);
-  const [description, setDescription] = useState(metaDescription);
-  const [imageUrl, setImageUrl] = useState(owner?.featuredImage?.url);
-  const [showTags, setShowTags] = useState(false);
-  const [rating, setRating] = useState(0);
-  const [reviewCount, setReviewCount] = useState(0);
-
-  console.log("owner", owner);
+  const [pushJson, setPushJson] = useState(metaData?.active || false);
+  const [showTags, setShowTags] = useState(ownerMetaData?.showTags || false);
+  const [rating, setRating] = useState(ownerMetaData?.rating || 0);
+  const [reviewCount, setReviewCount] = useState(
+    ownerMetaData?.reviewCount || 0
+  );
 
   const handleSubmit = useCallback(() => {
-    console.log({ reviewCount, rating });
     createMetafield({
       type: obj_type.toLowerCase(),
       owner: obj_type.toUpperCase(),
       ownerId: owner?.id,
+      active: pushJson,
       data: {
-        title,
-        description,
-        imageUrl,
         showTags,
         rating: rating,
         reviewCount: reviewCount,
       },
     });
-  }, [rating, reviewCount, title, description, imageUrl, showTags]);
+  }, [rating, reviewCount, showTags, owner, pushJson]);
 
-  const handleTitleChange = useCallback((value) => setTitle(value), []);
-  const handleImageUrlChange = useCallback((value) => setImageUrl(value), []);
   const handleShowTagsChange = useCallback((value) => setShowTags(value), []);
   const handleRatingChange = useCallback((value) => setRating(value), []);
+  const handlePushJsonChange = () => setPushJson((prev) => !prev);
+
   const handleReviewCountChange = useCallback(
     (value) => setReviewCount(value),
-    []
-  );
-  const handleDescriptionChange = useCallback(
-    (value) => setDescription(value),
     []
   );
 
@@ -68,34 +75,69 @@ export function GenerateJsonld({ obj_type }) {
 
   return (
     <Box paddingBlockStart={"2"}>
-      <Text variant="headingMd">{obj_type} meta information for Jsonld</Text>
+      <HorizontalStack align="space-between" ali>
+        <Text variant="headingMd">{obj_type} information for Jsonld</Text>
+        <div
+          style={{
+            display: "flex",
+            gap: "0.21rem",
+            flexDirection: "column",
+            alignItems: "flex-end",
+          }}
+        >
+          <Text variant="headingSm">Status</Text>
+          <Switch checked={pushJson} handleClick={handlePushJsonChange} />
+        </div>
+      </HorizontalStack>
       <Box paddingBlockStart={"4"}>
         <Form onSubmit={handleSubmit}>
           <FormLayout>
             <TextField
-              value={title}
-              onChange={handleTitleChange}
-              label="Meta Title"
+              value={owner?.title}
+              disabled
+              label="Title"
               type="text"
             />
             <TextField
-              value={description}
-              onChange={handleDescriptionChange}
-              multiline={4}
-              label={`${obj_type} meta description`}
+              value={owner?.description}
+              disabled
+              multiline={3}
+              label={`${obj_type} description`}
               type="text"
             />
-            <HorizontalStack gap={"3"}>
-              {imageUrl && <Thumbnail source={imageUrl} />}
-              <div style={{ flexGrow: 1 }}>
+            {obj_type.toLowerCase() == "product" && (
+              <TextField
+                label={`Brand`}
+                type="text"
+                disabled
+                value={owner?.vendor}
+              />
+            )}
+            <TextField
+              label={`Seller information`}
+              type="text"
+              placeholder="url"
+              value={shop?.domain}
+              disabled
+              connectedLeft={
                 <TextField
-                  value={imageUrl}
-                  onChange={handleImageUrlChange}
-                  label="Image Url"
+                  value={shop?.name}
+                  placeholder="name"
                   type="text"
+                  disabled
                 />
-              </div>
-            </HorizontalStack>
+              }
+            />
+            {images && images.length > 0 && (
+              <VerticalStack gap={"2"}>
+                <Text>Images</Text>
+                <HorizontalStack gap={"3"}>
+                  {images.map((img) => (
+                    <Thumbnail source={img?.url} />
+                  ))}
+                </HorizontalStack>
+              </VerticalStack>
+            )}
             {obj_type.toLowerCase() == "product" && (
               <HorizontalStack gap={"4"} blockAlign="center">
                 <TextField

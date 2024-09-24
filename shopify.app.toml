@@ -3,7 +3,7 @@
 client_id = "5979b1355fc1fc33469e698f5e91dabe"
 name = "new-testing-app"
 handle = "new-testing-app-9"
-application_url = "https://lance-statement-existing-subsection.trycloudflare.com"
+application_url = "https://knew-array-resistant-fountain.trycloudflare.com"
 embedded = true
 
 [build]
@@ -16,9 +16,9 @@ scopes = "read_customers,read_products,write_products"
 
 [auth]
 redirect_urls = [
-  "https://lance-statement-existing-subsection.trycloudflare.com/auth/callback",
-  "https://lance-statement-existing-subsection.trycloudflare.com/auth/shopify/callback",
-  "https://lance-statement-existing-subsection.trycloudflare.com/api/auth/callback"
+  "https://knew-array-resistant-fountain.trycloudflare.com/auth/callback",
+  "https://knew-array-resistant-fountain.trycloudflare.com/auth/shopify/callback",
+  "https://knew-array-resistant-fountain.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

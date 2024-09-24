@@ -121,7 +121,11 @@ export const MetafieldCreate = async (req, res, next) => {
               key: "json-ld",
               namespace: "bs-23-seo-app",
               ownerId,
-              value: JSON.stringify({ ...prevData, [type]: data }),
+              value: JSON.stringify({
+                ...prevData,
+                [type]: data,
+                active: req.body.active,
+              }),
             },
           ],
         },

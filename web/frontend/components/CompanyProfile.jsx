@@ -19,7 +19,7 @@ export default function CompanyProfile() {
   });
   const { organization } = useHomeSeo();
   const { mutate: createMetafield, isError: isErrorOnCreatingMetafield } =
-    useCreateMetafield();
+    useCreateMetafield("metafieldList");
 
   return (
     <>

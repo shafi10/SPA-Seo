@@ -33,7 +33,7 @@ export const useMetafieldsQuery = ({
   });
 };
 
-export const useCreateMetafield = () => {
+export const useCreateMetafield = (invalidationTarget) => {
   const fetch = useAuthenticatedFetch();
   const { setCloseModal, setToggleToast } = useUI();
   const queryClient = useQueryClient();
@@ -49,14 +49,15 @@ export const useCreateMetafield = () => {
 
   return useMutation((status) => createStatus(status), {
     onSuccess: async (data, obj) => {
+      console.log("hi", obj, invalidationTarget);
       if (data?.status !== 200) {
         return setToggleToast({
           active: true,
           message: `Something went wrong`,
         });
       }
-      setCloseModal();
-      queryClient.invalidateQueries("metafieldList");
+      // setCloseModal(); // metafieldList productList collectionList
+      queryClient.invalidateQueries("productList");
 
       setToggleToast({
         active: true,

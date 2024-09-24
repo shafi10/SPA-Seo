@@ -2,10 +2,15 @@
   {
     "@context": "https://schema.org",
     "@type": "ProductCollection",
-    "name": "{{ page_title | escape }}",
-    "description": "{{ page_description | strip_html | escape }}",
+    "name": "{{ collection.title | escape }}",
+    "description": "{{ collection.description | strip_html | escape }}",
+    "provider": {
+      "@type": "Organization",
+      "name": "{{ shop.name | escape }}",
+      "url": "{{ shop.url | escape }}"
+    }
     {% if collection.products.size > 0 %}
-    "hasItem": [
+    , "hasItem": [
     {% for product in collection.products %}
       {
         "@context": "https://schema.org",
@@ -22,21 +27,24 @@
         "mpn": "{{ product.variants.first.barcode | escape }}",
         "brand": {
           "@type": "Brand",
-          {% if org_data.brand.name %}
-          "name": "{{ org_data.brand.name | escape }}"
-          {% else %}
+          {% if product.vendor %}
           "name": "{{ product.vendor | escape }}"
+          {% else %}
+          "name": "{{ org_data.brand.name | escape }}"
           {% endif %}
         },
+        {% assign product_meta_data = product.metafields['bs-23-seo-app']['json-ld'].value %}
+        {% if product_meta_data != null %}
         "aggregateRating": {
           "@type": "AggregateRating",
           "itemReviewed": {
             "@type": "Thing",
             "name": "{{ product.title | strip_html | escape }}"
           },
-          "ratingValue": 4.4,
-          "reviewCount": 89
+          "ratingValue": {{ product_meta_data.rating }},
+          "reviewCount": {{ product_meta_data.reviewCount }}
         },
+        {% endif %}
         "offers": [
         {% for variant in product.variants %}
           {
@@ -51,11 +59,7 @@
               "@type": "Organization",
               "name": "{{ shop.name | escape }}",
               "url": "{{ shop.url | escape }}"
-            },
-            "size": "{{ variant.option1 | escape }}"
-            {% if product.options.size > 1 %}
-              , "color": "{{ variant.option2 | escape }}"
-            {% endif %}
+            }
           }
           {% if forloop.last == false %},{% endif %}
         {% endfor %}

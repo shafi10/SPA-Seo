@@ -18,16 +18,18 @@ const fetchAllCollections = async (session) => {
             handle
             updatedAt
             sortOrder
+            metafield(namespace: "bs-23-seo-app", key: "json-ld") {
+              value
+            }
             seo{
-                        title
-                        description
-                      }
+              title
+              description
+            }
             image {
               id
               url
               altText
-              }
-
+            }
           }
           cursor
         }

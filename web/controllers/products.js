@@ -19,26 +19,40 @@ const fetchAllProducts = async (session) => {
             handle
             status
             handle
-            seo{
-                        title
-                        description
-                      }
+            tags
+            vendor
+            priceRangeV2 {
+              maxVariantPrice {
+                amount
+                currencyCode
+              }
+              minVariantPrice {
+                amount
+                currencyCode
+              }
+            }
+            metafield(namespace: "bs-23-seo-app", key: "json-ld") {
+              value
+            }
+            seo {
+              title
+              description
+            }
             images(first: 100) {
-                                  edges {
-                                    node {
-                                      id
-                                      url
-                                      originalSrc
-                                      altText
-                                    }
-                                  }
-                                }
-                                featuredImage{
-                                  altText
-                                  url
-                                  width
-                                }
-
+              edges {
+                node {
+                  id
+                  url
+                  originalSrc
+                  altText
+                }
+              }
+            }
+            featuredImage{
+              altText
+              url
+              width
+            }
           }
           cursor
         }
