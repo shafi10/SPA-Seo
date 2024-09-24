@@ -45,6 +45,7 @@ export function GenerateJsonld({ obj_type }) {
   const [reviewCount, setReviewCount] = useState(
     ownerMetaData?.reviewCount || 0
   );
+  const [keywords, setKeywords] = useState(ownerMetaData?.keywords || null);
 
   const handleSubmit = useCallback(() => {
     createMetafield({
@@ -56,14 +57,15 @@ export function GenerateJsonld({ obj_type }) {
         showTags,
         rating: rating,
         reviewCount: reviewCount,
+        keywords,
       },
     });
-  }, [rating, reviewCount, showTags, owner, pushJson]);
+  }, [rating, reviewCount, showTags, owner, pushJson, keywords]);
 
   const handleShowTagsChange = useCallback((value) => setShowTags(value), []);
   const handleRatingChange = useCallback((value) => setRating(value), []);
   const handlePushJsonChange = () => setPushJson((prev) => !prev);
-
+  const handleKeywordsChange = useCallback((value) => setKeywords(value), []);
   const handleReviewCountChange = useCallback(
     (value) => setReviewCount(value),
     []
@@ -128,6 +130,15 @@ export function GenerateJsonld({ obj_type }) {
                 />
               }
             />
+            {obj_type.toLowerCase() == "collection" && (
+              <TextField
+                value={keywords}
+                onChange={handleKeywordsChange}
+                label={`Keywords`}
+                type="text"
+                helpText="Add keywords separated by commas"
+              />
+            )}
             {images && images.length > 0 && (
               <VerticalStack gap={"2"}>
                 <Text>Images</Text>

@@ -4,6 +4,7 @@
     "@type": "ProductCollection",
     "name": "{{ collection.title | escape }}",
     "description": "{{ collection.description | strip_html | escape }}",
+    "keywords": "{{ data.keywords | escape }}",
     "provider": {
       "@type": "Organization",
       "name": "{{ shop.name | escape }}",
