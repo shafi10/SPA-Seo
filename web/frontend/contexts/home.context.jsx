@@ -7,6 +7,7 @@ const initialState = {
     logo: "",
     showContact: false,
     priceRange: [100, 1000],
+    status: false,
     socialLinks: {
       facebook: null,
       twitter: null,

@@ -11,7 +11,7 @@
     {% render 'collection', org_data: shop_data.organization, data: data.collection %}
   {% endif %}
 {% else %}
-  {% if shop_data != null %}
+  {% if shop_data != null and shop_data.organization.status %}
     {% render 'organization', data: shop_data.organization %}
   {% endif %}
 {% endif %}

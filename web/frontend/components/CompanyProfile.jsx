@@ -1,6 +1,15 @@
-import React from "react";
-import { useAuthenticatedFetch, useShopQuery } from "../hooks";
-import { Box, Divider, Page, Text } from "@shopify/polaris";
+import React, { useState } from "react";
+import { useShopQuery } from "../hooks";
+import {
+  Box,
+  Divider,
+  Page,
+  Layout,
+  AlphaCard,
+  Text,
+  HorizontalStack,
+  VerticalStack,
+} from "@shopify/polaris";
 import {
   IndustryInformation,
   BrandInformation,
@@ -12,14 +21,21 @@ import {
 } from "./HomepageSeoComponents";
 import { useHomeSeo } from "../contexts/home.context";
 import { useCreateMetafield } from "../hooks/useMetafieldQuery";
+import Switch from "./commonUI/Switch/Switch";
 
 export default function CompanyProfile() {
   const { data, error, status, isError, isLoading } = useShopQuery({
     url: "/api/shop",
   });
-  const { organization } = useHomeSeo();
+  const { organization, setOrganization } = useHomeSeo();
   const { mutate: createMetafield, isError: isErrorOnCreatingMetafield } =
     useCreateMetafield("metafieldList");
+  const handleCheckedChange = () => {
+    setOrganization({
+      ...organization,
+      status: !organization.status,
+    });
+  };
 
   return (
     <>
@@ -40,20 +56,41 @@ export default function CompanyProfile() {
               }),
           }}
         >
-          <Box paddingInlineStart={"32"} paddingInlineEnd={"32"}>
-            <IndustryInformation />
-            <Divider />
-            <BrandInformation />
-            <Divider />
-            <CompanyLogoInformation />
-            <Divider />
-            <ContactInformation />
-            <Divider />
-            <PriceRangeInformation />
-            <Divider />
-            <SocialMediaInformation />
-            <Divider />
-          </Box>
+          <Layout>
+            <Layout.Section>
+              <IndustryInformation />
+              <Divider />
+              <BrandInformation />
+              <Divider />
+              <CompanyLogoInformation />
+              <Divider />
+              <ContactInformation />
+              <Divider />
+              <PriceRangeInformation />
+              <Divider />
+              <SocialMediaInformation />
+              <Divider />
+            </Layout.Section>
+            <Layout.Section secondary>
+              <Box paddingInlineStart={"20"}>
+                <HorizontalStack align="space-between" blockAlign="center">
+                  <div style={{ width: "70%" }}>
+                    <VerticalStack gap={"2"}>
+                      <Text variant="headingMd">Json-LD snippet</Text>
+                      <Text variant="bodyMd">
+                        Inject your organization information for seach engines
+                        like googles to crawl
+                      </Text>
+                    </VerticalStack>
+                  </div>
+                  <Switch
+                    checked={organization?.status}
+                    handleClick={handleCheckedChange}
+                  />
+                </HorizontalStack>
+              </Box>
+            </Layout.Section>
+          </Layout>
         </Page>
       ) : (
         <>Loading . . .</>
