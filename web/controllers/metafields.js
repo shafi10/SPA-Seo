@@ -103,8 +103,6 @@ export const MetafieldCreate = async (req, res, next) => {
       prevData = {};
     }
 
-    console.log("prevData", prevData, req.body);
-
     let shopId = await client.query({
       data: {
         query: GetShopId,
