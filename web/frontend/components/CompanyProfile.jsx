@@ -18,7 +18,7 @@ import {
   PriceRangeInformation,
   ProductReviewInformation,
   SocialMediaInformation,
-} from "./HomepageSeoComponents";
+} from "./CompanyProfileUiComponents";
 import { useHomeSeo } from "../contexts/home.context";
 import { useCreateMetafield } from "../hooks/useMetafieldQuery";
 import Switch from "./commonUI/Switch/Switch";
