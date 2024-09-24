@@ -9,6 +9,7 @@ export default function Sidebar({ selectedSidebar, setSelectedSidebar }) {
     { id: 5, title: "Collection page" },
     { id: 6, title: "Bulk Collection page" },
     { id: 7, title: "Company Settings" },
+    { id: 8, title: "Blog page" },
   ];
 
   return (
