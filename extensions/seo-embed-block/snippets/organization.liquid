@@ -1,23 +1,15 @@
 <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    {% if data.brand.name %}
-      "name": "{{ data.brand.name | escape }}",
-    {% else %}
-      "name": "{{ shop.name | escape }}",
-    {% endif %}
+    "@type": "{{ data.businessType }}",
+    "name": "{{ shop.name | escape }}",
     "description": "{{ shop.description | escape }}",
     "url": "{{ shop.url }}",
-    {% if data.brand.logo %}
-      "logo": "{{ data.brand.logo }}",
-    {% elsif data.logo %}
-      "logo": "{{ data.logo }}",
-    {% else %}
-      "logo": "{{ shop.logo | default: shop.url }}",
-    {% endif %}
-    "industry": "{{ data.industry | escape }}",
-    "priceRange": [{{ data.priceRange[0] }}, {{ data.priceRange[1] }}],
+    "brand": "{{ data.brand.name }}",
+    {% if data.businessType == "LocalBusiness" %}"image": "{{ data.brand.logo }}",{% endif %}
+    "logo": {% if data.logo %} "{{ data.logo }}" {% else %} "{{ shop.logo | default: shop.url }}" {% endif %},
+    "keywords": "{{ data.industry | escape }}",
+    {% if data.businessType == "LocalBusiness" %}"priceRange": "{{ data.priceRange[0] }} - {{ data.priceRange[1] }}",{% endif %}
     "sameAs": [
       "{% if data.socialLinks.facebook %}{{ data.socialLinks.facebook | escape }}{% endif %}",
       "{% if data.socialLinks.twitter %}{{ data.socialLinks.twitter | escape }}{% endif %}",
@@ -40,7 +32,7 @@
         "addressLocality": "{{ shop.address.city | escape }}",
         "addressRegion": "{{ shop.address.province | escape }}",
         "postalCode": "{{ shop.address.zip | escape }}",
-        "addressCountry": "{{ shop.address.country | escape }}"
+        "addressCountry": "{{ shop.address.country_code | escape }}"
       }
     {% endif %}
   }
