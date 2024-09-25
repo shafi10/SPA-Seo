@@ -5,6 +5,7 @@ import PriceRangeInformation from "./PriceRangeInformation";
 import SocialMediaInformation from "./SocialMediaInformation";
 import CompanyLogoInformation from "./CompanyLogoInformation";
 import ProductReviewInformation from "./ProductReviewAppInformation";
+import BusinessTypeInformation from "./BusinessTypeInformation";
 
 export {
   IndustryInformation,
@@ -14,4 +15,5 @@ export {
   SocialMediaInformation,
   CompanyLogoInformation,
   ProductReviewInformation,
+  BusinessTypeInformation,
 };

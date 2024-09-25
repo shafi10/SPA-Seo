@@ -18,6 +18,7 @@ import {
   PriceRangeInformation,
   ProductReviewInformation,
   SocialMediaInformation,
+  BusinessTypeInformation,
 } from "./CompanyProfileUiComponents";
 import { useHomeSeo } from "../contexts/home.context";
 import { useCreateMetafield } from "../hooks/useMetafieldQuery";
@@ -90,6 +91,8 @@ export default function CompanyProfile() {
                 </Layout.Section>
               </Layout>
             </Box>
+            <Divider />
+            <BusinessTypeInformation />
             <Divider />
             <IndustryInformation />
             <Divider />
