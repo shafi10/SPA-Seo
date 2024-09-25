@@ -11,6 +11,7 @@ import {
   Thumbnail,
   InlineError,
   VerticalStack,
+  Tag,
 } from "@shopify/polaris";
 import { useUI } from "../contexts/ui.context";
 import { useCreateMetafield } from "../hooks/useMetafieldQuery";
@@ -45,7 +46,10 @@ export function GenerateJsonld({ obj_type }) {
   const [reviewCount, setReviewCount] = useState(
     ownerMetaData?.reviewCount || 0
   );
-  const [keywords, setKeywords] = useState(ownerMetaData?.keywords || null);
+  const [keywordsInput, setKeywordsInput] = useState("");
+  const [keywords, setKeywords] = useState(
+    ownerMetaData?.keywords.split(",") || []
+  );
 
   const handleSubmit = useCallback(() => {
     createMetafield({
@@ -57,7 +61,7 @@ export function GenerateJsonld({ obj_type }) {
         showTags,
         rating: rating,
         reviewCount: reviewCount,
-        keywords,
+        keywords: keywords.join(","),
       },
     });
   }, [rating, reviewCount, showTags, owner, pushJson, keywords]);
@@ -65,12 +69,21 @@ export function GenerateJsonld({ obj_type }) {
   const handleShowTagsChange = useCallback((value) => setShowTags(value), []);
   const handleRatingChange = useCallback((value) => setRating(value), []);
   const handlePushJsonChange = () => setPushJson((prev) => !prev);
-  const handleKeywordsChange = useCallback((value) => setKeywords(value), []);
+  const handleKeywordsChange = useCallback(
+    (value) => setKeywordsInput(value),
+    []
+  );
   const handleReviewCountChange = useCallback(
     (value) => setReviewCount(value),
     []
   );
-
+  const handleRemoveKeyword = (index) => {
+    const newKeywords = keywords.filter((_, i) => i !== index);
+    setKeywords(newKeywords);
+  };
+  const handleAddKeyword = (val) => {
+    setKeywords([...keywords, val]);
+  };
   const handleStarClick = (value) => {
     setRating(value);
   };
@@ -131,13 +144,42 @@ export function GenerateJsonld({ obj_type }) {
               }
             />
             {obj_type.toLowerCase() == "collection" && (
-              <TextField
-                value={keywords}
-                onChange={handleKeywordsChange}
-                label={`Keywords`}
-                type="text"
-                helpText="Add keywords separated by commas"
-              />
+              <VerticalStack gap={"3"}>
+                <TextField
+                  value={keywordsInput}
+                  onChange={handleKeywordsChange}
+                  label={`Keywords`}
+                  type="text"
+                  connectedRight={
+                    keywordsInput &&
+                    keywords.length > 0 && (
+                      <Button
+                        primary
+                        onClick={() => {
+                          if (keywordsInput.length > 0) {
+                            handleAddKeyword(keywordsInput);
+                            setKeywordsInput("");
+                          }
+                        }}
+                      >
+                        Add
+                      </Button>
+                    )
+                  }
+                />
+                <HorizontalStack gap={"2"}>
+                  {keywords &&
+                    keywords.length > 0 &&
+                    keywords.map((k, index) => (
+                      <Tag
+                        key={index}
+                        onRemove={() => handleRemoveKeyword(index)}
+                      >
+                        {k}
+                      </Tag>
+                    ))}
+                </HorizontalStack>
+              </VerticalStack>
             )}
             {images && images.length > 0 && (
               <VerticalStack gap={"2"}>
