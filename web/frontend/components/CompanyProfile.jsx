@@ -18,6 +18,7 @@ import {
   PriceRangeInformation,
   ProductReviewInformation,
   SocialMediaInformation,
+  BusinessTypeInformation,
 } from "./CompanyProfileUiComponents";
 import { useHomeSeo } from "../contexts/home.context";
 import { useCreateMetafield } from "../hooks/useMetafieldQuery";
@@ -44,8 +45,8 @@ export default function CompanyProfile() {
           fullWidth
           compactTitle
           divider
-          subtitle={data.domain}
-          title={data.name}
+          subtitle={data?.domain}
+          title={data?.name}
           primaryAction={{
             content: "Save",
             onAction: () =>
@@ -57,6 +58,8 @@ export default function CompanyProfile() {
           }}
         >
           <Box paddingInlineStart={"32"} paddingInlineEnd={"32"}>
+            <BusinessTypeInformation />
+            <Divider />
             <IndustryInformation />
             <Divider />
             <BrandInformation />
