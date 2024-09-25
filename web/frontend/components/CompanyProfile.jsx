@@ -57,7 +57,19 @@ export default function CompanyProfile() {
           }}
         >
           <Box paddingInlineStart={"32"} paddingInlineEnd={"32"}>
-            <Box paddingBlockEnd={"5"}>
+            <IndustryInformation />
+            <Divider />
+            <BrandInformation />
+            <Divider />
+            <CompanyLogoInformation />
+            <Divider />
+            <ContactInformation />
+            <Divider />
+            <PriceRangeInformation />
+            <Divider />
+            <SocialMediaInformation />
+            <Divider />
+            <Box paddingBlockStart={"5"}>
               <Layout>
                 <Layout.Section oneThird>
                   <Box paddingBlockEnd={"4"}>
@@ -90,19 +102,6 @@ export default function CompanyProfile() {
                 </Layout.Section>
               </Layout>
             </Box>
-            <Divider />
-            <IndustryInformation />
-            <Divider />
-            <BrandInformation />
-            <Divider />
-            <CompanyLogoInformation />
-            <Divider />
-            <ContactInformation />
-            <Divider />
-            <PriceRangeInformation />
-            <Divider />
-            <SocialMediaInformation />
-            <Divider />
           </Box>
         </Page>
       ) : (
