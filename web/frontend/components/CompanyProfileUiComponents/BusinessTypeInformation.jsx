@@ -14,9 +14,9 @@ export default function BusinessTypeInformation() {
   const options = [
     {
       label: "Organization",
-      value: "organization",
+      value: "Organization",
     },
-    { label: "Local Business", value: "local-business" },
+    { label: "Local Business", value: "LocalBusiness" },
   ];
 
   const handleSelectChange = (value) => {

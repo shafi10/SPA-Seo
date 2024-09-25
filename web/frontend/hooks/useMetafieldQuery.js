@@ -21,12 +21,17 @@ export const useMetafieldsQuery = ({
   return useQuery("metafieldList", fetch, {
     ...reactQueryOptions,
     onSuccess: (data) => {
-      console.log(data);
+      console.log("org data", data);
       if (
         typeof data.data === "object" &&
         Object.entries(data.data).length > 0
       ) {
-        setOrganization({ ...organization, ...data.data.organization });
+        const industry = data.data.organization?.industry?.split(",");
+        setOrganization({
+          ...organization,
+          ...data.data.organization,
+          industry: industry,
+        });
       }
     },
     refetchOnWindowFocus: false,

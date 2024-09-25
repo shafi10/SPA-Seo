@@ -7,58 +7,73 @@ import {
   Select,
   VerticalStack,
   TextField,
+  Tag,
+  Button,
 } from "@shopify/polaris";
 import { useHomeSeo } from "../../contexts/home.context";
+import { useUI } from "../../contexts/ui.context";
 
 export default function IndustryInformation() {
+  const { setToggleToast } = useUI();
   const { organization, setOrganization } = useHomeSeo();
-  const handleSelectChange = (value) => {
-    setOrganization({ ...organization, industry: value });
+  const handleAddSelection = (value) => {
+    const isExists = organization?.industry?.find(
+      (organization) => organization === value
+    );
+
+    if (isExists) {
+      return setToggleToast({
+        active: true,
+        message: `Item already added`,
+      });
+    }
+    setOrganization({
+      ...organization,
+      industry: [...organization?.industry, value],
+    });
   };
-  const handleTextFieldChange = (value) => {
-    setOrganization({ ...organization, industry: value });
+
+  const handleRemove = (value) => {
+    const list = organization?.industry?.filter((data) => data !== value);
+    setOrganization({
+      ...organization,
+      industry: list,
+    });
   };
+
+  const [selectOrganization, setSelectOrganization] = useState("Store");
+  const [otherOrganization, setOtherOrganization] = useState("");
 
   const options = [
     {
       label: "Store",
-      value: "store",
+      value: "Store",
     },
-    { label: "Arts and Crafts", value: "arts-and-crafts" },
-    { label: "Baby and Kids", value: "baby-and-kids" },
-    { label: "Books, Music and Video", value: "books-music-and-video" },
+    { label: "Arts and Crafts", value: "Arts and Crafts" },
+    { label: "Baby and Kids", value: "Baby and Kids" },
+    { label: "Books, Music and Video", value: "Books, Music and Video" },
     {
       label: "Business equipment and Supplies",
-      value: "business-equipment-and-supplies",
+      value: "Business equipment and Supplies",
     },
-    { label: "Clothing", value: "clothing" },
+    { label: "Clothing", value: "Clothing" },
     { label: "Electronics", value: "electronics" },
-    { label: "Food and Drink", value: "food-and-drink" },
-    { label: "Hardware and Automotive", value: "hardware-and-automotive" },
-    { label: "Health and Beauty", value: "health-and-beauty" },
-    { label: "Home and Decor", value: "home-and-decor" },
-    { label: "Jewelry and Accessories", value: "jewelry-and-accessories" },
-    { label: "Outdoor and Garden", value: "outdoor-and-garden" },
-    { label: "Pet supplies", value: "pet-supplies" },
-    { label: "Restaurants", value: "restaurants" },
-    { label: "Services", value: "services" },
-    { label: "Sports and Recreation", value: "sports-and-recreation" },
-    { label: "Toys and Games", value: "toys-and-games" },
+    { label: "Food and Drink", value: "Food and Drink" },
+    { label: "Hardware and Automotive", value: "Hardware and Automotive" },
+    { label: "Health and Beauty", value: "Health and Beauty" },
+    { label: "Home and Decor", value: "Home and Decor" },
+    { label: "Jewelry and Accessories", value: "Jewelry and Accessories" },
+    { label: "Outdoor and Garden", value: "Outdoor and Garden" },
+    { label: "Pet supplies", value: "Pet supplies" },
+    { label: "Restaurants", value: "Restaurants" },
+    { label: "Services", value: "Services" },
+    { label: "Sports and Recreation", value: "Sports and Recreation" },
+    { label: "Toys and Games", value: "Toys and Games" },
     {
       label: "Other",
-      value: "other",
+      value: "Other",
     },
   ];
-
-  function getIndustryLabel(value) {
-    const industry = options.find((option) => option.value === value);
-    return industry ? industry.label : "Other";
-  }
-
-  function getIndustryValue(value) {
-    const industry = options.find((option) => option.value === value);
-    return industry ? industry.value : "other";
-  }
 
   return (
     <Box paddingBlockStart={"5"} paddingBlockEnd={"5"}>
@@ -76,21 +91,41 @@ export default function IndustryInformation() {
         <Layout.Section oneHalf>
           <Box>
             <AlphaCard>
-              <VerticalStack gap={"6"}>
-                <Select
-                  helpText="Not sure what to choose? Use 'Store' as a default."
-                  label="Select industry"
-                  options={options}
-                  onChange={handleSelectChange}
-                  value={getIndustryValue(organization?.industry)}
-                />
-                {getIndustryLabel(organization?.industry) == "Other" && (
-                  <TextField
-                    value={organization?.industry}
-                    placeholder="Enter industry"
-                    onChange={handleTextFieldChange}
-                  ></TextField>
-                )}
+              <VerticalStack gap={"4"}>
+                <div className="d-flex d-flex-gap">
+                  <div className="select_for_industry">
+                    <Select
+                      label="Select industry"
+                      options={options}
+                      onChange={(value) => setSelectOrganization(value)}
+                      value={selectOrganization}
+                    />
+
+                    {selectOrganization == "Other" && (
+                      <TextField
+                        label="Enter other industry"
+                        value={otherOrganization}
+                        placeholder="Enter industry"
+                        onChange={(value) => setOtherOrganization(value)}
+                      ></TextField>
+                    )}
+                  </div>
+                  <div className="items_center button_for_industry_info">
+                    <Button
+                      primary
+                      onClick={() => handleAddSelection(selectOrganization)}
+                    >
+                      Add
+                    </Button>
+                  </div>
+                </div>
+                <div className="organization_industry_list">
+                  {organization?.industry?.map((data, index) => (
+                    <Tag key={index} onRemove={() => handleRemove(data)}>
+                      {data}
+                    </Tag>
+                  ))}
+                </div>
               </VerticalStack>
             </AlphaCard>
           </Box>

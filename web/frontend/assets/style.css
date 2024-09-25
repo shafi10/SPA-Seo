@@ -3,6 +3,18 @@
   font-size: 13px;
 }
 
+.d-flex {
+  display: flex;
+}
+
+.d-flex-gap {
+  gap: 12px;
+}
+
+.flex-warp {
+  flex: warp;
+}
+
 .red_color {
   color: red;
 }
@@ -264,4 +276,21 @@
 
 .seo_validation_error {
   color: red;
+}
+
+.select_for_industry {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.button_for_industry_info {
+  margin-top: 22px;
+}
+
+.organization_industry_list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
