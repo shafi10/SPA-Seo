@@ -1,3 +1,10 @@
+{% comment %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelector('body script[type="application/ld+json"]').remove();
+    });
+  </script>
+{% endcomment %}
 <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -9,9 +16,8 @@
       "@type": "Organization",
       "name": "{{ shop.name | escape }}",
       "url": "{{ shop.url | escape }}"
-    }
-    {% if collection.products.size > 0 %}
-    , "hasItem": [
+    }{% if collection.products.size > 0 %},{% endif %}
+    {% if collection.products.size > 0 %}"hasItem": [
     {% for product in collection.products %}
       {
         "@context": "https://schema.org",
@@ -19,24 +25,16 @@
         "name": "{{ product.title | strip_html | escape }}",
         "description": "{{ product.description | strip_html | escape }}",
         "image": [
-        {% for image in product.images %}
-          "{{ image.src | product_img_url: 'large' }}"
-          {% if forloop.last == false %},{% endif %}
-        {% endfor %}
+          {% for image in product.images %}"{{ image.src | image_url }}"{% if forloop.last == false %},{% endif %}
+          {% endfor %}
         ],
         "sku": "{{ product.variants.first.sku | escape }}",
         "mpn": "{{ product.variants.first.barcode | escape }}",
         "brand": {
           "@type": "Brand",
-          {% if product.vendor %}
-          "name": "{{ product.vendor | escape }}"
-          {% else %}
-          "name": "{{ org_data.brand.name | escape }}"
-          {% endif %}
+          {% if product.vendor %}"name": "{{ product.vendor | escape }}"{% else %}"name": "{{ org_data.brand.name | escape }}"{% endif %}
         },
-        {% assign product_meta_data = product.metafields['bs-23-seo-app']['json-ld'].value %}
-        {% if product_meta_data != null %}
-        "aggregateRating": {
+        {% if product.metafields['bs-23-seo-app']['json-ld'].value != null %}"aggregateRating": {
           "@type": "AggregateRating",
           "itemReviewed": {
             "@type": "Thing",
@@ -44,11 +42,9 @@
           },
           "ratingValue": {{ product_meta_data.product.rating }},
           "reviewCount": {{ product_meta_data.product.reviewCount }}
-        },
-        {% endif %}
+        },{% endif %}
         "offers": [
-        {% for variant in product.variants %}
-          {
+        {% for variant in product.variants %}{
             "@type": "Offer",
             "priceCurrency": "{{ shop.currency | escape }}",
             "price": {{ variant.price | money_without_currency | remove: ',' }},
@@ -61,14 +57,9 @@
               "name": "{{ shop.name | escape }}",
               "url": "{{ shop.url | escape }}"
             }
-          }
-          {% if forloop.last == false %},{% endif %}
-        {% endfor %}
+          }{% if forloop.last == false %},{% endif %}{% endfor %}
         ]
-      }
-      {% if forloop.last == false %},{% endif %}
-    {% endfor %}
-    ]
-    {% endif %}
+      }{% if forloop.last == false %},{% endif %}{% endfor %}
+    ]{% endif %}
   }
 </script>

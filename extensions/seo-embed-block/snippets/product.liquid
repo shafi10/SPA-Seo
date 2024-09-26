@@ -15,18 +15,11 @@
       "mainEntityOfPage": "{{ shop.url }}/products/{{ product.handle }}",
       "sameAs": "{{ shop.url }}/products/{{ product.handle }}",
       "image": [
-      {% for image in product.images %}
-        "{{ image.src | product_img_url: 'large' }}"
-        {% if forloop.last == false %},{% endif %}
-      {% endfor %}
-      ],
+        {% for image in product.images %}"https:{{ image.src | image_url }}"{% if forloop.last == false %},{% endif %}
+        {% endfor %}],
       "brand": {
         "@type": "Brand",
-        {% if product.vendor %}
-        "name": "{{ product.vendor | escape }}"
-        {% else %}
-        "name": "{{ org_data.brand.name | escape }}"
-        {% endif %}
+        {% if product.vendor %}"name": "{{ product.vendor | escape }}"{% else %}"name": "{{ org_data.brand.name | escape }}"{% endif %}
       },
       "aggregateRating": {
         "@type": "AggregateRating",
@@ -37,15 +30,12 @@
           "@id": "{{ shop.url }}/products/{{ product.handle }}"
         }
       },
-      {% if data.showtags %}
-      "keywords": "{{ product.tags | join: ', ' }}",
-      {% endif %}
-      "hasVariant": [
-      {% for variant in product.variants %}
+      {% if data.showtags %}"keywords": "{{ product.tags | join: ', ' }}",{% endif %}
+      "hasVariant": [{% for variant in product.variants %}
         {
           "@type": "Product",
           "name": "{{ product.title | append: " (" | append: variant.title | append: ")" | escape }}",
-          "image": "{{ variant.image.src | product_img_url: 'large' }}",
+          "image": "{% if variant.image %}https:{{ variant.image.src | image_url }}{%endif%}",
           "sku": "{{ variant.sku | escape }}",
           "mpn": "{{ variant.barcode | escape }}",
           "url": "{{ shop.url }}/products/{{ product.handle }}?variant={{ variant.id }}",
@@ -60,9 +50,7 @@
               "url": "{{ shop.url | escape }}"
             }
           }
-        }
-        {% if forloop.last == false %},{% endif %}
-      {% endfor %}
+        }{% if forloop.last == false %},{% endif %}{% endfor %}
       ]
     }
   {% else %}
@@ -76,24 +64,16 @@
       "mainEntityOfPage": "{{ shop.url }}/products/{{ product.handle }}",
       "sameAs": "{{ shop.url }}/products/{{ product.handle }}",
       "image": [
-      {% for image in product.images %}
-        "{{ image.src | product_img_url: 'large' }}"
-        {% if forloop.last == false %},{% endif %}
-      {% endfor %}
+        {% for image in product.images %}"https:{{ image.src | product_img_url: 'large' }}"{% if forloop.last == false %},{% endif %}
+        {% endfor %}
       ],
-      "sku": "{{ product.variants.first.sku | escape }}",
+      "sku": "{{ product.variants.first.sku | escape | remove: "\n" }}",
       "mpn": "{{ product.variants.first.barcode | escape }}",
       "brand": {
         "@type": "Brand",
-        {% if product.vendor %}
-        "name": "{{ product.vendor | escape }}"
-        {% else %}
-        "name": "{{ org_data.brand.name | escape }}"
-        {% endif %}
+        {% if product.vendor %}"name": "{{ product.vendor | escape }}"{% else %}"name": "{{ org_data.brand.name | escape }}"{% endif %}
       },
-      {% if data.showtags %}
-      "keywords": "{{ product.tags | join: ', ' }}",
-      {% endif %}
+      {% if data.showtags %}"keywords": "{{ product.tags | join: ', ' }}",{% endif %}
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": {{ data.rating }},
@@ -104,8 +84,7 @@
         }
       },
       "offers": [
-      {% for variant in product.variants %}
-        {
+      {% for variant in product.variants %}{
           "@type": "Offer",
           "priceCurrency": "{{ shop.currency | escape }}",
           "price": {{ variant.price | money_without_currency | remove: ',' }},
@@ -117,15 +96,8 @@
             "@type": "Organization",
             "name": "{{ shop.name | escape }}",
             "url": "{{ shop.url | escape }}"
-          },
-          "size": "{{ variant.option1 | escape }}"
-          {% if product.options.size > 1 %}
-            , "color": "{{ variant.option2 | escape }}"
-          {% endif %}
-        }
-        {% if forloop.last == false %},{% endif %}
-      {% endfor %}
+          }
+        }{% if forloop.last == false %},{% endif %}{% endfor %}
       ]
-    }
-  {% endif %}
+    }{% endif %}
 </script>
