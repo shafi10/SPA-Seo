@@ -25,7 +25,7 @@
         "name": "{{ product.title | strip_html | escape }}",
         "description": "{{ product.description | strip_html | escape }}",
         "image": [
-          {% for image in product.images %}"{{ image.src | image_url }}"{% if forloop.last == false %},{% endif %}
+          {% for image in product.images %}"https:{{ image.src | image_url }}"{% if forloop.last == false %},{% endif %}
           {% endfor %}
         ],
         "sku": "{{ product.variants.first.sku | escape }}",

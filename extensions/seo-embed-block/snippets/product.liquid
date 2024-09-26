@@ -64,7 +64,7 @@
       "mainEntityOfPage": "{{ shop.url }}/products/{{ product.handle }}",
       "sameAs": "{{ shop.url }}/products/{{ product.handle }}",
       "image": [
-        {% for image in product.images %}"https:{{ image.src | product_img_url: 'large' }}"{% if forloop.last == false %},{% endif %}
+        {% for image in product.images %}"https:{{ image.src | image_url }}"{% if forloop.last == false %},{% endif %}
         {% endfor %}
       ],
       "sku": "{{ product.variants.first.sku | escape | remove: "\n" }}",
