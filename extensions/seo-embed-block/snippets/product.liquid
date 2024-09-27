@@ -13,13 +13,14 @@
       }
     });
     if (!found) {
+      productSnippetScript.id = '';
       productSnippetScript.type = 'application/ld+json';
     } else {
       productSnippetScript.innerHTML = '';
     }
   });
 </script>
-<script id="product-snippet" type="text/plain">
+<script id="product-snippet" type="application/ld+json">
   {% if product.variants.size > 1 %}
     {
       "@context": "https://schema.org",
