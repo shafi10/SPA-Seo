@@ -52,7 +52,7 @@
         {
           "@type": "Product",
           "name": "{{ product.title | append: " (" | append: variant.title | append: ")" | escape }}",
-          "image": "{% if variant.image %}https:{{ variant.image.src | image_url }}{% elsif %}https:{{ product.featured_image.src | image_url }}{%endif%}",
+          "image": "{% if variant.image %}https:{{ variant.image.src | image_url }}{% else %}https:{{ product.featured_image.src | image_url }}{%endif%}",
           "sku": {{ variant.sku | json | remove: "\n" | remove: "\r" }},
           "mpn": "{{ variant.barcode | escape }}",
           "url": "{{ shop.url }}/products/{{ product.handle }}?variant={{ variant.id }}",
