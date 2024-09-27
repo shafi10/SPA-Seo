@@ -3,20 +3,20 @@
     const collectionSnippetScript = document.querySelector('head script#collection-snippet');
     const collectionSnippet = JSON.parse(collectionSnippetScript.innerHTML);
     const snippetScriptsInsideBody = document.querySelectorAll('script[type="application/ld+json"]');
-    let found = false;
+    let foundCollectionSnippet = false;
     snippetScriptsInsideBody.forEach((script) => {
       const snippet = JSON.parse(script.innerHTML);
       if (snippet['@type'] === 'ProductCollection') {
-        found = true;
+        foundCollectionSnippet = true;
         const finalSnippet = deepmerge(snippet, collectionSnippet);
         script.innerHTML = JSON.stringify(finalSnippet);
+        collectionSnippetScript.innerHTML = '';
       }
     });
-    if (!found) {
+    if (!foundCollectionSnippet) {
       collectionSnippetScript.id = '';
       collectionSnippetScript.type = 'application/ld+json';
     } else {
-      collectionSnippetScript.innerHTML = '';
     }
   });
 </script>
