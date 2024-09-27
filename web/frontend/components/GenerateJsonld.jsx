@@ -48,7 +48,7 @@ export function GenerateJsonld({ obj_type }) {
   );
   const [keywordsInput, setKeywordsInput] = useState("");
   const [keywords, setKeywords] = useState(
-    ownerMetaData?.keywords.split(",") || []
+    ownerMetaData?.keywords?.split(",") || []
   );
 
   const handleSubmit = useCallback(() => {
@@ -122,27 +122,12 @@ export function GenerateJsonld({ obj_type }) {
             />
             {obj_type.toLowerCase() == "product" && (
               <TextField
-                label={`Brand`}
+                label={`Vendor`}
                 type="text"
                 disabled
                 value={owner?.vendor}
               />
             )}
-            <TextField
-              label={`Seller information`}
-              type="text"
-              placeholder="url"
-              value={shop?.domain}
-              disabled
-              connectedLeft={
-                <TextField
-                  value={shop?.name}
-                  placeholder="name"
-                  type="text"
-                  disabled
-                />
-              }
-            />
             {obj_type.toLowerCase() == "collection" && (
               <VerticalStack gap={"3"}>
                 <TextField
