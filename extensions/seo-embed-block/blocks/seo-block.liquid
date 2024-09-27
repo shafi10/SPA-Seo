@@ -1,3 +1,4 @@
+<script src="https://unpkg.com/deepmerge@4.3.1/dist/umd.js"></script>
 {% assign shop_data = shop.metafields['bs-23-seo-app']['json-ld'].value %}
 
 {% if request.page_type == 'product' %}
@@ -17,52 +18,51 @@
 {% endif %}
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-  let pageType = "{{ request.page_type }}";
-  if(pageType == "index"){
-    var seoTitle = "{{ shop.metafields['seo-app-bs23']['home-seo-value'].value.seo_title }}";
-    var seoDescription = "{{ shop.metafields['seo-app-bs23']['home-seo-value'].value.seo_description }}";
-  
-    if (seoTitle) {
-      document.title = seoTitle;
-    }
-  
-    if (seoDescription) {
-      var metaDescription = document.querySelector('meta[name="description"]');
-      if (metaDescription) {
-        metaDescription.setAttribute('content', seoDescription);
-      } else {
-        var newMetaDescription = document.createElement('meta');
-        newMetaDescription.name = 'description';
-        newMetaDescription.content = seoDescription;
-        document.head.appendChild(newMetaDescription);
+  document.addEventListener('DOMContentLoaded', function () {
+    let pageType = '{{ request.page_type }}';
+    if (pageType == 'index') {
+      var seoTitle = "{{ shop.metafields['seo-app-bs23']['home-seo-value'].value.seo_title }}";
+      var seoDescription = "{{ shop.metafields['seo-app-bs23']['home-seo-value'].value.seo_description }}";
+
+      if (seoTitle) {
+        document.title = seoTitle;
+      }
+
+      if (seoDescription) {
+        var metaDescription = document.querySelector('meta[name="description"]');
+        if (metaDescription) {
+          metaDescription.setAttribute('content', seoDescription);
+        } else {
+          var newMetaDescription = document.createElement('meta');
+          newMetaDescription.name = 'description';
+          newMetaDescription.content = seoDescription;
+          document.head.appendChild(newMetaDescription);
+        }
+      }
+    } else if (pageType === 'article') {
+      var seoTitle = "{{ article.metafields['seo-app-bs23']['seo-blog-article'].value.seoTitle }}";
+      var seoDescription = "{{ article.metafields['seo-app-bs23']['seo-blog-article'].value.seoDescription }}";
+
+      if (seoTitle) {
+        document.title = seoTitle;
+      }
+
+      if (seoDescription) {
+        var metaDescription = document.querySelector('meta[name="description"]');
+        if (metaDescription) {
+          metaDescription.setAttribute('content', seoDescription);
+        } else {
+          var newMetaDescription = document.createElement('meta');
+          newMetaDescription.name = 'description';
+          newMetaDescription.content = seoDescription;
+          document.head.appendChild(newMetaDescription);
+        }
       }
     }
-  } else if(pageType === "article"){
-    var seoTitle = "{{ article.metafields['seo-app-bs23']['seo-blog-article'].value.seoTitle }}";
-    var seoDescription = "{{ article.metafields['seo-app-bs23']['seo-blog-article'].value.seoDescription }}";
-  
-    if (seoTitle) {
-      document.title = seoTitle;
-    }
-  
-    if (seoDescription) {
-      var metaDescription = document.querySelector('meta[name="description"]');
-      if (metaDescription) {
-        metaDescription.setAttribute('content', seoDescription);
-      } else {
-        var newMetaDescription = document.createElement('meta');
-        newMetaDescription.name = 'description';
-        newMetaDescription.content = seoDescription;
-        document.head.appendChild(newMetaDescription);
-      }
-    }
-  }
-});
+  });
 </script>
-  
-  
-  {% schema %}
+
+{% schema %}
 {
   "name": "SEO app",
   "target": "head"

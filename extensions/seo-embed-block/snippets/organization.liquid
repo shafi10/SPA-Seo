@@ -1,4 +1,21 @@
-<script type="application/ld+json">
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const orgSnippetScript = document.querySelector('head script#org-snippet');
+    const orgSnippet = JSON.parse(orgSnippetScript.innerHTML);
+    const snippetScriptsInsideBody = document.querySelectorAll('body script[type="application/ld+json"]');
+    console.log({ orgSnippetScript, orgSnippet, snippetScriptsInsideBody });
+    snippetScriptsInsideBody.forEach((script) => {
+      const snippet = JSON.parse(script.innerHTML);
+      if (snippet['@type'] === 'Organization') {
+        const finalSnippet = deepmerge(snippet, orgSnippet);
+        console.log({ snippet, orgSnippet, finalSnippet });
+        script.innerHTML = JSON.stringify(finalSnippet);
+        orgSnippetScript.remove();
+      }
+    });
+  });
+</script>
+<script id="org-snippet" type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "{{ data.businessType }}",

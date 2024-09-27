@@ -1,3 +1,18 @@
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const productSnippetScript = document.querySelector('head script#product-snippet');
+    const productSnippet = JSON.parse(productSnippetScript.innerHTML);
+    const snippetScriptsInsideBody = document.querySelectorAll('body script[type="application/ld+json"]');
+    snippetScriptsInsideBody.forEach((script) => {
+      const snippet = JSON.parse(script.innerHTML);
+      if (snippet['@type'] === 'Product') {
+        const finalSnippet = deepmerge(snippet, productSnippet);
+        script.innerHTML = JSON.stringify(finalSnippet);
+        productSnippetScript.remove();
+      }
+    });
+  });
+</script>
 <script id="product-snippet" type="application/ld+json">
   {% if product.variants.size > 1 %}
     {
@@ -31,7 +46,7 @@
           "@type": "Product",
           "name": "{{ product.title | append: " (" | append: variant.title | append: ")" | escape }}",
           "image": "{% if variant.image %}https:{{ variant.image.src | image_url }}{%endif%}",
-          "sku": "{{ variant.sku | escape }}",
+          "sku": {{ variant.sku | json | remove: "\n" | remove: "\r" }},
           "mpn": "{{ variant.barcode | escape }}",
           "url": "{{ shop.url }}/products/{{ product.handle }}?variant={{ variant.id }}",
           "offers": {
@@ -62,7 +77,7 @@
         {% for image in product.images %}"https:{{ image.src | image_url }}"{% if forloop.last == false %},{% endif %}
         {% endfor %}
       ],
-      "sku": "{{ product.variants.first.sku | escape | remove: "\n" }}",
+      "sku": {{ product.variants.first.sku | json | remove: "\n" | remove: "\r" }},
       "mpn": "{{ product.variants.first.barcode | escape }}",
       "brand": {
         "@type": "Brand",
@@ -84,7 +99,7 @@
           "priceCurrency": "{{ shop.currency | escape }}",
           "price": {{ variant.price | money_without_currency | remove: ',' }},
           "availability": "{% if variant.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
-          "sku": "{{ variant.sku | escape }}",
+          "sku": {{ variant.sku | json | remove: "\n" | remove: "\r" }},
           "mpn": "{{ variant.barcode | escape }}",
           "url": "{{ shop.url }}/products/{{ product.handle }}?variant={{ variant.id }}",
           "seller": {
