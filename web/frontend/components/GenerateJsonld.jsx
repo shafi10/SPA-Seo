@@ -43,6 +43,9 @@ export function GenerateJsonld({ obj_type }) {
   const [pushJson, setPushJson] = useState(metaData?.active || false);
   const [showTags, setShowTags] = useState(ownerMetaData?.showTags || false);
   const [rating, setRating] = useState(ownerMetaData?.rating || 0);
+  const [showVarinats, setShowVariants] = useState(
+    ownerMetaData?.showVarinats | false
+  );
   const [reviewCount, setReviewCount] = useState(
     ownerMetaData?.reviewCount || 0
   );
@@ -52,6 +55,7 @@ export function GenerateJsonld({ obj_type }) {
   );
 
   const handleSubmit = useCallback(() => {
+    console.log("submitting", showVarinats);
     createMetafield({
       type: obj_type.toLowerCase(),
       owner: obj_type.toUpperCase(),
@@ -59,16 +63,18 @@ export function GenerateJsonld({ obj_type }) {
       active: pushJson,
       data: {
         showTags,
+        showVarinats: showVarinats,
         rating: rating,
         reviewCount: reviewCount,
         keywords: keywords.join(","),
       },
     });
-  }, [rating, reviewCount, showTags, owner, pushJson, keywords]);
+  }, [rating, reviewCount, showTags, owner, pushJson, keywords, showVarinats]);
 
   const handleShowTagsChange = useCallback((value) => setShowTags(value), []);
   const handleRatingChange = useCallback((value) => setRating(value), []);
   const handlePushJsonChange = () => setPushJson((prev) => !prev);
+  const handleShowVariantsChange = () => setShowVariants((prev) => !prev);
   const handleKeywordsChange = useCallback(
     (value) => setKeywordsInput(value),
     []
@@ -113,10 +119,20 @@ export function GenerateJsonld({ obj_type }) {
               label="Title"
               type="text"
             />
+            {images && images.length > 0 && (
+              <VerticalStack gap={"2"}>
+                <Text>Images</Text>
+                <HorizontalStack gap={"3"}>
+                  {images.map((img) => (
+                    <Thumbnail source={img?.url} />
+                  ))}
+                </HorizontalStack>
+              </VerticalStack>
+            )}
             <TextField
               value={owner?.description}
               disabled
-              multiline={3}
+              multiline={2}
               label={`${obj_type} description`}
               type="text"
             />
@@ -166,15 +182,24 @@ export function GenerateJsonld({ obj_type }) {
                 </HorizontalStack>
               </VerticalStack>
             )}
-            {images && images.length > 0 && (
-              <VerticalStack gap={"2"}>
-                <Text>Images</Text>
-                <HorizontalStack gap={"3"}>
-                  {images.map((img) => (
-                    <Thumbnail source={img?.url} />
-                  ))}
-                </HorizontalStack>
-              </VerticalStack>
+            {obj_type.toLowerCase() == "product" && (
+              <div
+                style={{
+                  display: "flex",
+                  gap: "0.21rem",
+                  flexDirection: "column",
+                }}
+              >
+                <Text variant="bodyMd">Show all variants data</Text>
+                <Switch
+                  checked={showVarinats}
+                  handleClick={handleShowVariantsChange}
+                />
+                <Text variant="bodySm">
+                  This shows all vairants data on your jsonld. If turned off the
+                  jsonld will only show the data for default variant.
+                </Text>
+              </div>
             )}
             {obj_type.toLowerCase() == "product" && (
               <HorizontalStack gap={"4"} blockAlign="center">

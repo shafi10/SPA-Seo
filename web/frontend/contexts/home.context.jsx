@@ -6,6 +6,7 @@ const initialState = {
     brand: { name: "", logo: "" },
     logo: "",
     showContact: false,
+    showVariants: false,
     businessType: "Organization",
     priceRange: [100, 1000],
     status: false,
