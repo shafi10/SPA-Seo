@@ -2,18 +2,24 @@
   document.addEventListener('DOMContentLoaded', function () {
     const productSnippetScript = document.querySelector('head script#product-snippet');
     const productSnippet = JSON.parse(productSnippetScript.innerHTML);
-    const snippetScriptsInsideBody = document.querySelectorAll('body script[type="application/ld+json"]');
+    const snippetScriptsInsideBody = document.querySelectorAll('script[type="application/ld+json"]');
+    let found = false;
     snippetScriptsInsideBody.forEach((script) => {
       const snippet = JSON.parse(script.innerHTML);
       if (snippet['@type'] === 'Product') {
+        found = true;
         const finalSnippet = deepmerge(snippet, productSnippet);
         script.innerHTML = JSON.stringify(finalSnippet);
-        productSnippetScript.remove();
       }
     });
+    if (!found) {
+      productSnippetScript.type = 'application/ld+json';
+    } else {
+      productSnippetScript.innerHTML = '';
+    }
   });
 </script>
-<script id="product-snippet" type="application/ld+json">
+<script id="product-snippet" type="text/plain">
   {% if product.variants.size > 1 %}
     {
       "@context": "https://schema.org",
