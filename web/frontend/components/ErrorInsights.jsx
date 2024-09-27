@@ -1,5 +1,6 @@
-import { Button, Tabs } from "@shopify/polaris";
-import React from "react";
+import { Tabs } from "@shopify/polaris";
+import React, { useCallback, useState } from "react";
+import { ErrorList } from "./Errorlist";
 
 export function ErrorInsights() {
   const [selected, setSelected] = useState(0);
@@ -12,12 +13,12 @@ export function ErrorInsights() {
   const tabs = [
     {
       id: "all-Product-1",
-      content: "Collection SEO",
-      panelID: "all-Product-content-1",
+      content: "Error insights",
+      panelID: "all-error-content-1",
     },
     {
-      id: "accepts-Product-alt-1",
-      content: "Collection Image alt",
+      id: "accepts-error-alt-1",
+      content: "Auto Redirect",
       panelID: "accepts-Product-alt-content-1",
     },
   ];
@@ -26,15 +27,10 @@ export function ErrorInsights() {
     <div>
       <div className="seo_score_page_title_container">
         <div className="seo_score_page_title">404 Error</div>
-        <div className="">
-          <Button primary submit>
-            Submit
-          </Button>
-        </div>
       </div>
       <div>
         <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}>
-          {selected === 0 && <></>}
+          {selected === 0 && <ErrorList />}
         </Tabs>
       </div>
     </div>

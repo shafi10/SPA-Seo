@@ -265,3 +265,7 @@
 .seo_validation_error {
   color: red;
 }
+
+.seo_error_list_container {
+  padding: 12px;
+}
