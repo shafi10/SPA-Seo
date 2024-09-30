@@ -26,7 +26,7 @@ export default function CollectionSeo() {
     },
     {
       id: "accepts-Jsonld-1",
-      content: "Json-LD",
+      content: "SEO Markup Generator (JSON-LD)",
       panelID: "accepts-jsonld-1",
     },
   ];

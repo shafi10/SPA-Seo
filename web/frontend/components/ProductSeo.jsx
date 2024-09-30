@@ -32,7 +32,7 @@ export default function ProductSeo() {
     },
     {
       id: "product-json-ld",
-      content: "Generate JSON-LD for SEO",
+      content: "SEO Markup Generator (JSON-LD)",
       panelID: "panel-product-json-ld",
     },
   ];

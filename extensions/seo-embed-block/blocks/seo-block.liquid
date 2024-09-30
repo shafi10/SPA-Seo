@@ -1,4 +1,7 @@
 <script async src="https://unpkg.com/deepmerge@4.3.1/dist/umd.js"></script>
+<script async>
+  console.log('start');
+</script>
 {% assign shop_data = shop.metafields['bs-23-seo-app']['json-ld'].value %}
 
 {% if shop_data != null and shop_data.organization.status %}

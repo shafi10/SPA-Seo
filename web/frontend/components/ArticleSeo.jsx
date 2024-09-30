@@ -26,7 +26,7 @@ export default function ArticleSeo() {
     },
     {
       id: "accepts-blog-jsonld",
-      content: "Structured data",
+      content: "SEO Markup Generator (JSON-LD)",
       panelID: "accepts-Product-alt-content-1",
     },
   ];
