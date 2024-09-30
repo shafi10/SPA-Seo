@@ -2,13 +2,16 @@
   document.addEventListener('DOMContentLoaded', function () {
     const orgSnippetScript = document.querySelector('head script#org-snippet');
     const orgSnippet = JSON.parse(orgSnippetScript.innerHTML);
-    const snippetScriptsInsideBody = document.querySelectorAll('script[type="application/ld+json"]');
+    const snippetScriptsInsideBody = document.querySelectorAll(
+      'script[type="application/ld+json"]:not([id="org-snippet"])'
+    );
     let foundOrgSnippet = false;
     snippetScriptsInsideBody.forEach((script) => {
       const snippet = JSON.parse(script.innerHTML);
       if (snippet['@type'] === 'Organization') {
         foundOrgSnippet = true;
-        const finalSnippet = deepmerge(snippet, orgSnippet);
+        const finalSnippet = Object.assign({}, snippet, orgSnippet);
+        console.log({ snippet, orgSnippet, finalSnippet });
         script.innerHTML = JSON.stringify(finalSnippet);
         orgSnippetScript.innerHTML = '';
       }

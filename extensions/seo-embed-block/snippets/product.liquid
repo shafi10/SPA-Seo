@@ -2,13 +2,15 @@
   document.addEventListener('DOMContentLoaded', function () {
     const productSnippetScript = document.querySelector('head script#product-snippet');
     const productSnippet = JSON.parse(productSnippetScript.innerHTML);
-    const snippetScriptsInsideBody = document.querySelectorAll('script[type="application/ld+json"]');
+    const snippetScriptsInsideBody = document.querySelectorAll(
+      'script[type="application/ld+json"]:not([id="product-snippet"])'
+    );
     let foundProductSnippet = false;
     snippetScriptsInsideBody.forEach((script) => {
       const snippet = JSON.parse(script.innerHTML);
       if (snippet['@type'] === 'Product' || snippet['@type'] === 'ProductGroup') {
         foundProductSnippet = true;
-        const finalSnippet = deepmerge(snippet, productSnippet);
+        const finalSnippet = Object.assign({}, snippet, productSnippet);
         script.innerHTML = JSON.stringify(finalSnippet);
         productSnippetScript.innerHTML = '';
       }
@@ -26,7 +28,7 @@
       "@type": "ProductGroup",
       "@id": "{{ shop.url }}/products/{{ product.handle }}",
       "name": "{{ product.title | escape }}",
-      "description": "{{ product.description | strip_html | escape }}",
+      "description": {{ product.description | strip_html | json }},
       "url": "{{ shop.url }}/products/{{ product.handle }}",
       "mainEntityOfPage": "{{ shop.url }}/products/{{ product.handle }}",
       "sameAs": "{{ shop.url }}/products/{{ product.handle }}",
@@ -99,7 +101,7 @@
       "@type": "Product",
       "@id": "{{ shop.url }}/products/{{ product.handle }}",
       "name": "{{ product.title | escape }}",
-      "description": "{{ product.description | strip_html | escape }}",
+      "description": {{ product.description | strip_html | json }},
       "url": "{{ shop.url }}/products/{{ product.handle }}",
       "mainEntityOfPage": "{{ shop.url }}/products/{{ product.handle }}",
       "sameAs": "{{ shop.url }}/products/{{ product.handle }}",

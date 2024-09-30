@@ -2,13 +2,16 @@
   document.addEventListener('DOMContentLoaded', function () {
     const collectionSnippetScript = document.querySelector('head script#collection-snippet');
     const collectionSnippet = JSON.parse(collectionSnippetScript.innerHTML);
-    const snippetScriptsInsideBody = document.querySelectorAll('script[type="application/ld+json"]');
+    const snippetScriptsInsideBody = document.querySelectorAll(
+      'script[type="application/ld+json"]:not([id="collection-snippet"])'
+    );
     let foundCollectionSnippet = false;
     snippetScriptsInsideBody.forEach((script) => {
       const snippet = JSON.parse(script.innerHTML);
       if (snippet['@type'] === 'ProductCollection') {
         foundCollectionSnippet = true;
-        const finalSnippet = deepmerge(snippet, collectionSnippet);
+        const finalSnippet = Object.assign({}, snippet, collectionSnippet);
+        console.log({ snippet, collectionSnippet, finalSnippet });
         script.innerHTML = JSON.stringify(finalSnippet);
         collectionSnippetScript.innerHTML = '';
       }
@@ -25,7 +28,7 @@
     "@context": "https://schema.org",
     "@type": "ProductCollection",
     "name": "{{ collection.title | escape }}",
-    "description": "{{ collection.description | strip_html | escape }}",
+    "description": {{ collection.description | strip_html | strip_newlines | json }},
     "keywords": "{{ data.keywords | escape }}",
     "provider": {
       "@type": "Organization",
@@ -37,8 +40,8 @@
       {
         "@context": "https://schema.org",
         "@type": "Product",
-        "name": "{{ product.title | strip_html | escape }}",
-        "description": "{{ product.description | strip_html | escape }}",
+        "name": "{{ product.title | strip_html | strip_newlines | escape }}",
+        "description": {{ product.description | strip_html | strip_newlines | json }},
         "image": [
           {% for image in product.images %}"https:{{ image.src | image_url }}"{% if forloop.last == false %},{% endif %}
           {% endfor %}
@@ -54,7 +57,7 @@
           "@type": "AggregateRating",
           "itemReviewed": {
             "@type": "Thing",
-            "name": "{{ product.title | strip_html | escape }}"
+            "name": "{{ product.title | strip_html | strip_newlines | escape }}"
           },
           "ratingValue": {{ product_metadata.product.rating }},
           "reviewCount": {{ product_metadata.product.reviewCount }}
