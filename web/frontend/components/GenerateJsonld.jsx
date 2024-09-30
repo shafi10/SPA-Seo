@@ -26,11 +26,14 @@ export function GenerateJsonld({ obj_type }) {
       ? owner?.images.edges.map((e) => e.node)
       : obj_type?.toLowerCase() == "collection" && owner?.image
       ? [owner?.image]
+      : obj_type?.toLowerCase() == "blog" && owner?.image
+      ? [owner?.image]
       : null;
   const metaData = owner?.metafield
     ? JSON.parse(owner?.metafield?.value)
     : null;
   const ownerMetaData = metaData?.[`${obj_type?.toLowerCase()}`] || null;
+  console.log("modal", images);
 
   const invalidationTarget =
     obj_type?.toLowerCase() == "product"
@@ -124,7 +127,7 @@ export function GenerateJsonld({ obj_type }) {
                 <Text>Images</Text>
                 <HorizontalStack gap={"3"}>
                   {images.map((img) => (
-                    <Thumbnail source={img?.url} />
+                    <Thumbnail source={img?.url ? img?.url : img?.src} />
                   ))}
                 </HorizontalStack>
               </VerticalStack>
@@ -153,7 +156,7 @@ export function GenerateJsonld({ obj_type }) {
                   type="text"
                   connectedRight={
                     keywordsInput &&
-                    keywords.length > 0 && (
+                    keywordsInput.length > 0 && (
                       <Button
                         primary
                         onClick={() => {

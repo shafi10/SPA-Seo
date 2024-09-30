@@ -1,4 +1,4 @@
-<script src="https://unpkg.com/deepmerge@4.3.1/dist/umd.js"></script>
+<script async src="https://unpkg.com/deepmerge@4.3.1/dist/umd.js"></script>
 {% assign shop_data = shop.metafields['bs-23-seo-app']['json-ld'].value %}
 
 {% if shop_data != null and shop_data.organization.status %}
@@ -14,6 +14,11 @@
   {% assign data = collection.metafields['bs-23-seo-app']['json-ld'].value %}
   {% if data != null and data.active %}
     {% render 'collection', org_data: shop_data.organization, data: data.collection %}
+  {% endif %}
+{% elsif request.page_type == 'blog' %}
+  {% assign data = collection.metafields['bs-23-seo-app']['json-ld'].value %}
+  {% if data != null and data.active %}
+    {% render 'blog', org_data: shop_data.organization, data: data.collection %}
   {% endif %}
 {% endif %}
 
