@@ -52,6 +52,22 @@
   }
 });
 </script>
+
+
+{% if template == '404' %}
+  <script>
+      fetch('https://ringtones-emission-woman-names.trycloudflare.com/api/404-error/update-error-insights', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+              shop: "{{ shop.url }}", // Pass shop domain
+              url: window.location.href,
+              referrer: document.referrer,
+              timestamp: new Date().toISOString()
+          })
+      });
+  </script>
+  {% endif %}
   
   
   {% schema %}
