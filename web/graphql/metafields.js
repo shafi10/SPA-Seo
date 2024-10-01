@@ -20,13 +20,41 @@ export const GetShopMetafield = `
         }
     }`;
 
-export const CheckShopMetafieldDefinition = `
+export const GetProductMetafield = (ownerId) => `
+query GetProductMetafield {
+  product(id: "${ownerId}") {
+    title
+    metafield(key: "${SHOP_META_FIELD_KEY}", namespace: "${SHOP_NAME_SPACE}") {
+      id
+      namespace
+      key
+      value
+    }
+  }
+}
+`;
+
+export const GetCollectionMetafield = (ownerId) => `
+query GetCollectionMetafield {
+  collection(id: "${ownerId}") {
+    title
+    metafield(key: "${SHOP_META_FIELD_KEY}", namespace: "${SHOP_NAME_SPACE}") {
+      id
+      namespace
+      key
+      value
+    }
+  }
+}
+`;
+
+export const CheckShopMetafieldDefinition = (type) => `
     query CheckShopMetafieldDefinition {
         metafieldDefinitions( 
             first: 1, 
             namespace: "${SHOP_NAME_SPACE}", 
             key: "${SHOP_META_FIELD_KEY}", 
-            ownerType: SHOP
+            ownerType: ${type}
         ) {
             edges {
                 node {
@@ -39,7 +67,7 @@ export const CheckShopMetafieldDefinition = `
         }
     }`;
 
-export const CreateShopMetafieldDefinition = `
+export const CreateShopMetafieldDefinition = (type) => `
         mutation CreateShopMetafieldDefinition {
             metafieldDefinitionCreate(definition: {
                 namespace: "${SHOP_NAME_SPACE}",
@@ -47,7 +75,7 @@ export const CreateShopMetafieldDefinition = `
                 type: "json",
                 name: "SEO app metafield",
                 description: "Metafield for generating json-ld for SEO",
-                ownerType: SHOP
+                ownerType: ${type}
             }) {
                 createdDefinition {
                     id

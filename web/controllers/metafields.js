@@ -4,20 +4,23 @@ import {
   CreateShopMetafieldDefinition,
   GetShopId,
   GetShopMetafield,
+  GetProductMetafield,
+  GetCollectionMetafield,
   SetShopMetafield,
 } from "../graphql/metafields.js";
 
-async function initializeMetafield(client) {
+async function initializeMetafield(client, type) {
   try {
+    console.log("initializing metafield", type);
     const response = await client.query({
       data: {
-        query: CheckShopMetafieldDefinition,
+        query: CheckShopMetafieldDefinition(type),
       },
     });
 
     if (response.body.data.metafieldDefinitions.edges.length == 0) {
       const metafieldCreationResponse = await client.query({
-        data: { query: CreateShopMetafieldDefinition },
+        data: { query: CreateShopMetafieldDefinition(type) },
       });
 
       if (
@@ -67,17 +70,35 @@ export const MetafieldCreate = async (req, res, next) => {
     const client = new shopify.api.clients.Graphql({
       session: res.locals.shopify.session,
     });
-    await initializeMetafield(client);
+    let { type, data, owner, ownerId } = req.body;
 
-    const { type, data } = req.body;
-    let prevData = await client.query({
-      data: {
-        query: GetShopMetafield,
-      },
-    });
+    await initializeMetafield(client, owner);
+    let prevData = {};
 
-    if (prevData.body.data.shop.metafield) {
-      prevData = JSON.parse(prevData.body.data.shop.metafield.value);
+    if (owner == "SHOP") {
+      prevData = await client.query({
+        data: {
+          query: GetShopMetafield,
+        },
+      });
+    } else if (owner == "PRODUCT") {
+      prevData = await client.query({
+        data: {
+          query: GetProductMetafield(ownerId),
+        },
+      });
+    } else if (owner == "COLLECTION") {
+      prevData = await client.query({
+        data: {
+          query: GetCollectionMetafield(ownerId),
+        },
+      });
+    }
+
+    if (prevData.body.data[`${owner.toLowerCase()}`].metafield) {
+      prevData = JSON.parse(
+        prevData.body.data[`${owner.toLowerCase()}`].metafield.value
+      );
     } else {
       prevData = {};
     }
@@ -88,6 +109,7 @@ export const MetafieldCreate = async (req, res, next) => {
       },
     });
     shopId = shopId.body.data.shop.id;
+    if (ownerId == null) ownerId = shopId;
     const setMetafieldResponse = await client.query({
       data: {
         query: SetShopMetafield,
@@ -96,8 +118,12 @@ export const MetafieldCreate = async (req, res, next) => {
             {
               key: "json-ld",
               namespace: "bs-23-seo-app",
-              ownerId: shopId,
-              value: JSON.stringify({ ...prevData, [type]: data }),
+              ownerId,
+              value: JSON.stringify({
+                ...prevData,
+                [type]: data,
+                active: req.body.active,
+              }),
             },
           ],
         },
@@ -118,6 +144,7 @@ export const MetafieldCreate = async (req, res, next) => {
       "Failed to create shop metafield:",
       error.response?.errors || error.message
     );
+    console.error(error);
     return res.status(500).json({ error: "Internal server error" });
   }
 };

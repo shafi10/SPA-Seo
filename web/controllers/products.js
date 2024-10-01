@@ -15,29 +15,44 @@ const fetchAllProducts = async (session) => {
           node {
             id
             title
+            description
             handle
             status
             handle
-            seo{
-                        title
-                        description
-                      }
+            tags
+            vendor
+            priceRangeV2 {
+              maxVariantPrice {
+                amount
+                currencyCode
+              }
+              minVariantPrice {
+                amount
+                currencyCode
+              }
+            }
+            metafield(namespace: "bs-23-seo-app", key: "json-ld") {
+              value
+            }
+            seo {
+              title
+              description
+            }
             images(first: 100) {
-                                  edges {
-                                    node {
-                                      id
-                                      url
-                                      originalSrc
-                                      altText
-                                    }
-                                  }
-                                }
-                                featuredImage{
-                                  altText
-                                  url
-                                  width
-                                }
-
+              edges {
+                node {
+                  id
+                  url
+                  originalSrc
+                  altText
+                }
+              }
+            }
+            featuredImage{
+              altText
+              url
+              width
+            }
           }
           cursor
         }
@@ -118,6 +133,7 @@ export const getProductControllerByID = async (req, res, next) => {
       product(id: "gid://shopify/Product/${id}") {
         id
         title
+        description
         images(first: 5) {
           edges {
             node {

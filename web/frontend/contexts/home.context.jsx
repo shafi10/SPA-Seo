@@ -2,11 +2,14 @@ import React from "react";
 
 const initialState = {
   organization: {
-    industry: "store",
+    industry: [],
     brand: { name: "", logo: "" },
     logo: "",
     showContact: false,
+    showVariants: false,
+    businessType: "Organization",
     priceRange: [100, 1000],
+    status: false,
     socialLinks: {
       facebook: null,
       twitter: null,

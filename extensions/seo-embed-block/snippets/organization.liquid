@@ -1,21 +1,40 @@
-<script type="application/ld+json">
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const orgSnippetScript = document.querySelector('head script#org-snippet');
+    const orgSnippet = JSON.parse(orgSnippetScript.innerHTML);
+    const snippetScriptsInsideBody = document.querySelectorAll(
+      'script[type="application/ld+json"]:not([id="org-snippet"])'
+    );
+    let foundOrgSnippet = false;
+    snippetScriptsInsideBody.forEach((script) => {
+      const snippet = JSON.parse(script.innerHTML);
+      if (snippet['@type'] === 'Organization') {
+        foundOrgSnippet = true;
+        const finalSnippet = Object.assign({}, snippet, orgSnippet);
+        console.log({ snippet, orgSnippet, finalSnippet });
+        script.innerHTML = JSON.stringify(finalSnippet);
+        orgSnippetScript.innerHTML = '';
+      }
+    });
+    if (!foundOrgSnippet) {
+      orgSnippetScript.id = '';
+      orgSnippetScript.type = 'application/ld+json';
+    } else {
+    }
+  });
+</script>
+<script id="org-snippet" type="text/plain">
   {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    {% if data.brand.name %}
-      "name": "{{ data.brand.name | escape }}",
-    {% else %}
-      "name": "{{ shop.name | escape }}",
-    {% endif %}
+    "@type": "{{ data.businessType }}",
+    "name": "{{ shop.name | escape }}",
     "description": "{{ shop.description | escape }}",
     "url": "{{ shop.url }}",
-    {% if data.brand.logo %}
-      "logo": "{{ data.brand.logo }}",
-    {% elsif data.logo %}
-      "logo": "{{ data.logo }}",
-    {% else %}
-      "logo": "{{ shop.logo | default: shop.url | append: '/logo.png' }}",
-    {% endif %}
+    "brand": "{{ data.brand.name }}",
+    {% if data.businessType == "LocalBusiness" %}"image": "{{ data.brand.logo }}",{% endif %}
+    "logo": {% if data.logo %} "{{ data.logo }}" {% else %} "{{ shop.logo | default: shop.url }}" {% endif %},
+    "keywords": "{{ data.industry | escape }}",
+    {% if data.businessType == "LocalBusiness" %}"priceRange": "{{ data.priceRange[0] }} - {{ data.priceRange[1] }}",{% endif %}
     "sameAs": [
       "{% if data.socialLinks.facebook %}{{ data.socialLinks.facebook | escape }}{% endif %}",
       "{% if data.socialLinks.twitter %}{{ data.socialLinks.twitter | escape }}{% endif %}",
@@ -26,55 +45,20 @@
       "{% if data.socialLinks.snapchat %}{{ data.socialLinks.snapchat | escape }}{% endif %}",
       "{% if data.socialLinks.tiktok %}{{ data.socialLinks.tiktok | escape }}{% endif %}"
     ],
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "telephone": "{{ shop.phone | escape }}",
-      "contactType": "Customer Service"
-    },
     {% if data.showContact %}
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "{{ shop.address.address1 | escape }}{% if shop.address.address2 %}, {{ shop.address.address2 | escape }}{% endif %}",
-      "addressLocality": "{{ shop.address.city | escape }}",
-      "addressRegion": "{{ shop.address.province | escape }}",
-      "postalCode": "{{ shop.address.zip | escape }}",
-      "addressCountry": "{{ shop.address.country | escape }}"
-    },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "{{ shop.phone | escape }}",
+        "contactType": "Customer Service"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "{{ shop.address.address1 | escape }}{% if shop.address.address2 %}, {{ shop.address.address2 | escape }}{% endif %}",
+        "addressLocality": "{{ shop.address.city | escape }}",
+        "addressRegion": "{{ shop.address.province | escape }}",
+        "postalCode": "{{ shop.address.zip | escape }}",
+        "addressCountry": "{{ shop.address.country_code | escape }}"
+      }
     {% endif %}
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "{{ shop.url }}/search?q={search_term_string}",
-      "query-input": "required name=search_term_string"
-    },
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": "Featured Products",
-      "itemListElement": [
-        {% for product in collections.first.products %}
-        {
-          "@type": "Product",
-          "name": "{{ product.title | escape }}",
-          "image": [
-            {% for image in product.images %}
-              "{{ image.src | product_img_url: 'large' }}"{% if forloop.last == false %},{% endif %}
-            {% endfor %}
-          ],
-          "sku": "{{ product.variants.first.sku | escape }}",
-          "mpn": "{{ product.variants.first.barcode | escape }}",
-          "brand": {
-            "@type": "Brand",
-            "name": "{{ product.vendor | escape }}"
-          },
-          "offers": {
-            "@type": "Offer",
-            "priceCurrency": "{{ shop.currency | escape }}",
-            "price": "{{ product.price | money_without_currency | escape }}",
-            "availability": "{% if product.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
-            "url": "{{ shop.url }}/products/{{ product.handle }}"
-          }
-        }{% if forloop.last == false %},{% endif %}
-        {% endfor %}
-      ]
-    }
   }
 </script>
