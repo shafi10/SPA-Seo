@@ -48,6 +48,20 @@ query GetCollectionMetafield {
 }
 `;
 
+export const GetArticleMetafield = (ownerId) => `
+query GetArticleMetafield {
+  collection(id: "${ownerId}") {
+    title
+    metafield(key: "${SHOP_META_FIELD_KEY}", namespace: "${SHOP_NAME_SPACE}") {
+      id
+      namespace
+      key
+      value
+    }
+  }
+}
+`;
+
 export const CheckShopMetafieldDefinition = (type) => `
     query CheckShopMetafieldDefinition {
         metafieldDefinitions( 

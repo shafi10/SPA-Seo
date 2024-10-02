@@ -9,9 +9,9 @@ import {
   Button,
   HorizontalStack,
   Thumbnail,
-  InlineError,
   VerticalStack,
   Tag,
+  Select,
 } from "@shopify/polaris";
 import { useUI } from "../contexts/ui.context";
 import { useCreateMetafield } from "../hooks/useMetafieldQuery";
@@ -26,14 +26,14 @@ export function GenerateJsonld({ obj_type }) {
       ? owner?.images.edges.map((e) => e.node)
       : obj_type?.toLowerCase() == "collection" && owner?.image
       ? [owner?.image]
-      : obj_type?.toLowerCase() == "blog" && owner?.image
+      : obj_type?.toLowerCase() == "article" && owner?.image
       ? [owner?.image]
       : null;
   const metaData = owner?.metafield
     ? JSON.parse(owner?.metafield?.value)
     : null;
   const ownerMetaData = metaData?.[`${obj_type?.toLowerCase()}`] || null;
-  console.log("modal", images);
+  console.log("modal", images, owner);
 
   const invalidationTarget =
     obj_type?.toLowerCase() == "product"
@@ -56,23 +56,43 @@ export function GenerateJsonld({ obj_type }) {
   const [keywords, setKeywords] = useState(
     ownerMetaData?.keywords?.split(",") || []
   );
+  const [audiance, setAudience] = useState(null);
+  const [authorUrl, setAuthorUrl] = useState(null);
+  const [additionalAuthors, setAdditionalAuthors] = useState([]);
+  const [additionalAuthorName, setAdditionalAuthorName] = useState(null);
+  const [additionalAuthorUrl, setAdditionalAuthorUrl] = useState(null);
 
   const handleSubmit = useCallback(() => {
-    console.log("submitting", showVarinats);
     createMetafield({
       type: obj_type.toLowerCase(),
       owner: obj_type.toUpperCase(),
       ownerId: owner?.id,
       active: pushJson,
+      blogId: owner?.blog_id || null,
       data: {
         showTags,
         showVarinats: showVarinats,
         rating: rating,
         reviewCount: reviewCount,
         keywords: keywords.join(","),
+        audienceType: audiance || null,
+        authorUrl: authorUrl || null,
+        additionalAuthors:
+          additionalAuthors.length > 0 ? additionalAuthors : null,
       },
     });
-  }, [rating, reviewCount, showTags, owner, pushJson, keywords, showVarinats]);
+  }, [
+    rating,
+    reviewCount,
+    showTags,
+    owner,
+    pushJson,
+    keywords,
+    showVarinats,
+    audiance,
+    authorUrl,
+    additionalAuthors,
+  ]);
 
   const handleShowTagsChange = useCallback((value) => setShowTags(value), []);
   const handleRatingChange = useCallback((value) => setRating(value), []);
@@ -86,6 +106,7 @@ export function GenerateJsonld({ obj_type }) {
     (value) => setReviewCount(value),
     []
   );
+
   const handleRemoveKeyword = (index) => {
     const newKeywords = keywords.filter((_, i) => i !== index);
     setKeywords(newKeywords);
@@ -96,6 +117,38 @@ export function GenerateJsonld({ obj_type }) {
   const handleStarClick = (value) => {
     setRating(value);
   };
+  const handleAudienceChange = (value) => {
+    setAudience(value);
+  };
+  const handleAuthorUrlChange = useCallback((value) => setAuthorUrl(value), []);
+  const handleAdditionalAuthorNamneChange = useCallback(
+    (value) => setAdditionalAuthorName(value),
+    []
+  );
+  const handleAdditionalAuthorUrlChange = useCallback(
+    (value) => setAdditionalAuthorUrl(value),
+    []
+  );
+
+  const options = [
+    { label: "General", value: "General" },
+    { label: "Children", value: "Children" },
+    { label: "Teens", value: "Teens" },
+    { label: "Adults", value: "Adults" },
+    { label: "Seniors", value: "Seniors" },
+    { label: "Students", value: "Students" },
+    { label: "Professionals", value: "Professionals" },
+    { label: "Researchers", value: "Researchers" },
+    { label: "Parents", value: "Parents" },
+    { label: "Teachers", value: "Teachers" },
+    { label: "Business", value: "Business" },
+    { label: "Technologists", value: "Technologists" },
+    { label: "Health Enthusiasts", value: "HealthEnthusiasts" },
+    { label: "Travelers", value: "Travelers" },
+    { label: "Hobbyists", value: "Hobbyists" },
+    { label: "Gamers", value: "Gamers" },
+    { label: "Fitness Enthusiasts", value: "FitnessEnthusiasts" },
+  ];
 
   return (
     <Box paddingBlockStart={"2"}>
@@ -132,13 +185,94 @@ export function GenerateJsonld({ obj_type }) {
                 </HorizontalStack>
               </VerticalStack>
             )}
-            <TextField
-              value={owner?.description}
-              disabled
-              multiline={2}
-              label={`${obj_type} description`}
-              type="text"
-            />
+            {obj_type?.toLowerCase() != "article" && (
+              <TextField
+                value={owner?.description}
+                disabled
+                multiline={2}
+                label={`${obj_type} description`}
+                type="text"
+              />
+            )}
+            {obj_type?.toLowerCase() == "article" && (
+              <TextField
+                value={authorUrl}
+                label="Author information"
+                type="text"
+                placeholder="A link to a web page that uniquely identifies the author of the article"
+                onChange={handleAuthorUrlChange}
+                connectedLeft={
+                  <TextField disabled value={owner?.author} type="text" />
+                }
+              />
+            )}
+            {additionalAuthors.map((auth, index) => (
+              <TextField
+                value={auth.url}
+                type="text"
+                disabled
+                placeholder="A link to a web page that uniquely identifies the author of the article"
+                connectedLeft={
+                  <TextField disabled value={auth.name} type="text" />
+                }
+                connectedRight={
+                  <Button
+                    destructive
+                    onClick={() => {
+                      setAdditionalAuthors((prev) =>
+                        prev.filter((_, i) => i !== index)
+                      );
+                    }}
+                  >
+                    Remove
+                  </Button>
+                }
+              />
+            ))}
+            {obj_type?.toLowerCase() == "article" && (
+              <TextField
+                value={additionalAuthorUrl}
+                label="Add additional author information"
+                type="text"
+                placeholder="A link to a web page that uniquely identifies the author of the article"
+                onChange={handleAdditionalAuthorUrlChange}
+                connectedLeft={
+                  <TextField
+                    value={additionalAuthorName}
+                    placeholder="Author name"
+                    type="text"
+                    onChange={handleAdditionalAuthorNamneChange}
+                    d
+                  />
+                }
+                connectedRight={
+                  <Button
+                    primary
+                    onClick={() => {
+                      setAdditionalAuthors((prev) => [
+                        ...prev,
+                        {
+                          name: additionalAuthorName,
+                          url: additionalAuthorUrl,
+                        },
+                      ]);
+                      setAdditionalAuthorName(null);
+                      setAdditionalAuthorUrl(null);
+                    }}
+                  >
+                    Add
+                  </Button>
+                }
+              />
+            )}
+            {obj_type?.toLowerCase() == "article" && (
+              <Select
+                label="Set audience type"
+                options={options}
+                onChange={handleAudienceChange}
+                value={audiance}
+              />
+            )}
             {obj_type.toLowerCase() == "product" && (
               <TextField
                 label={`Vendor`}
@@ -227,13 +361,14 @@ export function GenerateJsonld({ obj_type }) {
                 type="integer"
               />
             )}
-            {obj_type.toLowerCase() == "product" && (
-              <Checkbox
-                label="Show product tag information"
-                checked={showTags}
-                onChange={handleShowTagsChange}
-              />
-            )}
+            {obj_type.toLowerCase() == "product" ||
+              (obj_type.toLowerCase() == "article" && (
+                <Checkbox
+                  label={`Show ${obj_type.toLowerCase()} tag information`}
+                  checked={showTags}
+                  onChange={handleShowTagsChange}
+                />
+              ))}
             <HorizontalStack align="end">
               <Button primary submit>
                 Save
