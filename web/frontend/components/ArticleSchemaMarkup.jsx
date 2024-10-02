@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   Box,
   Text,
@@ -17,31 +17,41 @@ import { useUI } from "../contexts/ui.context";
 import { useCreateMetafield } from "../hooks/useMetafieldQuery";
 import { useSingleArticleQuery } from "../hooks/useBlogsQuery";
 import Switch from "./commonUI/Switch/Switch";
+import { Spinners } from "./Spinner";
 
 export function ArticleSchemaMarkup() {
   const { modal } = useUI();
-  const { data } = useSingleArticleQuery({
+  const { data, isSuccess, isLoading } = useSingleArticleQuery({
     url: `/api/blog/articleById/${modal?.data?.info?.blog_id}/${modal?.data?.info?.id}`,
   });
   const owner = modal?.data?.info;
   const images = owner?.image ? [owner?.image] : null;
-  const metaData = data?.metafields ? JSON.parse(data?.metafields.value) : null;
-  const ownerMetaData = metaData?.article || null;
+
   const invalidationTarget = "singleArticle";
   const { mutate: createMetafield } = useCreateMetafield(invalidationTarget);
-  console.log("modal", { images, owner, data, metaData });
 
-  const [pushJson, setPushJson] = useState(metaData?.active || false);
-  const [showTags, setShowTags] = useState(ownerMetaData?.showTags || false);
-  const [authorUrl, setAuthorUrl] = useState(ownerMetaData?.authorUrl || null);
-  const [additionalAuthors, setAdditionalAuthors] = useState(
-    ownerMetaData?.additionalAuthors || []
-  );
-  const [audiance, setAudience] = useState(
-    ownerMetaData?.audienceType || "General"
-  );
+  const [pushJson, setPushJson] = useState(false);
+  const [showTags, setShowTags] = useState(false);
+  const [authorUrl, setAuthorUrl] = useState(null);
+  const [additionalAuthors, setAdditionalAuthors] = useState([]);
+  const [audiance, setAudience] = useState("General");
+  const [showComments, setShowComments] = useState(false);
   const [additionalAuthorName, setAdditionalAuthorName] = useState(null);
   const [additionalAuthorUrl, setAdditionalAuthorUrl] = useState(null);
+
+  useEffect(() => {
+    const metaData = data?.metafields
+      ? JSON.parse(data?.metafields.value)
+      : null;
+    const ownerMetaData = metaData?.article || null;
+
+    setPushJson(metaData?.active);
+    setShowTags(ownerMetaData?.showTags);
+    setAuthorUrl(ownerMetaData?.authorUrl);
+    setAdditionalAuthors(ownerMetaData?.additionalAuthors);
+    setAudience(ownerMetaData?.audienceType);
+    setShowComments(ownerMetaData?.showComments);
+  }, [isSuccess]);
 
   const handleSubmit = useCallback(() => {
     createMetafield({
@@ -54,14 +64,24 @@ export function ArticleSchemaMarkup() {
         showTags,
         audienceType: audiance || null,
         authorUrl: authorUrl || null,
+        showComments,
         additionalAuthors:
           additionalAuthors.length > 0 ? additionalAuthors : null,
       },
     });
-  }, [showTags, owner, pushJson, audiance, authorUrl, additionalAuthors]);
+  }, [
+    showTags,
+    owner,
+    pushJson,
+    audiance,
+    authorUrl,
+    showComments,
+    additionalAuthors,
+  ]);
 
   const handleShowTagsChange = useCallback((value) => setShowTags(value), []);
   const handlePushJsonChange = () => setPushJson((prev) => !prev);
+  const handleShowCommentsChange = () => setShowComments((prev) => !prev);
   const handleAudienceChange = (value) => {
     setAudience(value);
   };
@@ -96,126 +116,149 @@ export function ArticleSchemaMarkup() {
   ];
 
   return (
-    <Box paddingBlockStart={"2"}>
-      <HorizontalStack align="space-between" ali>
-        <Text variant="headingMd">Article information for Jsonld</Text>
-        <div
-          style={{
-            display: "flex",
-            gap: "0.21rem",
-            flexDirection: "column",
-            alignItems: "flex-end",
-          }}
-        >
-          <Text variant="headingSm">Status</Text>
-          <Switch checked={pushJson} handleClick={handlePushJsonChange} />
-        </div>
-      </HorizontalStack>
-      <Box paddingBlockStart={"4"}>
-        <Form onSubmit={handleSubmit}>
-          <FormLayout>
-            <TextField
-              value={owner?.title}
-              disabled
-              label="Title"
-              type="text"
-            />
-            {images && images.length > 0 && (
-              <VerticalStack gap={"2"}>
-                <Text>Images</Text>
-                <HorizontalStack gap={"3"}>
-                  {images.map((img) => (
-                    <Thumbnail source={img?.url ? img?.url : img?.src} />
-                  ))}
-                </HorizontalStack>
-              </VerticalStack>
-            )}
-            <TextField
-              value={authorUrl}
-              label="Author information"
-              type="text"
-              placeholder="A link to a web page that uniquely identifies the author of the article"
-              onChange={handleAuthorUrlChange}
-              connectedLeft={
-                <TextField disabled value={owner?.author} type="text" />
-              }
-            />
-            {additionalAuthors.map((auth, index) => (
-              <TextField
-                value={auth.url}
-                type="text"
-                disabled
-                placeholder="A link to a web page that uniquely identifies the author of the article"
-                connectedLeft={
-                  <TextField disabled value={auth.name} type="text" />
-                }
-                connectedRight={
-                  <Button
-                    destructive
-                    onClick={() => {
-                      setAdditionalAuthors((prev) =>
-                        prev.filter((_, i) => i !== index)
-                      );
-                    }}
-                  >
-                    Remove
-                  </Button>
-                }
-              />
-            ))}
-            <TextField
-              value={additionalAuthorUrl}
-              label="Add additional author information"
-              type="text"
-              placeholder="A link to a web page that uniquely identifies the author of the article"
-              onChange={handleAdditionalAuthorUrlChange}
-              connectedLeft={
+    <>
+      {isLoading ? (
+        <Spinners />
+      ) : (
+        <Box paddingBlockStart={"2"}>
+          <HorizontalStack align="space-between" ali>
+            <Text variant="headingMd">Article information for Jsonld</Text>
+            <div
+              style={{
+                display: "flex",
+                gap: "0.21rem",
+                flexDirection: "column",
+                alignItems: "flex-end",
+              }}
+            >
+              <Text variant="headingSm">Status</Text>
+              <Switch checked={pushJson} handleClick={handlePushJsonChange} />
+            </div>
+          </HorizontalStack>
+          <Box paddingBlockStart={"4"}>
+            <Form onSubmit={handleSubmit}>
+              <FormLayout>
                 <TextField
-                  value={additionalAuthorName}
-                  placeholder="Author name"
+                  value={owner?.title}
+                  disabled
+                  label="Title"
                   type="text"
-                  onChange={handleAdditionalAuthorNamneChange}
-                  d
                 />
-              }
-              connectedRight={
-                <Button
-                  primary
-                  onClick={() => {
-                    setAdditionalAuthors((prev) => [
-                      ...prev,
-                      {
-                        name: additionalAuthorName,
-                        url: additionalAuthorUrl,
-                      },
-                    ]);
-                    setAdditionalAuthorName(null);
-                    setAdditionalAuthorUrl(null);
+                {images && images.length > 0 && (
+                  <VerticalStack gap={"2"}>
+                    <Text>Images</Text>
+                    <HorizontalStack gap={"3"}>
+                      {images.map((img) => (
+                        <Thumbnail source={img?.url ? img?.url : img?.src} />
+                      ))}
+                    </HorizontalStack>
+                  </VerticalStack>
+                )}
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "0.21rem",
+                    flexDirection: "column",
                   }}
                 >
-                  Add
-                </Button>
-              }
-            />
-            <Select
-              label="Set audience type"
-              options={options}
-              onChange={handleAudienceChange}
-              value={audiance}
-            />
-            <Checkbox
-              label={`Show article tag information`}
-              checked={showTags}
-              onChange={handleShowTagsChange}
-            />
-            <HorizontalStack align="end">
-              <Button primary submit>
-                Save
-              </Button>
-            </HorizontalStack>
-          </FormLayout>
-        </Form>
-      </Box>
-    </Box>
+                  <Text variant="bodyMd">Show all comments data</Text>
+                  <Switch
+                    checked={showComments}
+                    handleClick={handleShowCommentsChange}
+                  />
+                  <Text variant="bodySm">
+                    This shows all comments data on your jsonld.
+                  </Text>
+                </div>
+
+                <TextField
+                  value={authorUrl}
+                  label="Author information"
+                  type="text"
+                  placeholder="A link to a web page that uniquely identifies the author of the article"
+                  onChange={handleAuthorUrlChange}
+                  connectedLeft={
+                    <TextField disabled value={owner?.author} type="text" />
+                  }
+                />
+                {additionalAuthors?.map((auth, index) => (
+                  <TextField
+                    value={auth.url}
+                    type="text"
+                    disabled
+                    placeholder="A link to a web page that uniquely identifies the author of the article"
+                    connectedLeft={
+                      <TextField disabled value={auth.name} type="text" />
+                    }
+                    connectedRight={
+                      <Button
+                        destructive
+                        onClick={() => {
+                          setAdditionalAuthors((prev) =>
+                            prev.filter((_, i) => i !== index)
+                          );
+                        }}
+                      >
+                        Remove
+                      </Button>
+                    }
+                  />
+                ))}
+                <TextField
+                  value={additionalAuthorUrl}
+                  label="Add additional author information"
+                  type="text"
+                  placeholder="A link to a web page that uniquely identifies the author of the article"
+                  onChange={handleAdditionalAuthorUrlChange}
+                  connectedLeft={
+                    <TextField
+                      value={additionalAuthorName}
+                      placeholder="Author name"
+                      type="text"
+                      onChange={handleAdditionalAuthorNamneChange}
+                      d
+                    />
+                  }
+                  connectedRight={
+                    <Button
+                      primary
+                      onClick={() => {
+                        setAdditionalAuthors((prev) => [
+                          ...prev,
+                          {
+                            name: additionalAuthorName,
+                            url: additionalAuthorUrl,
+                          },
+                        ]);
+                        setAdditionalAuthorName(null);
+                        setAdditionalAuthorUrl(null);
+                      }}
+                    >
+                      Add
+                    </Button>
+                  }
+                />
+                <Select
+                  label="Set audience type"
+                  options={options}
+                  onChange={handleAudienceChange}
+                  value={audiance}
+                />
+                <Checkbox
+                  label={`Show article tag information`}
+                  checked={showTags}
+                  onChange={handleShowTagsChange}
+                />
+                <HorizontalStack align="end">
+                  <Button primary submit>
+                    Save
+                  </Button>
+                </HorizontalStack>
+              </FormLayout>
+            </Form>
+          </Box>
+        </Box>
+      )}
+    </>
   );
 }

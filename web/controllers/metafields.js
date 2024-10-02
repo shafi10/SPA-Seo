@@ -86,7 +86,6 @@ async function manageArticleMetafield(session, ownerId, blogId, data, active) {
 export const MetafieldCreate = async (req, res, next) => {
   try {
     let { type, data, owner, ownerId, blogId } = req.body;
-    console.log("metafield create", req.body);
     if (owner == "ARTICLE") {
       await manageArticleMetafield(
         res.locals.shopify.session,

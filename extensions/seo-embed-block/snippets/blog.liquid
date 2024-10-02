@@ -61,6 +61,23 @@
         }{% if forloop.last == false %},{% endif %}
       {% endfor %}
     ],
+    {% if data.showComments and article.comments.size > 0 %}
+    "comment": [
+      {% for cmnt in article.comments %}
+      {
+        "@type": "Comment",
+        "text": "{{ cmnt.content | strip_html | strip_newlines | escape }}",
+        "dateCreated": "{{ cmnt.created_at }}",
+        "author": {
+          "@type": "Person",
+          "name": "{{ cmnt.author }}",
+          "email": "{{ cmnt.email }}"
+        }
+      }{% if forloop.last == false %},{% endif %}
+      {% endfor %}
+    ],
+    "commentCount": {{ article.comments_count }},
+    {% endif %}
     "publisher": {
       "@type": "Organization",
       "name": "{{ shop.name }}",
