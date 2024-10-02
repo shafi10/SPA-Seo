@@ -48,7 +48,7 @@ export function ArticleSchemaMarkup() {
     setPushJson(metaData?.active);
     setShowTags(ownerMetaData?.showTags);
     setAuthorUrl(ownerMetaData?.authorUrl);
-    setAdditionalAuthors(ownerMetaData?.additionalAuthors);
+    setAdditionalAuthors(ownerMetaData?.additionalAuthors || []);
     setAudience(ownerMetaData?.audienceType);
     setShowComments(ownerMetaData?.showComments);
   }, [isSuccess]);
@@ -66,7 +66,7 @@ export function ArticleSchemaMarkup() {
         authorUrl: authorUrl || null,
         showComments,
         additionalAuthors:
-          additionalAuthors.length > 0 ? additionalAuthors : null,
+          additionalAuthors?.length > 0 ? additionalAuthors : [],
       },
     });
   }, [
