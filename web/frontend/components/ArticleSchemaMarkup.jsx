@@ -222,6 +222,12 @@ export function ArticleSchemaMarkup() {
                   connectedRight={
                     <Button
                       primary
+                      disabled={
+                        !(
+                          additionalAuthorName &&
+                          additionalAuthorName.length > 0
+                        )
+                      }
                       onClick={() => {
                         setAdditionalAuthors((prev) => [
                           ...prev,
