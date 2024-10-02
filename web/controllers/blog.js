@@ -121,7 +121,14 @@ export const getSingleArticle = async (req, res) => {
       fields: "id, title,image,blogIid",
     });
 
-    return res.status(200).json(article);
+    const response = await shopify.api.rest.Metafield.all({
+      session: res.locals.shopify.session,
+      namespace: "bs-23-seo-app",
+      article_id: id,
+    });
+    const metafields = response?.data?.find((data) => data?.key === "json-ld");
+
+    return res.status(200).json({ ...article, metafields });
   } catch (error) {
     console.log(error);
   }

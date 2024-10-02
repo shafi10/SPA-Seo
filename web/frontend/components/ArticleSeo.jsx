@@ -3,7 +3,7 @@ import { Tabs } from "@shopify/polaris";
 import { useState, useCallback } from "react";
 import { CreateArticleSeo } from "./CreateArticleSeo";
 import { ArticleAltTextImage } from "./BlogAltCreate";
-import { GenerateJsonld } from "./GenerateJsonld";
+import { ArticleSchemaMarkup } from "./ArticleSchemaMarkup";
 
 export default function ArticleSeo() {
   const [selected, setSelected] = useState(0);
@@ -40,7 +40,7 @@ export default function ArticleSeo() {
           </div>
         )}
         {selected === 1 && <ArticleAltTextImage />}
-        {selected === 2 && <GenerateJsonld obj_type={"Blog"} />}
+        {selected === 2 && <ArticleSchemaMarkup />}
       </Tabs>
     </div>
   );

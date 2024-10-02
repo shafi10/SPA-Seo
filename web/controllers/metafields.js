@@ -65,12 +65,44 @@ function generateJsonldFromPayload(payload) {
   return jsonld;
 }
 
+async function manageArticleMetafield(session, ownerId, blogId, data, active) {
+  try {
+    const metafield = new shopify.api.rest.Metafield({
+      session,
+    });
+    metafield.article_id = ownerId;
+    metafield.namespace = "bs-23-seo-app";
+    metafield.key = "json-ld";
+    metafield.type = "json";
+    metafield.value = JSON.stringify({ article: data, active });
+    await metafield.save({
+      update: true,
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export const MetafieldCreate = async (req, res, next) => {
   try {
+    let { type, data, owner, ownerId, blogId } = req.body;
+    if (owner == "ARTICLE") {
+      await manageArticleMetafield(
+        res.locals.shopify.session,
+        ownerId,
+        blogId,
+        data,
+        req.body.active
+      );
+
+      return res.status(200).json({
+        message: "saved metafield successfully",
+      });
+    }
+
     const client = new shopify.api.clients.Graphql({
       session: res.locals.shopify.session,
     });
-    let { type, data, owner, ownerId } = req.body;
 
     await initializeMetafield(client, owner);
     let prevData = {};
