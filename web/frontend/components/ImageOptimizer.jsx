@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   Page,
   Layout,
@@ -16,8 +16,19 @@ import {
   Button,
 } from "@shopify/polaris";
 import Switch from "./commonUI/Switch/Switch";
+import {
+  useImageOptimizerQuery,
+  useSaveImageOptimizerSettings,
+} from "../hooks/useImageOptimizer";
 
 export function ImageOptimizer() {
+  const { data, isSuccess } = useImageOptimizerQuery({
+    url: "/api/metafields/get/image-optimizer",
+  });
+
+  const { mutate: saveImageOptimizerSettings } =
+    useSaveImageOptimizerSettings();
+
   const [productImageAlt, setProductImageAlt] = useState(
     "{{ product.title }} {{ shop.name }}"
   );
@@ -38,6 +49,21 @@ export function ImageOptimizer() {
   );
   const [shopImageAltStatus, setShopImageAltStatus] = useState(false);
   const [shopImageFilenameStatus, setShopImageFilenameStatus] = useState(false);
+
+  useEffect(() => {
+    if (isSuccess) {
+      const metadata = data.data;
+      console.log(metadata);
+      setProductImageAlt(metadata.altText.product);
+      setCollectionImageAlt(metadata.altText.collection);
+      setArticleImageAlt(metadata.altText.article);
+      setProductImageFilename(metadata.fileName.product);
+      setCollectionImageFilename(metadata.fileName.collection);
+      setArticleImageFilename(metadata.fileName.article);
+      setShopImageAltStatus(metadata.altText.status);
+      setShopImageFilenameStatus(metadata.fileName.status);
+    }
+  }, [isSuccess]);
 
   const handleShopImageAltStatusChange = () =>
     setShopImageAltStatus((prev) => !prev);
@@ -69,25 +95,35 @@ export function ImageOptimizer() {
     []
   );
 
-  const handleSubmit = useCallback(() => {
-    // console.log("submitting", showVarinats);
-    // createMetafield({
-    //   type: obj_type.toLowerCase(),
-    //   owner: obj_type.toUpperCase(),
-    //   ownerId: owner?.id,
-    //   active: pushJson,
-    //   data: {
-    //     showTags,
-    //     showVarinats: showVarinats,
-    //     rating: rating,
-    //     reviewCount: reviewCount,
-    //     keywords: keywords.join(","),
-    //   },
-    // });
-  }, []);
+  const handleSubmit = () => {
+    saveImageOptimizerSettings({
+      data: {
+        altText: {
+          status: shopImageAltStatus,
+          product: productImageAlt,
+          collection: collectionImgeAlt,
+          article: articleImageAlt,
+        },
+        fileName: {
+          status: shopImageFilenameStatus,
+          product: productImageFilename,
+          collection: collectionImgeFilename,
+          article: articleImageFilename,
+        },
+      },
+    });
+  };
 
   return (
-    <Page fullWidth title="Settings">
+    <Page
+      fullWidth
+      title="Settings"
+      primaryAction={
+        <Button primary submit onClick={handleSubmit}>
+          Save
+        </Button>
+      }
+    >
       <Layout>
         <Layout.Section>
           <Form onSubmit={handleSubmit}>

@@ -2,48 +2,33 @@ import { useAuthenticatedFetch } from "./useAuthenticatedFetch";
 import { useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useUI } from "../contexts/ui.context";
-import { useHomeSeo } from "../contexts/home.context";
 
-export const useMetafieldsQuery = ({
+export const useImageOptimizerQuery = ({
   url,
   fetchInit = {},
   reactQueryOptions,
 }) => {
   const authenticatedFetch = useAuthenticatedFetch();
-  const { organization, setOrganization } = useHomeSeo();
   const fetch = useMemo(() => {
     return async () => {
       const response = await authenticatedFetch(url, fetchInit);
       return response.json();
     };
-  }, [JSON.stringify(fetchInit)]);
+  }, [url, JSON.stringify(fetchInit)]);
 
-  return useQuery("metafieldList", fetch, {
+  return useQuery("ImageOptimizerSettings", fetch, {
     ...reactQueryOptions,
-    onSuccess: (data) => {
-      console.log("org data", data);
-      if (
-        typeof data.data === "object" &&
-        Object.entries(data.data).length > 0
-      ) {
-        const industry = data.data.organization?.industry?.split(",");
-        setOrganization({
-          ...organization,
-          ...data.data.organization,
-          industry: industry,
-        });
-      }
-    },
+    onSuccess: (data) => {},
     refetchOnWindowFocus: false,
   });
 };
 
-export const useCreateMetafield = (invalidationTarget) => {
+export const useSaveImageOptimizerSettings = () => {
   const fetch = useAuthenticatedFetch();
-  const { setCloseModal, setToggleToast } = useUI();
+  const { setToggleToast } = useUI();
   const queryClient = useQueryClient();
-  async function createStatus(status) {
-    return await fetch("/api/metafields/create", {
+  async function saveImageOptimizerSettings(status) {
+    return await fetch("/api/metafields/save/image-optimizer", {
       method: "POST",
       body: JSON.stringify(status),
       headers: {
@@ -52,20 +37,19 @@ export const useCreateMetafield = (invalidationTarget) => {
     });
   }
 
-  return useMutation((status) => createStatus(status), {
+  return useMutation((status) => saveImageOptimizerSettings(status), {
     onSuccess: async (data, obj) => {
-      if (data?.status !== 200) {
+      if (data?.status === 400) {
         return setToggleToast({
           active: true,
           message: `Something went wrong`,
         });
       }
-      setCloseModal(); // metafieldList productList collectionList
-      queryClient.invalidateQueries(invalidationTarget);
+      queryClient.invalidateQueries("ImageOptimizerSettings");
 
       setToggleToast({
         active: true,
-        message: `Submitted successfully`,
+        message: `Saved Successfully`,
       });
     },
     onError: async () => {
