@@ -74,10 +74,24 @@ async function initializeMetafield(client, type, functionType) {
 
 export const MetafieldCreate = async (req, res, next) => {
   try {
+    let { type, data, owner, ownerId, blogId } = req.body;
+    if (owner == "ARTICLE") {
+      await manageArticleMetafield(
+        res.locals.shopify.session,
+        ownerId,
+        blogId,
+        data,
+        req.body.active
+      );
+
+      return res.status(200).json({
+        message: "saved metafield successfully",
+      });
+    }
+
     const client = new shopify.api.clients.Graphql({
       session: res.locals.shopify.session,
     });
-    let { type, data, owner, ownerId } = req.body;
 
     await initializeMetafield(client, owner, "jsonld");
     let prevData = {};
