@@ -53,7 +53,6 @@ export function ImageOptimizer() {
   useEffect(() => {
     if (isSuccess) {
       const metadata = data.data;
-      console.log(metadata);
       setProductImageAlt(metadata.altText.product);
       setCollectionImageAlt(metadata.altText.collection);
       setArticleImageAlt(metadata.altText.article);
@@ -296,7 +295,7 @@ export function ImageOptimizer() {
                   <Text variant="headingSm">{`{{ product.title }}`}</Text>
                 </List.Item>
                 <List.Item>
-                  <Text variant="headingSm">{`{{ product.product_type }}`}</Text>
+                  <Text variant="headingSm">{`{{ product.type }}`}</Text>
                 </List.Item>
                 <List.Item>
                   <Text variant="headingSm">{`{{ product.vendor }}`}</Text>

@@ -1,8 +1,89 @@
+<!-- prettier-ignore -->
+<script>{{ settings | json }}</script>
+
+<!-- Initial alt text selction logic - start -->
+{% liquid
+  assign alt_text = 'alt text'
+  if request.page_type == 'product'
+    assign alt_text = settings.altText.product
+  elsif request.page_type == 'collection'
+    assign alt_text = settings.altText.collection
+  elsif request.page_type == 'article'
+    assign alt_text = settings.altText.article
+  endif
+%}
+<!-- Initial alt text selction logic - end -->
+
+<!-- - Liquid translation layer - start -->
+{% liquid
+  assign product_title = product.title
+  assign product_type = product.type
+  assign product_vendor = product.vendor
+  assign product_tags = product.tags | join: ','
+
+  assign collection_title = collection.title
+
+  assign article_title = article.title
+  assign article_author = article.author
+  assign article_tags = article.tags | join: ','
+
+  assign shop_name = shop.name
+  assign shop_domain = shop.domain
+
+  assign alt_text = alt_text | replace: '{{ product.title }}', productTitle
+%}
+
+<!-- Capture the raw liquid syntax for product.title - start -->
+
+{% capture product_title_code %}
+{% raw %}{{ product.title }}{% endraw %}
+{% endcapture %}
+{% capture product_type_code %}
+{% raw %}{{ product.type }}{% endraw %}
+{% endcapture %}
+{% capture product_vendor_code %}
+{% raw %}{{ product.vendor }}{% endraw %}
+{% endcapture %}
+{% capture product_tags_code %}
+{% raw %}{{ product.tags }}{% endraw %}
+{% endcapture %}
+{% capture collection_title_code %}
+{% raw %}{{ collection.title }}{% endraw %}
+{% endcapture %}
+{% capture article_title_code %}
+{% raw %}{{ article.title }}{% endraw %}
+{% endcapture %}
+{% capture article_author_code %}
+{% raw %}{{ article.author }}{% endraw %}
+{% endcapture %}
+{% capture article_tags_code %}
+{% raw %}{{ article.tags }}{% endraw %}
+{% endcapture %}
+{% capture shop_name_code %}
+{% raw %}{{ shop.name }}{% endraw %}
+{% endcapture %}
+{% capture shop_domain_code %}
+{% raw %}{{ shop.domain }}{% endraw %}
+{% endcapture %}
+
+<!-- Capture the raw liquid syntax for product.title - end -->
+
+{% liquid
+
+%}
+<!-- - Liquid translation layer - end -->
+
 <script>
   'gg';
+  '{{ settings.altText.product }}';
+  `{{ alt_text }}`;
+  `{{ product_title }} || {{ shop_name }} || {{ product_title_code }} || {{ shop_name_code }}`;
 </script>
-
-{% if request.page_type == 'product' %}
-{% elsif request.page_type == 'collection' %}
-
-{% endif %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const imageTags = document.querySelectorAll('img');
+    imageTags.forEach((img) => {
+      img.setAttribute('alt', '{{ alt_text }}');
+    });
+  });
+</script>
