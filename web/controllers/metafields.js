@@ -216,8 +216,31 @@ export const SaveImageOptimizerSettings = async (req, res, next) => {
     const client = new shopify.api.clients.Graphql({
       session: res.locals.shopify.session,
     });
-    let { data } = req.body;
+    let { data, type } = req.body;
     await initializeMetafield(client, "SHOP", "image");
+
+    let metafieldData = await client.query({
+      data: {
+        query: `
+        query GetShopMetafield {
+          shop {
+              metafield(key: "image-optimizer", namespace: "bs-23-seo-app") {
+                  id
+                  namespace
+                  key
+                  value
+              }      
+          }
+        }`,
+      },
+    });
+
+    if (metafieldData.body.data.shop.metafield) {
+      metafieldData = JSON.parse(metafieldData.body.data.shop.metafield.value);
+    } else {
+      metafieldData = null;
+    }
+
     let shopId = await client.query({
       data: {
         query: GetShopId,
@@ -234,7 +257,10 @@ export const SaveImageOptimizerSettings = async (req, res, next) => {
               key: "image-optimizer",
               namespace: "bs-23-seo-app",
               ownerId: shopId,
-              value: JSON.stringify(data),
+              value: JSON.stringify({
+                ...metafieldData,
+                [type === "altText" ? "altText" : "fileName"]: data,
+              }),
             },
           ],
         },
