@@ -53,6 +53,7 @@ export function AltText() {
       setProductAltStatus(metadata.altText.productStatus);
       setCollectionAltStatus(metadata.altText.collectionStatus);
       setArticleAltStatus(metadata.altText.articleStatus);
+      setLazyLoadImages(metadata.altText.lazyLoadImages);
     }
   }, [isSuccess]);
 
@@ -81,6 +82,7 @@ export function AltText() {
     saveImageOptimizerSettings({
       type: "altText",
       data: {
+        lazyLoadImages,
         product: productImageAlt,
         productStatus: productAltStatus,
         collection: collectionImgeAlt,
@@ -144,8 +146,8 @@ export function AltText() {
                         <Layout.Section oneThird>
                           <Box paddingBlockStart={"4"}>
                             <Switch
-                              checked={productAltStatus}
-                              handleClick={handleParoductAltStatusChange}
+                              checked={lazyLoadImages}
+                              handleClick={handleLazyLoadImagesChange}
                             />
                           </Box>
                         </Layout.Section>
