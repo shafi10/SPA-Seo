@@ -47,13 +47,20 @@ export function AltText() {
   useEffect(() => {
     if (isSuccess) {
       const metadata = data.data;
-      setProductImageAlt(metadata.altText.product);
-      setCollectionImageAlt(metadata.altText.collection);
-      setArticleImageAlt(metadata.altText.article);
-      setProductAltStatus(metadata.altText.productStatus);
-      setCollectionAltStatus(metadata.altText.collectionStatus);
-      setArticleAltStatus(metadata.altText.articleStatus);
-      setLazyLoadImages(metadata.altText.lazyLoadImages);
+      setProductImageAlt(
+        metadata?.altText?.product || "{{ product.title }} {{ shop.name }}"
+      );
+      setCollectionImageAlt(
+        metadata?.altText?.collection ||
+          "{{ collection.title }} {{ shop.name }}"
+      );
+      setArticleImageAlt(
+        metadata?.altText?.article || "{{ article.title }} {{ shop.name }}"
+      );
+      setProductAltStatus(metadata?.altText?.productStatus || false);
+      setCollectionAltStatus(metadata?.altText?.collectionStatus || false);
+      setArticleAltStatus(metadata?.altText?.articleStatus || false);
+      setLazyLoadImages(metadata?.altText?.lazyLoadImages || false);
     }
   }, [isSuccess]);
 
