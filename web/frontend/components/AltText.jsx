@@ -42,7 +42,7 @@ export function AltText() {
   const [productAltStatus, setProductAltStatus] = useState(false);
   const [collectionAltStatus, setCollectionAltStatus] = useState(false);
   const [articleAltStatus, setArticleAltStatus] = useState(false);
-  const [lazyLoadImages, setLazyLoadImages] = useState(false);
+  const [lazyLoadImages, setLazyLoadImages] = useState(true);
 
   useEffect(() => {
     if (isSuccess) {
@@ -60,7 +60,7 @@ export function AltText() {
       setProductAltStatus(metadata?.altText?.productStatus || false);
       setCollectionAltStatus(metadata?.altText?.collectionStatus || false);
       setArticleAltStatus(metadata?.altText?.articleStatus || false);
-      setLazyLoadImages(metadata?.altText?.lazyLoadImages || false);
+      setLazyLoadImages(metadata?.altText?.lazyLoadImages || true);
     }
   }, [isSuccess]);
 

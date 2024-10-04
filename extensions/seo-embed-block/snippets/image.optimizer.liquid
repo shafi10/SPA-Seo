@@ -81,7 +81,6 @@
     });
   </script>
 {% endif %}
-'article'
 {% if request.page_type == 'article' and settings.altText.articleStatus %}
   <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -92,13 +91,13 @@
     });
   </script>
 {% endif %}
-{% if settings.altText.lazyLoadImages %}
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const imageTags = document.querySelectorAll('img');
-      imageTags.forEach((img) => {
-        img.setAttribute('loading', 'lazy');
-      });
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const cond = JSON.parse('{{ settings.altText.lazyLoadImages }}');
+    const imageTags = document.querySelectorAll('img');
+    imageTags.forEach((img) => {
+      if (cond) img.setAttribute('loading', 'lazy');
+      else img.removeAttribute('loading');
     });
-  </script>
-{% endif %}
+  });
+</script>
