@@ -10,9 +10,6 @@ import CompanyProfile from "./CompanyProfile";
 import { useMetafieldsQuery } from "../hooks/useMetafieldQuery";
 import { PageSpeedInsights } from "./SeoScore";
 import BlogPage from "./Blog";
-// import { AltText } from "./AltText";
-// import { ImageOptimizer } from "./ImageOptimizer";
-import { AltText } from "./AltText";
 import { ImageOptimizer } from "./ImageOptimizer";
 
 export function Dashboard() {

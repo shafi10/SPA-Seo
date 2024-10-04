@@ -42,9 +42,7 @@ export function AltText() {
   const [productAltStatus, setProductAltStatus] = useState(false);
   const [collectionAltStatus, setCollectionAltStatus] = useState(false);
   const [articleAltStatus, setArticleAltStatus] = useState(false);
-
-  const [shopImageAltStatus, setShopImageAltStatus] = useState(false);
-  const [shopImageFilenameStatus, setShopImageFilenameStatus] = useState(false);
+  const [lazyLoadImages, setLazyLoadImages] = useState(false);
 
   useEffect(() => {
     if (isSuccess) {
@@ -58,14 +56,13 @@ export function AltText() {
     }
   }, [isSuccess]);
 
-  const handleShopImageAltStatusChange = () =>
-    setShopImageAltStatus((prev) => !prev);
   const handleParoductAltStatusChange = () =>
     setProductAltStatus((prev) => !prev);
   const handleCollectionAltStatusChange = () =>
     setCollectionAltStatus((prev) => !prev);
   const handleArticleAltStatusChange = () =>
     setArticleAltStatus((prev) => !prev);
+  const handleLazyLoadImagesChange = () => setLazyLoadImages((prev) => !prev);
 
   const handleProductImageAltChange = useCallback(
     (value) => setProductImageAlt(value),
@@ -77,18 +74,6 @@ export function AltText() {
   );
   const handleArticleImageAltChange = useCallback(
     (value) => setArticleImageAlt(value),
-    []
-  );
-  const handleProductImageFilenameChange = useCallback(
-    (value) => setProductImageFilename(value),
-    []
-  );
-  const handleCollectionImageFilenameChange = useCallback(
-    (value) => setCollectionImageFilename(value),
-    []
-  );
-  const handleArticleImageFilenameChange = useCallback(
-    (value) => setArticleImageFilename(value),
     []
   );
 
@@ -144,6 +129,29 @@ export function AltText() {
               <Layout.Section>
                 <Form onSubmit={handleSubmit}>
                   <VerticalStack gap={"4"}>
+                    <Box>
+                      <Layout>
+                        <Layout.Section>
+                          <VerticalStack>
+                            <Text variant="headingMd">Lazy load images</Text>
+                            <Text variant="bodyMd">
+                              Lazy load images to improve page speed by loading
+                              them only when they come into view, enhancing both
+                              performance and user experience.
+                            </Text>
+                          </VerticalStack>
+                        </Layout.Section>
+                        <Layout.Section oneThird>
+                          <Box paddingBlockStart={"4"}>
+                            <Switch
+                              checked={productAltStatus}
+                              handleClick={handleParoductAltStatusChange}
+                            />
+                          </Box>
+                        </Layout.Section>
+                      </Layout>
+                    </Box>
+                    <Divider borderWidth="1" />
                     <Box>
                       <Layout>
                         <Layout.Section oneThird>

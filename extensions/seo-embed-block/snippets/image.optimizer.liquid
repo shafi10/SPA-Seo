@@ -60,17 +60,35 @@
 %}
 <!-- - Liquid translation layer - end -->
 
-<script>
-  'gg';
-  '{{ settings.altText.product }}';
-  `{{ alt_text }}`;
-  `{{ product_title }} || {{ shop_name }} || {{ product_title_code }} || {{ shop_name_code }}`;
-</script>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const imageTags = document.querySelectorAll('img');
-    imageTags.forEach((img) => {
-      img.setAttribute('alt', '{{ alt_text }}');
+{% if request.page_type == 'product' and settings.altText.productStatus %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const imageTags = document.querySelectorAll('img');
+      imageTags.forEach((img) => {
+        img.setAttribute('alt', '{{ alt_text }}');
+      });
     });
-  });
-</script>
+  </script>
+{% endif %}
+
+{% if request.page_type == 'collection' and settings.altText.collectionStatus %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const imageTags = document.querySelectorAll('img');
+      imageTags.forEach((img) => {
+        img.setAttribute('alt', '{{ alt_text }}');
+      });
+    });
+  </script>
+{% endif %}
+'article'
+{% if request.page_type == 'article' and settings.altText.articleStatus %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const imageTags = document.querySelectorAll('img');
+      imageTags.forEach((img) => {
+        img.setAttribute('alt', '{{ alt_text }}');
+      });
+    });
+  </script>
+{% endif %}
