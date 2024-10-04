@@ -23,6 +23,7 @@ const STATIC_PATH =
     : `${process.cwd()}/frontend/`;
 
 const app = express();
+app.use(express.json());
 
 app.use("/api/404-error", errorRoute);
 
@@ -42,8 +43,6 @@ app.post(
 // also add a proxy rule for them in web/frontend/vite.config.js
 
 app.use("/api/*", shopify.validateAuthenticatedSession());
-
-app.use(express.json());
 
 app.get("/api/shop", async (_req, res) => {
   const response = await shopify.api.rest.Shop.all({

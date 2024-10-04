@@ -1,4 +1,5 @@
 import shopify from "../shopify.js";
+import { getAccessTokenForShop } from "../utils/getShopAccessToken.js";
 
 export const getErrorInsightsContent = async (req, res, next) => {
   try {
@@ -25,29 +26,27 @@ export const getErrorInsightsContent = async (req, res, next) => {
 };
 
 export const updateErrorInsightsSeo = async (req, res) => {
-  //   const { referrer, shop, timestamp, url } = req.body;
-  //   const accessToken = await getAccessTokenForShop(shopUrl);
-  //   console.log("🚀 ~ updateErrorInsightsSeo ~ accessToken:", accessToken);
-  //   // Create a new session using the shop and access token
-  //   const session = new shopify.Session({
-  //     shopUrl,
-  //     accessToken,
-  //     isOnline: false, // or true depending on your app's logic
-  //   });
-
+  console.log("highlight", req.body);
+  const { referrer, shop, timestamp, url } = req.body;
+  const shopURL = shop.split("://")[1];
+  const accessToken = await getAccessTokenForShop(shopURL);
+  const insights = [req.body];
   try {
-    // const metafield = new shopify.api.rest.Metafield({
-    //   session: session,
-    // });
-
-    // metafield.namespace = "seo-app-bs23";
-    // metafield.key = "seo-error-insights";
-    // metafield.type = "json";
-    // metafield.value = JSON.stringify(errorList);
-    // await metafield.save({
-    //   update: true,
-    // });
-    // return res.status(200).json(metafield);
+    await fetch(`${shop}/admin/api/2024-07/metafields.json`, {
+      method: "POST",
+      headers: {
+        "X-Shopify-Access-Token": accessToken?.[0]?.accessToken,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        metafield: {
+          namespace: "seo-app-bs23",
+          key: "seo-404error-insights",
+          type: "json",
+          value: JSON.stringify(insights),
+        },
+      }),
+    });
     return res.status(200).json("");
   } catch (error) {
     console.log(error);
