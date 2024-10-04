@@ -21,19 +21,24 @@ export const useMetafieldsQuery = ({
   return useQuery("metafieldList", fetch, {
     ...reactQueryOptions,
     onSuccess: (data) => {
-      console.log(data);
+      console.log("org data", data);
       if (
         typeof data.data === "object" &&
         Object.entries(data.data).length > 0
       ) {
-        setOrganization({ ...organization, ...data.data.organization });
+        const industry = data.data.organization?.industry?.split(",");
+        setOrganization({
+          ...organization,
+          ...data.data.organization,
+          industry: industry,
+        });
       }
     },
     refetchOnWindowFocus: false,
   });
 };
 
-export const useCreateMetafield = () => {
+export const useCreateMetafield = (invalidationTarget) => {
   const fetch = useAuthenticatedFetch();
   const { setCloseModal, setToggleToast } = useUI();
   const queryClient = useQueryClient();
@@ -49,14 +54,15 @@ export const useCreateMetafield = () => {
 
   return useMutation((status) => createStatus(status), {
     onSuccess: async (data, obj) => {
+      console.log("hi", obj, invalidationTarget);
       if (data?.status !== 200) {
         return setToggleToast({
           active: true,
           message: `Something went wrong`,
         });
       }
-      setCloseModal();
-      queryClient.invalidateQueries("metafieldList");
+      setCloseModal(); // metafieldList productList collectionList
+      queryClient.invalidateQueries(invalidationTarget);
 
       setToggleToast({
         active: true,
