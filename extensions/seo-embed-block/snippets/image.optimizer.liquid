@@ -92,3 +92,13 @@
     });
   </script>
 {% endif %}
+{% if settings.altText.lazyLoadImages %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const imageTags = document.querySelectorAll('img');
+      imageTags.forEach((img) => {
+        img.setAttribute('loading', 'lazy');
+      });
+    });
+  </script>
+{% endif %}
