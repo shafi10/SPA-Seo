@@ -3,19 +3,48 @@ import { getAccessTokenForShop } from "../utils/getShopAccessToken.js";
 
 export const getErrorInsightsContent = async (req, res, next) => {
   try {
-    const { id } = req.params;
-
     const response = await shopify.api.rest.Metafield.all({
       session: res.locals.shopify.session,
       namespace: "seo-app-bs23",
     });
 
     const highlight = response?.data?.find(
-      (data) => data?.key === "seo-blog-article"
+      (data) => data?.key === "seo-404error-insights"
     );
-    const highlightList = highlight?.value ? JSON.parse(highlight?.value) : "";
+    const errorList = highlight?.value ? JSON.parse(highlight?.value) : [];
 
-    return res.status(200).json(highlightList);
+    // Step 1: Total Visits
+    const totalVisits = errorList.length;
+
+    // Step 2: Unique URLs Visited
+    const uniqueUrls = [...new Set(errorList.map((visit) => visit.url))];
+    const uniqueUrlsCount = uniqueUrls.length;
+
+    // Step 3: Most Frequent URL
+    const urlFrequency = errorList.reduce((acc, visit) => {
+      acc[visit.url] = (acc[visit.url] || 0) + 1;
+      return acc;
+    }, {});
+
+    const mostFrequentUrl = Object.keys(urlFrequency).reduce((a, b) =>
+      urlFrequency[a] > urlFrequency[b] ? a : b
+    );
+
+    let mostFrequentOne = {
+      url: mostFrequentUrl,
+      count: urlFrequency[mostFrequentUrl],
+    };
+
+    //last visited
+    const lastVisitTime = errorList[errorList?.length - 1];
+
+    return res.status(200).json({
+      totalVisits: totalVisits,
+      uniqueUrlsCount: uniqueUrlsCount,
+      mostFrequentOne: mostFrequentOne,
+      lastVisit: lastVisitTime,
+      errorList: errorList,
+    });
   } catch (err) {
     console.log(
       "🚀 ~ file: description.js:73 ~ descriptionController ~ err:",
@@ -26,12 +55,30 @@ export const getErrorInsightsContent = async (req, res, next) => {
 };
 
 export const updateErrorInsightsSeo = async (req, res) => {
-  console.log("highlight", req.body);
-  const { referrer, shop, timestamp, url } = req.body;
+  const { shop } = req.body;
   const shopURL = shop.split("://")[1];
   const accessToken = await getAccessTokenForShop(shopURL);
-  const insights = [req.body];
+
   try {
+    const errorList = await fetch(
+      `${shop}/admin/api/2024-07/metafields.json?namespace=seo-app-bs23`,
+      {
+        method: "GET",
+        headers: {
+          "X-Shopify-Access-Token": accessToken?.[0]?.accessToken,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const response = await errorList.json();
+    const responseList = response?.metafields?.find(
+      (metafield) => metafield.key === "seo-404error-insights"
+    );
+    const list = responseList?.value ? JSON.parse(responseList?.value) : [];
+    const newList = [...list, req.body];
+    console.log("🚀 ~ updateErrorInsightsSeo ~ newList:", newList);
+
     await fetch(`${shop}/admin/api/2024-07/metafields.json`, {
       method: "POST",
       headers: {
@@ -43,11 +90,15 @@ export const updateErrorInsightsSeo = async (req, res) => {
           namespace: "seo-app-bs23",
           key: "seo-404error-insights",
           type: "json",
-          value: JSON.stringify(insights),
+          value: JSON.stringify(newList),
         },
       }),
     });
-    return res.status(200).json("");
+
+    return res.status(200).json({
+      status: "success",
+      message: "Created successfully",
+    });
   } catch (error) {
     console.log(error);
   }

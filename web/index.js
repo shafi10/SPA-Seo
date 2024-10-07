@@ -10,7 +10,7 @@ import metafieldsRoute from "./routes/metafields.js";
 import seoInsightsRoute from "./routes/seoInsights.js";
 import homeRoute from "./routes/home.js";
 import blogRoute from "./routes/blog.js";
-import errorRoute from "./routes/404error.js";
+import { errorRouter, updateErrorInsightsRouter } from "./routes/404error.js";
 
 const PORT = parseInt(
   process.env.BACKEND_PORT || process.env.PORT || "3000",
@@ -25,7 +25,7 @@ const STATIC_PATH =
 const app = express();
 app.use(express.json());
 
-app.use("/api/404-error", errorRoute);
+app.use("/api/404-error", updateErrorInsightsRouter);
 
 // Set up Shopify authentication and webhook handling
 app.get(shopify.config.auth.path, shopify.auth.begin());
@@ -66,6 +66,7 @@ app.use("/api/metafields", metafieldsRoute);
 app.use("/api/seo", seoInsightsRoute);
 app.use("/api/home", homeRoute);
 app.use("/api/blog", blogRoute);
+app.use("/api/error", errorRouter);
 
 app.use(shopify.cspHeaders());
 app.use(serveStatic(STATIC_PATH, { index: false }));

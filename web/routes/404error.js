@@ -5,10 +5,13 @@ import {
   updateImageSeoAltController,
 } from "../controllers/404error.js";
 
-const router = express.Router();
+export const errorRouter = express.Router();
+export const updateErrorInsightsRouter = express.Router();
 
-router.get("/insights", getErrorInsightsContent);
-router.post("/update-error-insights", updateErrorInsightsSeo);
-router.post("/update-article-image-alt", updateImageSeoAltController);
-
-export default router;
+errorRouter.get("/insights", getErrorInsightsContent);
+updateErrorInsightsRouter.post(
+  "/update-error-insights",
+  updateErrorInsightsSeo
+);
+//next
+errorRouter.post("/update-error-redirect", updateImageSeoAltController);

@@ -298,3 +298,21 @@
 .seo_error_list_container {
   padding: 12px;
 }
+
+.seo_error_insights_options {
+  margin-bottom: 24px;
+}
+
+.seo_error_list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.seo_error_list_title {
+  font-size: 18px;
+  padding: 0 12px;
+}

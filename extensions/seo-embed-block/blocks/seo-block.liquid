@@ -1,4 +1,3 @@
-{% comment %} <script async src="https://unpkg.com/deepmerge@4.3.1/dist/umd.js"></script> {% endcomment %}
 {% assign shop_data = shop.metafields['bs-23-seo-app']['json-ld'].value %}
 
 {% if shop_data != null and shop_data.organization.status %}
@@ -70,15 +69,14 @@
 
 {% if template == '404' %}
   <script>
-      fetch('https://non-tub-managed-beautifully.trycloudflare.com/api/404-error/update-error-insights', {
+      fetch('https://lebanon-ecuador-remained-raymond.trycloudflare.com/api/404-error/update-error-insights', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-              shop: "{{ shop.url }}", // Pass shop domain
+              shop: "{{ shop.url }}",
               url: window.location.href,
               referrer: document.referrer,
               timestamp: new Date().toISOString(),
-              sessionId: localStorage.getItem('session_id')
           })
       });
   </script>
