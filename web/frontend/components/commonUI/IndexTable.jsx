@@ -5,7 +5,7 @@ export function IndexTableData({
   rowMarkup,
   headings,
   resourceName,
-  itemsPerPage = 30,
+  itemsPerPage = 20,
 }) {
   // Pagination state variables
   const [currentPage, setCurrentPage] = useState(1);
@@ -42,7 +42,7 @@ export function IndexTableData({
           {currentPageData}
         </IndexTable>
       </LegacyCard>
-      {rowMarkup?.length > 10 && (
+      {rowMarkup?.length > 20 && (
         <div className="center__align content__margin_top">
           <Pagination
             hasPrevious={currentPage > 1}

@@ -1,4 +1,3 @@
-{% comment %} <script async src="https://unpkg.com/deepmerge@4.3.1/dist/umd.js"></script> {% endcomment %}
 {% assign shop_data = shop.metafields['bs-23-seo-app']['json-ld'].value %}
 
 {% if shop_data != null and shop_data.organization.status %}
@@ -67,7 +66,24 @@
   });
 </script>
 
-{% schema %}
+
+{% if template == '404' %}
+  <script>
+      fetch('https://lebanon-ecuador-remained-raymond.trycloudflare.com/api/404-error/update-error-insights', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+              shop: "{{ shop.url }}",
+              url: window.location.href,
+              referrer: document.referrer,
+              timestamp: new Date().toISOString(),
+          })
+      });
+  </script>
+  {% endif %}
+  
+  
+  {% schema %}
 {
   "name": "SEO app",
   "target": "head"

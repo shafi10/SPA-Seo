@@ -10,6 +10,7 @@ import CompanyProfile from "./CompanyProfile";
 import { useMetafieldsQuery } from "../hooks/useMetafieldQuery";
 import { PageSpeedInsights } from "./SeoScore";
 import BlogPage from "./Blog";
+import { ErrorInsights } from "./ErrorInsights";
 
 export function Dashboard() {
   useShopQuery({
@@ -35,6 +36,7 @@ export function Dashboard() {
           {selectedSidebar === 6 && <CollectionBulkUpdate />}
           {selectedSidebar === 7 && <CompanyProfile />}
           {selectedSidebar === 8 && <BlogPage />}
+          {selectedSidebar === 9 && <ErrorInsights />}
         </div>
       </div>
     </>
