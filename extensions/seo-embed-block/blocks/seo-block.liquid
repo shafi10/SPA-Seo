@@ -1,18 +1,19 @@
-<script>
-// document.addEventListener('DOMContentLoaded', function() {
-  // Remove the first <title> tag
-  var titleTag = document.querySelector('head > title');
-  if (titleTag) {
-    titleTag.parentNode.removeChild(titleTag);
-  }
+ <script>
+    // Immediately remove <title> and <meta name="description"> before the DOM renders
+    (function() {
+      // Remove the <title> tag
+      var titleTag = document.querySelector('title');
+      if (titleTag) {
+        titleTag.remove(); // Directly remove it before rendering
+      }
 
-  // Remove the first <meta name="description"> tag
-  var metaDescriptionTag = document.querySelector('head > meta[name="description"]');
-  if (metaDescriptionTag) {
-    metaDescriptionTag.parentNode.removeChild(metaDescriptionTag);
-  }
-// });
-</script>
+      // Remove the <meta name="description"> tag
+      var metaDescriptionTag = document.querySelector('meta[name="description"]');
+      if (metaDescriptionTag) {
+        metaDescriptionTag.remove();
+      }
+    })();
+  </script>
 
 {% if request.page_type == 'index' %}
   {% if shop.metafields['seo-app-bs23']['home-seo-value'] %}
@@ -31,9 +32,16 @@
     <meta name="description" content="{{ article.excerpt | escape }}">
   {% endif %}
 {% else %}
-  <title>{{ shop.name | escape }}</title>
-  <meta name="description" content="{{ shop.description | escape }}">
+<title>
+  {{ page_title }}
+  {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+  {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+  {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+</title>
+{% if page_description %}
+  <meta name="description" content="{{ page_description | escape }}">
 {% endif %}
+{% endif %} 
 
 {% assign shop_data = shop.metafields['bs-23-seo-app']['json-ld'].value %}
 
@@ -57,51 +65,6 @@
     {% render 'blog', org_data: shop_data.organization, data: data.article %}
   {% endif %}
 {% endif %}
-
-{% comment %} <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    let pageType = '{{ request.page_type }}';
-    if (pageType == 'index') {
-      var seoTitle = "{{ shop.metafields['seo-app-bs23']['home-seo-value'].value.seo_title }}";
-      var seoDescription = "{{ shop.metafields['seo-app-bs23']['home-seo-value'].value.seo_description }}";
-
-      if (seoTitle) {
-        document.title = seoTitle;
-      }
-
-      if (seoDescription) {
-        var metaDescription = document.querySelector('meta[name="description"]');
-        if (metaDescription) {
-          metaDescription.setAttribute('content', seoDescription);
-        } else {
-          var newMetaDescription = document.createElement('meta');
-          newMetaDescription.name = 'description';
-          newMetaDescription.content = seoDescription;
-          document.head.appendChild(newMetaDescription);
-        }
-      }
-    } else if (pageType === 'article') {
-      var seoTitle = "{{ article.metafields['seo-app-bs23']['seo-blog-article'].value.seoTitle }}";
-      var seoDescription = "{{ article.metafields['seo-app-bs23']['seo-blog-article'].value.seoDescription }}";
-
-      if (seoTitle) {
-        document.title = seoTitle;
-      }
-
-      if (seoDescription) {
-        var metaDescription = document.querySelector('meta[name="description"]');
-        if (metaDescription) {
-          metaDescription.setAttribute('content', seoDescription);
-        } else {
-          var newMetaDescription = document.createElement('meta');
-          newMetaDescription.name = 'description';
-          newMetaDescription.content = seoDescription;
-          document.head.appendChild(newMetaDescription);
-        }
-      }
-    }
-  });
-</script> {% endcomment %}
 
 
 {% if template == '404' %}
