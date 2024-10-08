@@ -1,3 +1,40 @@
+<script>
+// document.addEventListener('DOMContentLoaded', function() {
+  // Remove the first <title> tag
+  var titleTag = document.querySelector('head > title');
+  if (titleTag) {
+    titleTag.parentNode.removeChild(titleTag);
+  }
+
+  // Remove the first <meta name="description"> tag
+  var metaDescriptionTag = document.querySelector('head > meta[name="description"]');
+  if (metaDescriptionTag) {
+    metaDescriptionTag.parentNode.removeChild(metaDescriptionTag);
+  }
+// });
+</script>
+
+{% if request.page_type == 'index' %}
+  {% if shop.metafields['seo-app-bs23']['home-seo-value'] %}
+    <title>{{ shop.metafields['seo-app-bs23']['home-seo-value'].value.seo_title | escape }}</title>
+    <meta name="description" content="{{ shop.metafields['seo-app-bs23']['home-seo-value'].value.seo_description | escape }}">
+  {% else %}
+    <title>{{ shop.name | escape }}</title>
+    <meta name="description" content="{{ shop.description | escape }}">
+  {% endif %}
+{% elsif request.page_type == 'article' %}
+  {% if article.metafields['seo-app-bs23']['seo-blog-article'] %}
+    <title>{{ article.metafields['seo-app-bs23']['seo-blog-article'].value.seoTitle | escape }}</title>
+    <meta name="description" content="{{ article.metafields['seo-app-bs23']['seo-blog-article'].value.seoDescription | escape }}">
+  {% else %}
+    <title>{{ article.title | escape }}</title>
+    <meta name="description" content="{{ article.excerpt | escape }}">
+  {% endif %}
+{% else %}
+  <title>{{ shop.name | escape }}</title>
+  <meta name="description" content="{{ shop.description | escape }}">
+{% endif %}
+
 {% assign shop_data = shop.metafields['bs-23-seo-app']['json-ld'].value %}
 
 {% if shop_data != null and shop_data.organization.status %}
@@ -21,7 +58,7 @@
   {% endif %}
 {% endif %}
 
-<script>
+{% comment %} <script>
   document.addEventListener('DOMContentLoaded', function () {
     let pageType = '{{ request.page_type }}';
     if (pageType == 'index') {
@@ -64,7 +101,7 @@
       }
     }
   });
-</script>
+</script> {% endcomment %}
 
 
 {% if template == '404' %}
