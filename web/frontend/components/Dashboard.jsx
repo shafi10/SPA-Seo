@@ -10,6 +10,7 @@ import CompanyProfile from "./CompanyProfile";
 import { useMetafieldsQuery } from "../hooks/useMetafieldQuery";
 import { PageSpeedInsights } from "./SeoScore";
 import BlogPage from "./Blog";
+import { ImageOptimizer } from "./ImageOptimizer";
 import { ErrorInsights } from "./ErrorInsights";
 import { useCreateGlobalFileSeo } from "../hooks/useHomeSEOQuery";
 
@@ -38,7 +39,8 @@ export function Dashboard() {
           {selectedSidebar === 6 && <CollectionBulkUpdate />}
           {selectedSidebar === 7 && <CompanyProfile />}
           {selectedSidebar === 8 && <BlogPage />}
-          {selectedSidebar === 9 && <ErrorInsights />}
+          {selectedSidebar === 9 && <ImageOptimizer />}
+          {selectedSidebar === 10 && <ErrorInsights />}
         </div>
       </div>
     </>
