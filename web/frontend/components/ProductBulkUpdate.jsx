@@ -152,7 +152,7 @@ export default function ProductBulkUpdate() {
                 </div>
                 <div className="app_product_bulk_input">
                   <TextareaField
-                    value={info?.seo?.title ? info.seo.title : ""}
+                    value={info?.seo?.title ? info?.seo?.title : ""}
                     onChange={handleChange}
                     type="text"
                     name="seo_title"
@@ -160,10 +160,10 @@ export default function ProductBulkUpdate() {
                     index={info?.id}
                     error={""}
                   />
-                  {info?.seo?.title.length > 70 && (
+                  {info?.seo?.title?.length > 70 && (
                     <p className="seo_validation_error">
                       SEO title must be 70 characters or fewer. Currently, it is{" "}
-                      {info?.seo?.title.length} characters.
+                      {info?.seo?.title?.length} characters.
                     </p>
                   )}
                 </div>

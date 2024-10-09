@@ -11,6 +11,7 @@ export default function Sidebar({ selectedSidebar, setSelectedSidebar }) {
     { id: 7, title: "Company Settings" },
     { id: 8, title: "Blog page" },
     { id: 9, title: "Image optimizer" },
+    { id: 10, title: "404 Error" },
   ];
 
   return (

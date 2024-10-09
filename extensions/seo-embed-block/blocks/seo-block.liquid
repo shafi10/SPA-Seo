@@ -1,4 +1,3 @@
-{% comment %} <script async src="https://unpkg.com/deepmerge@4.3.1/dist/umd.js"></script> {% endcomment %}
 {% assign shop_data = shop.metafields['bs-23-seo-app']['json-ld'].value %}
 {% render 'image.optimizer', settings: shop.metafields['bs-23-seo-app']['image-optimizer'].value %}
 
@@ -22,53 +21,24 @@
     {% render 'blog', org_data: shop_data.organization, data: data.article %}
   {% endif %}
 {% endif %}
+  
+{% if template == '404' %}
+  <script>
+    fetch('https://sponsored-handbook-mounts-impressive.trycloudflare.com/api/404-error/update-error-insights', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            shop: "{{ shop.url }}",
+            url: window.location.href,
+            referrer: document.referrer,
+            timestamp: new Date().toISOString(),
+        })
+    });
+  </script>
+  {% endif %}
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    let pageType = '{{ request.page_type }}';
-    if (pageType == 'index') {
-      var seoTitle = "{{ shop.metafields['seo-app-bs23']['home-seo-value'].value.seo_title }}";
-      var seoDescription = "{{ shop.metafields['seo-app-bs23']['home-seo-value'].value.seo_description }}";
-
-      if (seoTitle) {
-        document.title = seoTitle;
-      }
-
-      if (seoDescription) {
-        var metaDescription = document.querySelector('meta[name="description"]');
-        if (metaDescription) {
-          metaDescription.setAttribute('content', seoDescription);
-        } else {
-          var newMetaDescription = document.createElement('meta');
-          newMetaDescription.name = 'description';
-          newMetaDescription.content = seoDescription;
-          document.head.appendChild(newMetaDescription);
-        }
-      }
-    } else if (pageType === 'article') {
-      var seoTitle = "{{ article.metafields['seo-app-bs23']['seo-blog-article'].value.seoTitle }}";
-      var seoDescription = "{{ article.metafields['seo-app-bs23']['seo-blog-article'].value.seoDescription }}";
-
-      if (seoTitle) {
-        document.title = seoTitle;
-      }
-
-      if (seoDescription) {
-        var metaDescription = document.querySelector('meta[name="description"]');
-        if (metaDescription) {
-          metaDescription.setAttribute('content', seoDescription);
-        } else {
-          var newMetaDescription = document.createElement('meta');
-          newMetaDescription.name = 'description';
-          newMetaDescription.content = seoDescription;
-          document.head.appendChild(newMetaDescription);
-        }
-      }
-    }
-  });
-</script>
-
-{% schema %}
+  
+  {% schema %}
 {
   "name": "SEO app",
   "target": "head"
