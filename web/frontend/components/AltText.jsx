@@ -20,12 +20,15 @@ import { Spinners } from "./Spinner";
 import {
   useImageOptimizerQuery,
   useSaveImageOptimizerSettings,
+  useBulkUpdateAltText,
 } from "../hooks/useImageOptimizer";
+import { useAuthenticatedFetch } from "@shopify/app-bridge-react";
 
 export function AltText() {
   const { data, isSuccess, isLoading } = useImageOptimizerQuery({
     url: "/api/metafields/get/image-optimizer",
   });
+  const testFetcher = useAuthenticatedFetch();
 
   const { mutate: saveImageOptimizerSettings } =
     useSaveImageOptimizerSettings();
@@ -130,6 +133,12 @@ export function AltText() {
                   Restore default
                 </Button>
               ),
+            },
+            {
+              content: "Test api hit",
+              onAction: () => {
+                testFetcher("/api/image-optimizer/alt-text");
+              },
             },
           ]}
         >

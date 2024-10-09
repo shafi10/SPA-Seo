@@ -3,6 +3,26 @@ import { useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useUI } from "../contexts/ui.context";
 
+export const useBulkUpdateAltText = ({
+  url,
+  fetchInit = {},
+  reactQueryOptions,
+}) => {
+  const authenticatedFetch = useAuthenticatedFetch();
+  const fetch = useMemo(() => {
+    return async () => {
+      const response = await authenticatedFetch(url, fetchInit);
+      return response.json();
+    };
+  }, [url, JSON.stringify(fetchInit)]);
+
+  return useQuery("BulkImageAltText", fetch, {
+    ...reactQueryOptions,
+    onSuccess: (data) => {},
+    refetchOnWindowFocus: false,
+  });
+};
+
 export const useImageOptimizerQuery = ({
   url,
   fetchInit = {},
