@@ -58,3 +58,24 @@ export const useCreateHomeSeo = () => {
     refetchOnWindowFocus: false,
   });
 };
+
+export const useCreateGlobalFileSeo = ({
+  url,
+  fetchInit = {},
+  reactQueryOptions,
+}) => {
+  const authenticatedFetch = useAuthenticatedFetch();
+  const fetch = useMemo(() => {
+    return async () => {
+      const response = await authenticatedFetch(url, fetchInit);
+      return response.json();
+    };
+  }, [url, JSON.stringify(fetchInit)]);
+
+  return useQuery("createFileForSEO", fetch, {
+    ...reactQueryOptions,
+    onSuccess: (data) => {},
+    refetchOnWindowFocus: false,
+    // enabled: Object.keys(shop).length === 0,
+  });
+};

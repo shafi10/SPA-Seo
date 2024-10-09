@@ -1,48 +1,3 @@
- <script>
-    // Immediately remove <title> and <meta name="description"> before the DOM renders
-    (function() {
-      // Remove the <title> tag
-      var titleTag = document.querySelector('title');
-      if (titleTag) {
-        titleTag.remove(); // Directly remove it before rendering
-      }
-
-      // Remove the <meta name="description"> tag
-      var metaDescriptionTag = document.querySelector('meta[name="description"]');
-      if (metaDescriptionTag) {
-        metaDescriptionTag.remove();
-      }
-    })();
-  </script>
-
-{% if request.page_type == 'index' %}
-  {% if shop.metafields['seo-app-bs23']['home-seo-value'] %}
-    <title>{{ shop.metafields['seo-app-bs23']['home-seo-value'].value.seo_title | escape }}</title>
-    <meta name="description" content="{{ shop.metafields['seo-app-bs23']['home-seo-value'].value.seo_description | escape }}">
-  {% else %}
-    <title>{{ shop.name | escape }}</title>
-    <meta name="description" content="{{ shop.description | escape }}">
-  {% endif %}
-{% elsif request.page_type == 'article' %}
-  {% if article.metafields['seo-app-bs23']['seo-blog-article'] %}
-    <title>{{ article.metafields['seo-app-bs23']['seo-blog-article'].value.seoTitle | escape }}</title>
-    <meta name="description" content="{{ article.metafields['seo-app-bs23']['seo-blog-article'].value.seoDescription | escape }}">
-  {% else %}
-    <title>{{ article.title | escape }}</title>
-    <meta name="description" content="{{ article.excerpt | escape }}">
-  {% endif %}
-{% else %}
-<title>
-  {{ page_title }}
-  {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
-  {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
-  {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
-</title>
-{% if page_description %}
-  <meta name="description" content="{{ page_description | escape }}">
-{% endif %}
-{% endif %} 
-
 {% assign shop_data = shop.metafields['bs-23-seo-app']['json-ld'].value %}
 
 {% if shop_data != null and shop_data.organization.status %}
@@ -65,23 +20,22 @@
     {% render 'blog', org_data: shop_data.organization, data: data.article %}
   {% endif %}
 {% endif %}
-
-
+  
 {% if template == '404' %}
   <script>
-      fetch('https://lebanon-ecuador-remained-raymond.trycloudflare.com/api/404-error/update-error-insights', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-              shop: "{{ shop.url }}",
-              url: window.location.href,
-              referrer: document.referrer,
-              timestamp: new Date().toISOString(),
-          })
-      });
+    fetch('https://sponsored-handbook-mounts-impressive.trycloudflare.com/api/404-error/update-error-insights', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            shop: "{{ shop.url }}",
+            url: window.location.href,
+            referrer: document.referrer,
+            timestamp: new Date().toISOString(),
+        })
+    });
   </script>
   {% endif %}
-  
+
   
   {% schema %}
 {

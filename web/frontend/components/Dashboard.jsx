@@ -11,11 +11,13 @@ import { useMetafieldsQuery } from "../hooks/useMetafieldQuery";
 import { PageSpeedInsights } from "./SeoScore";
 import BlogPage from "./Blog";
 import { ErrorInsights } from "./ErrorInsights";
+import { useCreateGlobalFileSeo } from "../hooks/useHomeSEOQuery";
 
 export function Dashboard() {
   useShopQuery({
     url: "/api/shop",
   });
+  useCreateGlobalFileSeo({ url: "/api/home/create-seo-file" });
   useMetafieldsQuery({ url: "/api/metafields" });
 
   const [selectedSidebar, setSelectedSidebar] = useState(1);
