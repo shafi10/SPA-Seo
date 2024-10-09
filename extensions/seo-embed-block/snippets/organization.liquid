@@ -1,4 +1,4 @@
-<script>
+{% comment %} <script>
   document.addEventListener('DOMContentLoaded', function () {
     const orgSnippetScript = document.querySelector('head script#org-snippet');
     const orgSnippet = JSON.parse(orgSnippetScript.innerHTML);
@@ -21,8 +21,8 @@
     } else {
     }
   });
-</script>
-<script id="org-snippet" type="text/plain">
+</script> {% endcomment %}
+<script id="org-snippet" type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "{{ data.businessType }}",

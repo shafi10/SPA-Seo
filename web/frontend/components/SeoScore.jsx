@@ -22,8 +22,8 @@ export function PageSpeedInsights() {
             </div>
           </div>
           <div className="seo_score_container_grid">
-            {data?.map((seoInfo) => (
-              <div className="seo_score_container">
+            {data?.map((seoInfo, index) => (
+              <div className="seo_score_container" key={index}>
                 <div className="seo_score_title">
                   {seoInfo?.page} SEO Performance Score
                 </div>

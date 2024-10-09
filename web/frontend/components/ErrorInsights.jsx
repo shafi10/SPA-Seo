@@ -1,6 +1,7 @@
 import { Tabs } from "@shopify/polaris";
 import React, { useCallback, useState } from "react";
 import { ErrorList } from "./Errorlist";
+import { AutoRedirect } from "./AutoRedirect";
 
 export function ErrorInsights() {
   const [selected, setSelected] = useState(0);
@@ -31,6 +32,7 @@ export function ErrorInsights() {
       <div>
         <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}>
           {selected === 0 && <ErrorList />}
+          {selected === 1 && <AutoRedirect />}
         </Tabs>
       </div>
     </div>
