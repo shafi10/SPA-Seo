@@ -24,7 +24,7 @@ export const useErrorInsightsQuery = ({
   });
 };
 
-export const useArticlesQuery = ({
+export const useAutoRedirectQuery = ({
   url,
   fetchInit = {},
   reactQueryOptions,
@@ -37,7 +37,7 @@ export const useArticlesQuery = ({
     };
   }, [url, JSON.stringify(fetchInit)]);
 
-  return useQuery("articleList", fetch, {
+  return useQuery("auto-redirect", fetch, {
     ...reactQueryOptions,
     onSuccess: (data) => {},
     refetchOnWindowFocus: false,

@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import { FormLayout, Button, Form, InlineError } from "@shopify/polaris";
 import { InputField } from "./commonUI/InputField";
+import { useAutoRedirectQuery } from "../hooks/useErrorInsightsQuery";
 
 export function AutoRedirect() {
+  const { data } = useAutoRedirectQuery({
+    url: "/api/error/auto-redirect/list",
+  });
+  console.log("🚀 ~ AutoRedirect ~ data:", data);
+
   const [formData, setFormData] = useState({
     seo_title: "",
     seo_description: "",
@@ -52,6 +58,7 @@ export function AutoRedirect() {
   return (
     <div className="seo_auto_redirect_page">
       <div className="seo_auto_redirect_form_container">
+        <div className="seo_auto_redirect_list_title">Add auto redirect </div>
         <Form onSubmit={() => handleSubmit(formData)}>
           <div className="seo_auto_redirect_form">
             <InputField
@@ -82,6 +89,14 @@ export function AutoRedirect() {
       </div>
       <div className="seo_auto_redirect_list_container">
         <div className="seo_auto_redirect_list_title">Redirect List</div>
+        <div>
+          {data?.redirectList?.map((list) => (
+            <div>
+              <div>{list?.path}</div>
+              <div>{list?.target}</div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
